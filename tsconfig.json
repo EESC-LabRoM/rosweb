@@ -1,5 +1,6 @@
 {
   "files": [
+    "src/greet.ts",
     "src/main.ts"
   ],
   "compilerOptions": {
