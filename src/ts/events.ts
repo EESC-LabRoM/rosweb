@@ -1,23 +1,37 @@
+/// <reference path="d/jquery.d.ts" />
+
+import {Frontend} from "./frontend.ts";
+import {Tab} from "./tab.ts";
+
 export class Events {
   
+  private eventsClassPrefix : string = "jsEvent";
+  private frontend: Frontend;
+  
+  // constructor
   constructor() {
-    this.delegateClassEvent("jsEventNewTab", "click", this.newTab);
-    
+    this.frontend = new Frontend();
+    this.delegateClassEvent("NewTab", "click", this.newTab);
+  }
+  
+  // private methods
+  private delegateClassEvent(className: string, eventType: string, method: () => void) {
+    $(document).delegate("." + this.eventsClassPrefix + className, eventType, method);
     /*
-    for(let element of document.getElementsByClassName("jsEventNewTab")) {
-      element.addEventListener("click", this.newTab);
+    let elements : NodeListOf<Element> = document.getElementsByClassName(this.eventsClassPrefix + "NewTab");
+    for(let element of elements) {
+      element.addEventListener("click", method);
     }
     */
   }
   
-  private delegateClassEvent(className: string, eventName: string, method: () => void) {
-    for(let element of document.getElementsByClassName("jsEventNewTab")) {
-      element.addEventListener("click", method);
-    }
-  }
-  
-  public newTab() {
-    alert("hello new tab event");
+  // new tab
+  public newTab = (e?: MouseEvent) => {
+    var tab: Tab = new Tab();
+    tab.id = 1;
+    tab.name = "tab #1";
+    this.frontend.newTab(tab);
+    e.preventDefault();
   }
   
 }

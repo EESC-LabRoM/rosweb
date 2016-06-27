@@ -1,11 +1,12 @@
-class Tab {
+export class Tab {
   
   id: number;
   name: string;
   
-  constructor(name: string) {
-    this.name = name;
-    
+  constructor(name?: string) {
+    if(name) {
+      this.name = name;
+    }
   }
   
 }

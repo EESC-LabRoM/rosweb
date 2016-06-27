@@ -3,16 +3,18 @@ var gulp = require('gulp');
 var paths = {
   html: ["src/*.html"],
   ts: ["./src/ts/**/*.ts"],
-  sass: ["./src/sass/**/*.scss"]
+  sass: ["./src/sass/**/*.scss"],
+  hbs: ["./src/hbs/**/*.hbs"],
+  jslibs: ["./src/js/**/*.js"]
 };
 
-gulp.task('default', ['html', 'typescript', 'sass'], function() {
-  
+gulp.task('default', ['html', 'typescript', 'sass', 'handlebars', 'jslibs'], function() {
+
 });
 
 // HTML
 var pages = ["src/*.html"];
-gulp.task('html', function () {
+gulp.task('html', function() {
   return gulp.src(paths.html)
     .pipe(gulp.dest('dist'));
 });
@@ -23,7 +25,7 @@ var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
-gulp.task('typescript', function () {
+gulp.task('typescript', function() {
   return browserify({
     basedir: '.',
     debug: true,
@@ -43,15 +45,59 @@ gulp.task('typescript', function () {
 
 // SASS
 var sass = require('gulp-sass');
-gulp.task('sass', function () {
+gulp.task('sass', function() {
   return gulp.src('./src/sass/main.scss')
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest('./dist/'));
 });
 
+// Handlebars
+var handlebars = require('gulp-handlebars');
+var wrap = require('gulp-wrap');
+var declare = require('gulp-declare');
+var concat = require('gulp-concat');
+gulp.task('handlebars', function() {
+  gulp.src('src/hbs/**/*.hbs')
+    .pipe(handlebars({
+      handlebars: require('handlebars')
+    }))
+    .pipe(wrap('Handlebars.template(<%= contents %>)'))
+    .pipe(declare({
+      namespace: 'MyApp.templates',
+      noRedeclare: true, // Avoid duplicate declarations 
+    }))
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('dist/'));
+});
+
+// JavaScript libraries
+gulp.task('jslibs', function() {
+  return gulp.src(paths.jslibs)
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('basic', function() {
+  
+});
+
 // Watch
-gulp.task('watch', function () {
+gulp.task('watchsass', function() {
   gulp.watch(paths.sass, ['sass']);
+});
+gulp.task('watchts', function() {
+  gulp.watch(paths.sass, ['typescript']);
+});
+gulp.task('watchhbs', function(){
+  gulp.watch(paths.hbs, ['handlebars']);
+});
+gulp.task('watchjslibs', function() { 
+  gulp.watch(paths.jslibs, ['jslibs']);
+});
+gulp.task('watch', function() {
+  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.jslibs, ['jslibs']);
   gulp.watch(paths.ts, ['typescript']);
   gulp.watch(paths.html, ['html']);
+  gulp.watch(paths.hbs, ['handlebars']);
 });
+

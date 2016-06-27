@@ -12,3 +12,19 @@
 .clearfix {
   clear:both;
 }
+
+.cssTab {
+  margin:0 5px;
+  padding:3px 3px 0;
+  border: 1px solid #333;
+  border-bottom-width: 0;
+  background-color:transparent;
+}
+.cssTab{
+  &:hover, &.active {
+  }
+}
+.tabContent {
+  width:100%;
+  border:1px solid #333;
+}

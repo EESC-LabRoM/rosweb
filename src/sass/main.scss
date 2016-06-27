@@ -16,7 +16,11 @@ body {
       }
     }
     div#header2 {
+      padding-bottom:0;
       background-color:#ddd;
+      a.cssNewTab {
+        color:darken($ros_color, 20%);
+      }
     }
     div#content {
       div.lside {
