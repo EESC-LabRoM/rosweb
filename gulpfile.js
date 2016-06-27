@@ -76,11 +76,12 @@ gulp.task('jslibs', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('basic', function() {
-  
-});
+gulp.task('watchbasic', ['watchsass', 'watchhbs', 'watchhtml']);
 
 // Watch
+gulp.task('watchhtml', function() {
+  gulp.watch(paths.html, ['html']);
+});
 gulp.task('watchsass', function() {
   gulp.watch(paths.sass, ['sass']);
 });
