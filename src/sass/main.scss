@@ -1,5 +1,33 @@
-body {
-  background:#ccc;
-}
-
 @import 'styles';
+@import 'vars';
+
+body {
+  background:#eee;
+  div#container {
+    div.header {
+      padding:10px 20px;
+    }
+    div#header1 {
+      background-color:$ros_color;
+      a {
+        color:#fff;
+        font-weight: bold;
+        text-decoration: none;
+      }
+    }
+    div#header2 {
+      background-color:#ddd;
+    }
+    div#content {
+      div.lside {
+        float:left;
+        width:15%;
+        height:500px;
+        background-color:darken($ros_color, 20%);
+      }
+    }
+    div#footer {
+      
+    }
+  }
+}

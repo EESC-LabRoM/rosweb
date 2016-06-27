@@ -1,3 +1,14 @@
-p {
-  color:red;
+* {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color:#456b91;
+  border: 1px solid #ccc;
+}
+
+.clearfix {
+  clear:both;
 }

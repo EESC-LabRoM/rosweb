@@ -1,25 +1,29 @@
 // This is Gulp!
 var gulp = require('gulp');
+var paths = {
+  html: ["src/*.html"],
+  ts: ["./src/ts/**/*.ts"],
+  sass: ["./src/sass/**/*.scss"]
+};
 
-// TypeScript + Browserify + Uglify + etc..
+gulp.task('default', ['html', 'typescript', 'sass'], function() {
+  
+});
+
+// HTML
+var pages = ["src/*.html"];
+gulp.task('html', function () {
+  return gulp.src(paths.html)
+    .pipe(gulp.dest('dist'));
+});
+
+// TypeScript
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
-var paths = {
-  pages: ['src/*.html']
-};
-
-gulp.task('default', ['typescript', 'sass'], function() {
-  
-});
-
-gulp.task('copyHtml', function () {
-  return gulp.src(paths.pages)
-    .pipe(gulp.dest('dist'));
-});
-gulp.task('typescript', ['copyHtml'], function () {
+gulp.task('typescript', function () {
   return browserify({
     basedir: '.',
     debug: true,
@@ -46,6 +50,8 @@ gulp.task('sass', function () {
 });
 
 // Watch
-gulp.task('sass:watch', function () {
-  gulp.watch('./src/sass/**/*.scss', ['sass']);
+gulp.task('watch', function () {
+  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.ts, ['typescript']);
+  gulp.watch(paths.html, ['html']);
 });

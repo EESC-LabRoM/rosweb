@@ -1,8 +1,8 @@
 import {sayHello} from "./greet";
+import {Events} from "./events.ts";
 
-function showHello(divName: string, name: string) {
-  const elt = document.getElementById(divName);
-  elt.innerText = sayHello(name);
+function init() {
+  let events = new Events();
 }
 
-showHello("greeting", "TypeScript");
+init();
