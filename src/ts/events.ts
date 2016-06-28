@@ -12,6 +12,7 @@ export class Events {
   constructor() {
     this.frontend = new Frontend();
     this.delegateClassEvent("NewTab", "click", this.newTab);
+    this.delegateClassEvent("Tab", "click", this.tab);
   }
   
   // private methods
@@ -31,6 +32,11 @@ export class Events {
     tab.id = 1;
     tab.name = "tab #1";
     this.frontend.newTab(tab);
+    e.preventDefault();
+  }
+
+  public tab = (e?: MouseEvent) => {
+    let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
     e.preventDefault();
   }
   
