@@ -2,14 +2,18 @@
 
 import {Frontend} from "./frontend.ts";
 import {Tab} from "./tab.ts";
+import {Db} from "./db.ts";
+import {Names} from "./names.ts";
 
 export class Events {
   
   private eventsClassPrefix : string = "jsEvent";
   private frontend: Frontend;
+  private db: Db;
   
   // constructor
   constructor() {
+    this.db = new Db();
     this.frontend = new Frontend();
     this.delegateClassEvent("NewTab", "click", this.newTab);
     this.delegateClassEvent("Tab", "click", this.tab);
@@ -28,15 +32,16 @@ export class Events {
   
   // new tab
   public newTab = (e?: MouseEvent) => {
-    var tab: Tab = new Tab();
-    tab.id = 1;
-    tab.name = "tab #1";
+    var tab: Tab = this.db.newTab();
+    tab.name = "tab #" + tab.id;
     this.frontend.newTab(tab);
     e.preventDefault();
   }
 
   public tab = (e?: MouseEvent) => {
     let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
+    let tab: Tab = this.db.getTab(tab_id);
+    this.frontend.selectTab(tab);
     e.preventDefault();
   }
   

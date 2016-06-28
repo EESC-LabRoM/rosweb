@@ -88,10 +88,10 @@ gulp.task('watchsass', function() {
 gulp.task('watchts', function() {
   gulp.watch(paths.sass, ['typescript']);
 });
-gulp.task('watchhbs', function(){
+gulp.task('watchhbs', function() {
   gulp.watch(paths.hbs, ['handlebars']);
 });
-gulp.task('watchjslibs', function() { 
+gulp.task('watchjslibs', function() {
   gulp.watch(paths.jslibs, ['jslibs']);
 });
 gulp.task('watch', function() {
@@ -102,3 +102,17 @@ gulp.task('watch', function() {
   gulp.watch(paths.hbs, ['handlebars']);
 });
 
+// Web server
+gulp.task('ws', function() {
+  var gulp = require('gulp');
+  var webserver = require('gulp-webserver');
+  var stream = gulp.src('./')
+    .pipe(webserver({
+      livereload: true,
+      directoryListing: true,
+      open: true,
+      host: "localhost",
+      port: 8080
+    }));
+  stream.emit('kill');
+});
