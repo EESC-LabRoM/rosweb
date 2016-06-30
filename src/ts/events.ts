@@ -1,7 +1,7 @@
 /// <reference path="d/jquery.d.ts" />
 
 import {Frontend} from "./frontend.ts";
-import {Tab} from "./tab.ts";
+import {Tab} from "./model/tab.ts";
 import {Db} from "./db.ts";
 
 export class Events {
@@ -15,23 +15,21 @@ export class Events {
     this.Frontend = new Frontend();
     
     this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
-    
     this.DelegateClassEvent("Nothing", "click", this.nothing);
     this.DelegateClassEvent("NewTab", "click", this.newTab);
-    this.DelegateClassEvent("Tab", "click", this.tab);
+    this.DelegateClassEvent("Tab", "click", this.selectTab);
     this.DelegateClassEvent("CloseTab", "click", this.closeTab);
+    this.DelegateClassEvent("WidgetItem", "click", this.widgetItem);
   }
   
   private DelegateClassEvent(className: string, eventType: string, method: () => void) {
     $(document).delegate("." + this.eventsClassPrefix + className, eventType, method);
   }
-  private DelegateIdEvent(id: string, eventType: string, method: () => void) {
-    $(document).delegate("#" + id, eventType, method);
-  }
   
   public nothing = (e?: MouseEvent) => {
     e.preventDefault();
   }
+  
   public newTab = (e?: MouseEvent) => {
     this._newTab();
     e.preventDefault();
@@ -40,17 +38,19 @@ export class Events {
     var tab: Tab = this.Db.newTab();
     tab = this.Frontend.formTab(tab);
     this.Frontend.newTab(tab);
-    this._tab(tab);
+    this._selectTab(tab);
   }
-  public tab = (e?: MouseEvent) => {
+  
+  public selectTab = (e?: MouseEvent) => {
     let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
     let tab: Tab = this.Db.getTab(tab_id);
-    this._tab(tab);
+    this._selectTab(tab);
     e.preventDefault();
   }
-  private _tab(tab: Tab): void {
+  private _selectTab(tab: Tab): void {
     this.Frontend.selectTab(tab);
   }
+  
   public closeTab = (e?: MouseEvent) => {
     let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
     if(confirm("Are you sure you want to close tab #" + tab_id + " ?")) {
@@ -62,12 +62,19 @@ export class Events {
     this.Db.removeTab(tab_id);
     this.Frontend.closeTab(tab_id);
   }
+  
   public widgetMenu = (e?: MouseEvent) => {
     this._widgetMenu();
     e.preventDefault();
   }
   private _widgetMenu() {
-    this.Frontend.widgetsMenu();
+    this.Frontend.showWidgetsMenu();
+  }
+  
+  public widgetItem = (e?: MouseEvent) => {
+    this.Frontend.insertWidget();
+    alert("ouch!");
+    e.preventDefault();
   }
   
 }

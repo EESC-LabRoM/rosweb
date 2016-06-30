@@ -1,7 +1,8 @@
 /// <reference path="d/handlebars.d.ts" />
 /// <reference path="d/jquery.d.ts" />
 
-import {Tab} from "./tab.ts";
+import {Tab} from "./model/tab.ts";
+import {Widget} from "./model/widget.ts";
 import {Names} from "./names.ts";
 
 declare var MyApp: any;
@@ -55,8 +56,33 @@ export class Frontend {
     this.ActiveTabId = tab.id;
   }
   
-  public widgetsMenu() {
-    $("." + this.Names.classWidgetsList).animate({width: 'toggle'});
+  public showWidgetsMenu(): void {
+    $("." + this.Names.classWidgetsContainer).animate({width: 'toggle'});
+  }
+  public widgetsList(list: Array<Widget>): void {
+    var html = MyApp.templates.widgetList(list);
+    $("." + this.Names.classWidgetsList).html(html);
+  }
+  public getWidgetContent(): void {
+    var theTemplateScript = $("#expressions-template").html();
+
+    // Compile the template
+    var theTemplate = Handlebars.compile(theTemplateScript);
+
+    // Define our data object
+    var context={
+      "description": {
+        "escaped": "Using {{}} brackets will result in escaped HTML:",
+        "unescaped": "Using {{{}}} will leave the context as it is:"
+      },
+      "example": "<button> Hello </button>"
+    };
+
+    // Pass our data to the template
+    var theCompiledHtml = theTemplate(context);
+  }
+  public insertWidget(): void {
+    
   }
 
 }

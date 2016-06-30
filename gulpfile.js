@@ -5,7 +5,8 @@ var paths = {
   ts: ["./src/ts/**/*.ts"],
   sass: ["./src/sass/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
-  jslibs: ["./src/js/**/*.js"]
+  jslibs: ["./src/js/**/*.js"],
+  jswidgets: ["./src/js/widgets/**/*.*"]
 };
 
 gulp.task('default', ['html', 'typescript', 'sass', 'handlebars', 'jslibs'], function() {
@@ -76,7 +77,13 @@ gulp.task('jslibs', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('watchbasic', ['watchsass', 'watchhbs', 'watchhtml']);
+// Widgets
+gulp.task('widgets', function() {
+  return gulp.src(paths.jswidgets)
+    .pipe(gulp.dest('dist/widgets'));
+});
+
+gulp.task('watchbasic', ['watchsass', 'watchhbs', 'watchhtml', 'watchhbs']);
 
 // Watch
 gulp.task('watchhtml', function() {

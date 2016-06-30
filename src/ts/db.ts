@@ -1,9 +1,13 @@
-import {Tab} from "./tab.ts";
+import {Tab} from "./model/tab.ts";
+import {Widget} from "./model/widget.ts";
 
 export class Db {
   
   private TabCounter: number;
   private Tabs: Array<Tab>;
+  
+  private WidgetCounter: number;
+  private Widgets: Array<Widget>;
   
   constructor() {
     this.TabCounter = 0;
@@ -16,14 +20,12 @@ export class Db {
     this.Tabs.push(tab);
     return tab;
   }
-  
   public getTab(id: number): Tab {
     for(let tab of this.Tabs) {
       if(tab.id == id) return tab;
     }
     return null;
   }
-  
   public removeTab(tab_id: number): boolean {
     let index: number = 0;
     for(let tab of this.Tabs) {

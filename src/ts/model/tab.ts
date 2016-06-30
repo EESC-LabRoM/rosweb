@@ -1,7 +1,7 @@
 export class Tab {
   
-  id: number;
-  name: string;
+  public id: number;
+  public name: string;
   
   constructor(name?: string) {
     if(name) {

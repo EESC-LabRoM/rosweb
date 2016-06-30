@@ -50,20 +50,23 @@ body {
       }
     }
     div#content {
-      div.cssWidgetsList {
+      div.cssWidgetsContainer {
         display:none;
         position:absolute;
         float:left;
         width:300px;
         min-height:600px;
         background-color:darken($ros_color, 20%);
-        div.cssWidgetsListContent {
+        div.cssWidgets {
           width:300px;
           h2 {
             padding:8px 0;
             color:#fff;
             font-size:20px;
             text-align:center;
+          }
+          div.cssWidgetsList {
+            
           }
         }
       }
