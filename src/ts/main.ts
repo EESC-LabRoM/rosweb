@@ -1,8 +1,9 @@
 import {Events} from "./events.ts";
 import {Frontend} from "./frontend.ts";
 
+export var events: Events;
 function init() {
-  let events = new Events();
+  events = new Events();
 }
 
 init();

@@ -2,22 +2,38 @@ import {Tab} from "./tab.ts";
 
 export class Db {
   
-  private tabCounter: number;
+  private TabCounter: number;
+  private Tabs: Array<Tab>;
   
   constructor() {
-    this.tabCounter = 0;
+    this.TabCounter = 0;
+    this.Tabs = new Array<Tab>();
   }
   
   public newTab(): Tab {
     let tab = new Tab();
-    tab.id = ++this.tabCounter;
+    tab.id = ++this.TabCounter;
+    this.Tabs.push(tab);
     return tab;
   }
   
   public getTab(id: number): Tab {
-    let tab = new Tab();
-    tab.id = id;
-    return tab;
+    for(let tab of this.Tabs) {
+      if(tab.id == id) return tab;
+    }
+    return null;
+  }
+  
+  public removeTab(tab_id: number): boolean {
+    let index: number = 0;
+    for(let tab of this.Tabs) {
+      if(tab.id == tab_id) {
+        this.Tabs.splice(index, 1);
+        return true;
+      }
+      index++;
+    }
+    return false;
   }
   
 }

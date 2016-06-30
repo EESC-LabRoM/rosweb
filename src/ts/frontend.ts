@@ -13,6 +13,8 @@ export class Frontend {
   
   private names: Names;
   
+  private ActiveTabId: number;
+  
   constructor() {
     this.tabContainerId = "header2";
     this.tabContentContainerId = "content";
@@ -22,7 +24,8 @@ export class Frontend {
   
   public formTab(tab?: Tab): Tab {
     if(tab) {
-      
+      tab.name = "tab #" + tab.id; 
+      return tab;
     }
     return new Tab();
   }
@@ -36,6 +39,10 @@ export class Frontend {
     document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
   }
   
+  public closeTab(tab_id: number): void {
+    $(".jsTab[data-tab-id='" + tab_id + "']").remove();
+    $(".jsTabContent[data-tab-id='" + tab_id + "']").remove();
+  }
   
   public selectTab(tab: Tab): void {
     let className = this.names.eventsClassPrefix + "Tab";
@@ -44,6 +51,7 @@ export class Frontend {
     let tabClassName = this.names.classTabContent;
     $("." + tabClassName).removeClass("jsShow").addClass("jsHide");
     $("." + tabClassName + "[data-tab-id=" + tab.id + "]").removeClass("jsHide").addClass("jsShow");
+    this.ActiveTabId = tab.id;
   }
 
 }
