@@ -4,6 +4,8 @@ export class Names {
   
   public classTabContent: string = "jsTabContent";
   
+  public classWidgetsList: string = "jsWidgetsList";
+  
   constructor() {
     
   }

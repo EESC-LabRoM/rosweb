@@ -7,23 +7,66 @@ body {
   div#container {
     div.header {
       padding:10px 20px;
-    }
-    div#header1 {
-      background-color:$ros_color;
-      a {
-        color:#fff;
-        font-weight: bold;
-        text-decoration: none;
+      &#header1 {
+        background-color:$ros_color;
+        a {
+          margin:0 10px;
+          color:#fff;
+          font-weight: bold;
+          text-decoration: none;
+        }
       }
-    }
-    div#header2 {
-      padding-bottom:0;
-      background-color:#ddd;
-      a.cssNewTab {
-        color:darken($ros_color, 20%);
+      &#header2 {
+        padding:5px 20px;
+        background-color:darken($ros_color, 10%);
+        border-bottom:1px solid #fff;
+        a.cssNewTab {
+          display:inline-block;
+          padding:5px;
+          border:1px solid #fff;
+          border-radius: 6px;
+          color:#fff;
+          text-decoration: none;
+          &:hover, &:active {
+            background-color:darken($ros_color, 15%);
+          }
+        }
+        div.cssTab{
+          display:inline-block;
+          border:solid #fff;
+          border-width:1px 1px 0;
+          margin:0 10px;
+          a {
+            text-decoration: none;
+            &.cssEventTab {
+              padding: 3px 3px 0;
+              color:#333;
+            }
+            &.cssEventCloseTab {
+              color:red;
+            }
+          }
+        }
       }
     }
     div#content {
+      div.cssWidgetsList {
+        display:none;
+        position:absolute;
+        float:left;
+        width:300px;
+        min-height:600px;
+        background-color:darken($ros_color, 20%);
+        div.cssWidgetsListContent {
+          width:300px;
+          h2 {
+            padding:8px 0;
+            color:#fff;
+            font-size:20px;
+            text-align:center;
+          }
+        }
+      }
       div.lside {
         float:left;
         width:15%;

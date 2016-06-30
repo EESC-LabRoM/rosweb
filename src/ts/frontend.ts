@@ -11,15 +11,15 @@ export class Frontend {
   public tabContainerId: string;
   public tabContentContainerId: string;
   
-  private names: Names;
+  private Names: Names;
   
   private ActiveTabId: number;
   
   constructor() {
     this.tabContainerId = "header2";
-    this.tabContentContainerId = "content";
+    this.tabContentContainerId = "tabs";
     
-    this.names = new Names();
+    this.Names = new Names();
   }
   
   public formTab(tab?: Tab): Tab {
@@ -34,7 +34,8 @@ export class Frontend {
     var tabHtml = MyApp.templates.tab(tab);
     var tabContentHtml = MyApp.templates.tabContent(tab);
     // insert tab
-    document.getElementById(this.tabContainerId).innerHTML += tabHtml;
+    $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
+    //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
     // insert tab content
     document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
   }
@@ -45,13 +46,17 @@ export class Frontend {
   }
   
   public selectTab(tab: Tab): void {
-    let className = this.names.eventsClassPrefix + "Tab";
+    let className = this.Names.eventsClassPrefix + "Tab";
     $("." + className).removeClass("jsActive");
     $("." + className + "[data-tab-id=" + tab.id + "]").addClass("jsActive");
-    let tabClassName = this.names.classTabContent;
+    let tabClassName = this.Names.classTabContent;
     $("." + tabClassName).removeClass("jsShow").addClass("jsHide");
     $("." + tabClassName + "[data-tab-id=" + tab.id + "]").removeClass("jsHide").addClass("jsShow");
     this.ActiveTabId = tab.id;
+  }
+  
+  public widgetsMenu() {
+    $("." + this.Names.classWidgetsList).animate({width: 'toggle'});
   }
 
 }

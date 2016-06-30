@@ -3,7 +3,6 @@
 import {Frontend} from "./frontend.ts";
 import {Tab} from "./tab.ts";
 import {Db} from "./db.ts";
-import {Names} from "./names.ts";
 
 export class Events {
   
@@ -14,6 +13,10 @@ export class Events {
   constructor() {
     this.Db = new Db();
     this.Frontend = new Frontend();
+    
+    this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
+    
+    this.DelegateClassEvent("Nothing", "click", this.nothing);
     this.DelegateClassEvent("NewTab", "click", this.newTab);
     this.DelegateClassEvent("Tab", "click", this.tab);
     this.DelegateClassEvent("CloseTab", "click", this.closeTab);
@@ -21,14 +24,14 @@ export class Events {
   
   private DelegateClassEvent(className: string, eventType: string, method: () => void) {
     $(document).delegate("." + this.eventsClassPrefix + className, eventType, method);
-    /*
-    let elements : NodeListOf<Element> = document.getElementsByClassName(this.eventsClassPrefix + "NewTab");
-    for(let element of elements) {
-      element.addEventListener("click", method);
-    }
-    */
+  }
+  private DelegateIdEvent(id: string, eventType: string, method: () => void) {
+    $(document).delegate("#" + id, eventType, method);
   }
   
+  public nothing = (e?: MouseEvent) => {
+    e.preventDefault();
+  }
   public newTab = (e?: MouseEvent) => {
     this._newTab();
     e.preventDefault();
@@ -58,6 +61,13 @@ export class Events {
   private _closeTab(tab_id: number): void {
     this.Db.removeTab(tab_id);
     this.Frontend.closeTab(tab_id);
+  }
+  public widgetMenu = (e?: MouseEvent) => {
+    this._widgetMenu();
+    e.preventDefault();
+  }
+  private _widgetMenu() {
+    this.Frontend.widgetsMenu();
   }
   
 }

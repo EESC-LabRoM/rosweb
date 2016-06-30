@@ -4,19 +4,28 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="main.css" />
-  <title>Hello World!</title>
+  <title>ROSWeb</title>
 </head>
 
 <body>
   <div id="container">
     <div id="header1" class="header">
-      <a href="#">ROSWeb</a>
+      <a href="#" class="jsEventNothing">ROSWeb</a>
+      <a href="#" class="jsEventWidgetsMenu">Widgets</a>
     </div>
     <div id="header2" class="header">
       <a href="#" class="jsEventNewTab cssNewTab">New tab</a>
+      <div class="clearfix"></div>
     </div>
 
     <div id="content">
+      <div class="cssWidgetsList jsWidgetsList">
+        <div class="cssWidgetsListContent">
+          <h2>Widgets</h2>
+          <div id="widgetsList"></div>
+        </div>
+      </div>
+      <div id="tabs"></div>
     </div>
 
     <div id="footer">
