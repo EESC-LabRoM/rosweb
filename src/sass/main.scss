@@ -17,12 +17,13 @@ body {
         }
       }
       &#header2 {
-        padding:5px 20px;
+        padding:5px 20px 0;
         background-color:darken($ros_color, 10%);
         border-bottom:1px solid #fff;
         a.cssNewTab {
           display:inline-block;
           padding:5px;
+          margin-bottom:5px;
           border:1px solid #fff;
           border-radius: 6px;
           color:#fff;
@@ -33,17 +34,23 @@ body {
         }
         div.cssTab{
           display:inline-block;
+          height:30px;
           border:solid #fff;
           border-width:1px 1px 0;
           margin:0 10px;
           a {
+            display:inline-block;
+            height:100%;
             text-decoration: none;
             &.cssEventTab {
-              padding: 3px 3px 0;
+              padding: 0 3px;
               color:#333;
             }
             &.cssEventCloseTab {
+              display:inline-block;
+              padding:0 5px;
               color:red;
+              background-image:url();
             }
           }
         }
@@ -75,6 +82,10 @@ body {
         width:15%;
         height:500px;
         background-color:darken($ros_color, 20%);
+      }
+      .cssTabContent {
+        width:100%;
+        min-height:300px;
       }
     }
     div#footer {
