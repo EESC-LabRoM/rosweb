@@ -1,32 +1,42 @@
 // This is Gulp!
 var gulp = require('gulp');
-var paths = {
-  html: ["src/*.html"],
-  ts: ["./src/ts/**/*.ts"],
-  sass: ["./src/sass/**/*.scss"],
-  hbs: ["./src/hbs/**/*.hbs"],
-  jslibs: ["./src/js/**/*.js"],
-  jswidgets: ["./src/js/widgets/**/*.*"]
-};
-
-gulp.task('default', ['html', 'typescript', 'sass', 'handlebars', 'jslibs'], function() {
-
-});
-
-// HTML
-var pages = ["src/*.html"];
-gulp.task('html', function() {
-  return gulp.src(paths.html)
-    .pipe(gulp.dest('dist'));
-});
-
-// TypeScript
+// ts
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
-gulp.task('typescript', function() {
+// hbs
+var handlebars = require('gulp-handlebars');
+var wrap = require('gulp-wrap');
+var declare = require('gulp-declare');
+var concat = require('gulp-concat');
+// sass
+var sass = require('gulp-sass');
+var paths = {
+  html: ["src/*.html"],
+  ts: ["./src/ts/**/*.ts"],
+  sass: ["./src/sass/**/*.scss"],
+  hbs: ["./src/hbs/**/*.hbs"],
+  js: ["./src/js/**/*.js"],
+  wdgt: ["./src/js/widgets/**/*.*"]
+};
+
+gulp.task('default', ['html', 'ts', 'sass', 'hbs', 'js', 'wdgt', 'ws'], function() {
+
+});
+
+// HTML
+gulp.task('html', function() {
+  return gulp.src(paths.html)
+    .pipe(gulp.dest('dist'));
+});
+gulp.task('watchhtml', ['html'], function() {
+  gulp.watch(paths.html, ['html']);
+});
+
+// TypeScript
+gulp.task('ts', function() {
   return browserify({
     basedir: '.',
     debug: true,
@@ -43,21 +53,22 @@ gulp.task('typescript', function() {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist'));
 });
+gulp.task('watchts', ['js'], function() {
+  gulp.watch(paths.sass, ['ts']);
+});
 
 // SASS
-var sass = require('gulp-sass');
 gulp.task('sass', function() {
   return gulp.src('./src/sass/main.scss')
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest('./dist/'));
 });
+gulp.task('watchsass', ['sass'], function() {
+  gulp.watch(paths.sass, ['sass']);
+});
 
 // Handlebars
-var handlebars = require('gulp-handlebars');
-var wrap = require('gulp-wrap');
-var declare = require('gulp-declare');
-var concat = require('gulp-concat');
-gulp.task('handlebars', function() {
+gulp.task('hbs', function() {
   gulp.src('src/hbs/**/*.hbs')
     .pipe(handlebars({
       handlebars: require('handlebars')
@@ -70,53 +81,41 @@ gulp.task('handlebars', function() {
     .pipe(concat('templates.js'))
     .pipe(gulp.dest('dist/'));
 });
+gulp.task('watchhbs', ['hbs'], function() {
+  gulp.watch(paths.hbs, ['hbs']);
+});
 
 // JavaScript libraries
-gulp.task('jslibs', function() {
-  return gulp.src(paths.jslibs)
+gulp.task('js', function() {
+  return gulp.src(paths.js)
     .pipe(gulp.dest('dist'));
+});
+gulp.task('watchjs', ['js'], function() {
+  gulp.watch(paths.js, ['js']);
 });
 
 // Widgets
-gulp.task('widgets', function() {
-  return gulp.src(paths.jswidgets)
+gulp.task('wdgt', function() {
+  return gulp.src(paths.wdgt)
     .pipe(gulp.dest('dist/widgets'));
 });
+gulp.task('watchwdgt', ['wdgt'], function() {
+  gulp.watch(paths.wdgt, ['wdgt']);
+});
 
-gulp.task('watchbasic', ['watchsass', 'watchhbs', 'watchhtml', 'watchhbs']);
+gulp.task('watch', ['watchhtml', 'watchsass', 'watchts', 'watchhbs', 'watchwdgt', 'watchjs']);
+gulp.task('watch1', ['watchhtml', 'watchsass', 'watchhbs', 'watchwdgt', 'watchjs']);
 
 // Watch
-gulp.task('watchhtml', function() {
-  gulp.watch(paths.html, ['html']);
-});
-gulp.task('watchsass', function() {
-  gulp.watch(paths.sass, ['sass']);
-});
-gulp.task('watchts', function() {
-  gulp.watch(paths.sass, ['typescript']);
-});
-gulp.task('watchhbs', function() {
-  gulp.watch(paths.hbs, ['handlebars']);
-});
-gulp.task('watchjslibs', function() {
-  gulp.watch(paths.jslibs, ['jslibs']);
-});
-gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
-  gulp.watch(paths.jslibs, ['jslibs']);
-  gulp.watch(paths.ts, ['typescript']);
-  gulp.watch(paths.html, ['html']);
-  gulp.watch(paths.hbs, ['handlebars']);
-});
 
 // Web server
 gulp.task('ws', function() {
   var gulp = require('gulp');
   var webserver = require('gulp-webserver');
-  var stream = gulp.src('./')
+  var stream = gulp.src('./dist/')
     .pipe(webserver({
       livereload: true,
-      directoryListing: true,
+      directoryListing: false,
       open: true,
       host: "localhost",
       port: 8080
