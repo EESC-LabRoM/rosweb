@@ -19,7 +19,8 @@ var paths = {
   sass: ["./src/sass/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
   js: ["./src/js/**/*.js"],
-  wdgt: ["./src/js/widgets/**/*.*"]
+  wdgt: ["./src/js/widgets/**/*.*"],
+  img: ["./src/img/**/*.*"]
 };
 
 gulp.task('default', ['html', 'ts', 'sass', 'hbs', 'js', 'wdgt', 'ws'], function() {
@@ -67,6 +68,15 @@ gulp.task('watchsass', ['sass'], function() {
   gulp.watch(paths.sass, ['sass']);
 });
 
+// Images
+gulp.task('img', function() {
+  return gulp.src(paths.img)
+    .pipe(gulp.dest('dist/img/'));
+});
+gulp.task('watchimg', ['img'], function() {
+  gulp.watch(paths.img, ['img']);
+});
+
 // Handlebars
 gulp.task('hbs', function() {
   gulp.src('src/hbs/**/*.hbs')
@@ -104,7 +114,7 @@ gulp.task('watchwdgt', ['wdgt'], function() {
 });
 
 gulp.task('watch', ['watchhtml', 'watchsass', 'watchts', 'watchhbs', 'watchwdgt', 'watchjs']);
-gulp.task('watch1', ['watchhtml', 'watchsass', 'watchhbs', 'watchwdgt', 'watchjs']);
+gulp.task('watch1', ['watchhtml', 'watchsass', 'watchhbs', 'watchwdgt', 'watchjs', 'watchimg']);
 
 // Watch
 

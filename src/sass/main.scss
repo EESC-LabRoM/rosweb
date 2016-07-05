@@ -3,7 +3,7 @@
 @import 'js';
 
 body {
-  background:#eee;
+  background:#ccc;
   div#container {
     div.header {
       padding:10px 20px;
@@ -28,9 +28,6 @@ body {
           border-radius: 6px;
           color:#fff;
           text-decoration: none;
-          &:hover, &:active {
-            background-color:darken($ros_color, 15%);
-          }
         }
         div.cssTab{
           display:inline-block;
@@ -44,13 +41,10 @@ body {
             text-decoration: none;
             &.cssEventTab {
               padding: 0 3px;
-              color:#333;
             }
             &.cssEventCloseTab {
               display:inline-block;
               padding:0 5px;
-              color:red;
-              background-image:url();
             }
           }
         }
