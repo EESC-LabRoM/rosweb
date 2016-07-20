@@ -6,8 +6,8 @@ body {
   background:#eee;
   div#container {
     div.header {
-      padding:10px 20px;
       &#header1 {
+        padding:10px 20px;
         background-color:$ros_color;
         a {
           margin:0 10px;
@@ -17,13 +17,16 @@ body {
         }
       }
       &#header2 {
-        padding:5px 20px 0;
+        $header2Height: 50px;
+        height:$header2Height;
         background-color:darken($ros_color, 10%);
         border-bottom:1px solid #fff;
+        > a.cssNewTab, > div.cssTab {
+          float:left;
+        }
         a.cssNewTab {
-          display:inline-block;
-          padding:5px;
-          margin-bottom:5px;
+          margin: 10px 10px 0;
+          padding: 5px;
           border:1px solid #fff;
           border-radius: 6px;
           color:#fff;
@@ -32,25 +35,35 @@ body {
             background-color:darken($ros_color, 15%);
           }
         }
-        div.cssTab{
+
+        div.cssTab {
           display:inline-block;
-          height:30px;
+          margin: 20px 3px 0px;
+          $cssTabHeight: 30px;
+          height: $cssTabHeight;
           border:solid #fff;
+          border-radius:6px 6px 0 0;
           border-width:1px 1px 0;
-          margin:0 10px;
+          overflow: hidden;
           a {
-            display:inline-block;
+            float:left;
             height:100%;
-            text-decoration: none;
+            text-decoration:none;
             &.cssEventTab {
-              padding: 0 3px;
+              padding: 0 5px;
               color:#333;
+              line-height:$cssTabHeight;
             }
             &.cssEventCloseTab {
               display:inline-block;
-              padding:0 5px;
-              color:red;
-              background-image:url();
+              padding:0 7px;
+              background-image:url(img/close.png);
+              background-size:100%;
+              background-position: 50%;
+              background-repeat:no-repeat;
+              &:hover {
+                background-color:#ddd;
+              }
             }
           }
         }

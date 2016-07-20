@@ -47,6 +47,9 @@ export class Frontend {
   }
   
   public selectTab(tab: Tab): void {
+    let parentClassName = this.Names.classTabParent;
+    $("." + parentClassName).removeClass("jsActive");
+    $("." + parentClassName + "[data-tab-id=" + tab.id + "]").addClass("jsActive");
     let className = this.Names.eventsClassPrefix + "Tab";
     $("." + className).removeClass("jsActive");
     $("." + className + "[data-tab-id=" + tab.id + "]").addClass("jsActive");
