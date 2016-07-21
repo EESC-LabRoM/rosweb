@@ -3,16 +3,19 @@
 import {Frontend} from "./frontend.ts";
 import {Tab} from "./model/tab.ts";
 import {Db} from "./db.ts";
+import {WidgetsManager} from "./widgets_manager.ts";
 
 export class Events {
   
   private eventsClassPrefix : string = "jsEvent";
-  private Frontend: Frontend;
   private Db: Db;
+  private Frontend: Frontend;
+  private WidgetsManager: WidgetsManager;
   
   constructor() {
     this.Db = new Db();
     this.Frontend = new Frontend();
+    this.WidgetsManager = new WidgetsManager();
     
     this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
     this.DelegateClassEvent("Nothing", "click", this.nothing);
@@ -72,9 +75,14 @@ export class Events {
   }
   
   public widgetItem = (e?: MouseEvent) => {
-    this.Frontend.insertWidget();
-    alert("ouch!");
+    let widgetAlias = $(e.toElement).attr("data-widget-alias");
+    this._widgetItem(widgetAlias);
     e.preventDefault();
+  }
+  private _widgetItem(widgetAlias: string): void {
+    let widget = this.WidgetsManager.getByName(widgetAlias);
+    let widgetInstance = this.WidgetsManager.newInstanceOf(widget);
+    this.Frontend.insertWidget(widgetInstance);
   }
   
 }

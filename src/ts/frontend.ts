@@ -3,6 +3,7 @@
 
 import {Tab} from "./model/tab.ts";
 import {Widget} from "./model/widget.ts";
+import {WidgetInstance} from "./model/widget_instance.ts";
 import {Names} from "./names.ts";
 
 declare var MyApp: any;
@@ -66,26 +67,38 @@ export class Frontend {
     var html = MyApp.templates.widgetList(list);
     $("." + this.Names.classWidgetsList).html(html);
   }
-  public getWidgetContent(): void {
-    var theTemplateScript = $("#expressions-template").html();
+  private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance): void {
+    let fn = this._insertWidget;
+    $.ajax({
+      url: "widgets/" + widgetInstance.Widget.alias + "/index.hbs",
+      beforeSend: function() {
 
-    // Compile the template
-    var theTemplate = Handlebars.compile(theTemplateScript);
-
-    // Define our data object
-    var context={
-      "description": {
-        "escaped": "Using {{}} brackets will result in escaped HTML:",
-        "unescaped": "Using {{{}}} will leave the context as it is:"
       },
-      "example": "<button> Hello </button>"
-    };
-
-    // Pass our data to the template
-    var theCompiledHtml = theTemplate(context);
+      success: function(data: string) {
+        MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
+        fn(widgetInstance);
+      },
+      error: function(e1: any, e2: any) {
+        throw "Widget file not found!";
+      }
+    });
   }
-  public insertWidget(): void {
-    
+
+  public insertWidget(widgetInstance: WidgetInstance): void {
+    if(MyApp.templates._widgetsTemplates === undefined) {
+      MyApp.templates._widgetsTemplates = [];
+    }
+    if(MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
+      this._loadWidgetContentAndInsert(widgetInstance);
+    }
+    this._insertWidget(widgetInstance);
+  }
+
+  private _insertWidget(widgetInstance: WidgetInstance): void {
+    var content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
+    console.log(content);
+    var html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content});
+    console.log(html);
   }
 
 }

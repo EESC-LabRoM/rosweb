@@ -54,8 +54,8 @@ gulp.task('ts', function() {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist'));
 });
-gulp.task('watchts', ['js'], function() {
-  gulp.watch(paths.sass, ['ts']);
+gulp.task('watchts', ['ts'], function() {
+  gulp.watch(paths.ts, ['ts']);
 });
 
 // SASS
@@ -122,7 +122,7 @@ gulp.task('watchwdgt', ['wdgt'], function() {
   gulp.watch(paths.wdgt, ['wdgt']);
 });
 
-gulp.task('watch', ['watchhtml', 'watchsass', 'watchimg', 'watchts', 'watchhbs', 'watchwdgt', 'watchjs']);
+gulp.task('watch0', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'watchts']);
 gulp.task('watch1', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs']);
 
 // Watch
