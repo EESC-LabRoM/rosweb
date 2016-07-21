@@ -1,7 +1,32 @@
+@import 'vars';
+
 * {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.header {
+  &#header2 {
+    a.cssNewTab {
+      color:#fff;
+      &:hover, &:active {
+        background-color:darken($ros_color, 15%);
+      }
+    }
+    div.cssTab {
+      background-color:#ccc;
+      a {
+        &.cssEventTab {
+          padding: 0 3px;
+          color:#333;
+        }
+        &.cssEventCloseTab {
+          background-image:url(img/close-16.png);
+        }
+      }
+    }
+  }
 }
 
 .btn {

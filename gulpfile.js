@@ -68,6 +68,15 @@ gulp.task('watchsass', ['sass'], function() {
   gulp.watch(paths.sass, ['sass']);
 });
 
+// Images
+gulp.task('img', function() {
+  return gulp.src(paths.img)
+    .pipe(gulp.dest('dist/img/'));
+});
+gulp.task('watchimg', ['img'], function() {
+  gulp.watch(paths.img, ['img']);
+});
+
 // Handlebars
 gulp.task('hbs', function() {
   gulp.src('src/hbs/**/*.hbs')

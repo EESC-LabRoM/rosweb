@@ -3,7 +3,7 @@
 @import 'js';
 
 body {
-  background:#eee;
+  background:#ccc;
   div#container {
     div.header {
       &#header1 {
@@ -31,9 +31,6 @@ body {
           border-radius: 6px;
           color:#fff;
           text-decoration: none;
-          &:hover, &:active {
-            background-color:darken($ros_color, 15%);
-          }
         }
 
         div.cssTab {
