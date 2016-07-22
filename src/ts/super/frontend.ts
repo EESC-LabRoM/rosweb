@@ -1,10 +1,10 @@
-/// <reference path="d/handlebars.d.ts" />
-/// <reference path="d/jquery.d.ts" />
+/// <reference path="../d/handlebars.d.ts" />
+/// <reference path="../d/jquery.d.ts" />
 
 // Models
-import {Tab} from "./model/tab.ts";
-import {Widget} from "./model/widget.ts";
-import {WidgetInstance} from "./model/widget_instance.ts";
+import {Tab} from "../model/tab.ts";
+import {Widget} from "../model/widget.ts";
+import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super classes
 import {Names} from "./names.ts";

@@ -19,7 +19,7 @@ var paths = {
   sass: ["./src/sass/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
   js: ["./src/js/**/*.js"],
-  wdgt: ["./src/js/widgets/**/*.*"],
+  wdgt: ["./src/widgets/**/*.*"],
   img: ["./src/img/**/*.*"]
 };
 

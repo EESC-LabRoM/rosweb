@@ -1,6 +1,7 @@
-import {Tab} from "./model/tab.ts";
-import {Widget} from "./model/widget.ts";
-import {WidgetInstance} from "./model/widget_instance.ts";
+// Models
+import {Tab} from "../model/tab.ts";
+import {Widget} from "../model/widget.ts";
+import {WidgetInstance} from "../model/widget_instance.ts";
 
 export class Db {
   

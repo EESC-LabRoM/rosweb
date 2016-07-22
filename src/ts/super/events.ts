@@ -1,10 +1,11 @@
-/// <reference path="d/jquery.d.ts" />
+/// <reference path="../d/jquery.d.ts" />
 
 // Models
-import {Tab} from "./model/tab.ts";
+import {Tab} from "../model/tab.ts";
 
 // Super classes
 import {Db} from "./db.ts";
+import {Design} from "./design.ts";
 import {Frontend} from "./frontend.ts";
 import {WidgetsManager} from "./widgets_manager.ts";
 
@@ -12,17 +13,23 @@ export class Events {
   
   private eventsClassPrefix : string = "jsEvent";
   private Db: Db;
-  public Frontend: Frontend;
+  private Frontend: Frontend;
   private WidgetsManager: WidgetsManager;
+  private Design: Design;
   
   constructor() {
     this.Db = new Db();
     this.Frontend = new Frontend();
     this.WidgetsManager = new WidgetsManager();
+    this.Design = new Design();
 
     // render list
     this.Frontend.widgetsList(this.WidgetsManager.widgets);
+
+    // Resize Events
+    this.DelegateResizeEvent(window, this._windowResized);
     
+    // Left Click Events
     this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
     this.DelegateClassEvent("Nothing", "click", this.nothing);
     this.DelegateClassEvent("NewTab", "click", this.newTab);
@@ -30,9 +37,17 @@ export class Events {
     this.DelegateClassEvent("CloseTab", "click", this.closeTab);
     this.DelegateClassEvent("WidgetItem", "click", this.widgetItem);
   }
+
+  private _windowResized = (e?: MouseEvent) => {
+    this.Design.adjustWindowResize();
+  }
   
   private DelegateClassEvent(className: string, eventType: string, method: () => void) {
     $(document).delegate("." + this.eventsClassPrefix + className, eventType, method);
+  }
+
+  private DelegateResizeEvent(selector: any, method: () => void) {
+    $(selector).resize(method);
   }
   
   public nothing = (e?: MouseEvent) => {
