@@ -1,10 +1,14 @@
 /// <reference path="d/handlebars.d.ts" />
 /// <reference path="d/jquery.d.ts" />
 
+// Models
 import {Tab} from "./model/tab.ts";
 import {Widget} from "./model/widget.ts";
 import {WidgetInstance} from "./model/widget_instance.ts";
+
+// Super classes
 import {Names} from "./names.ts";
+import {Trigger} from "./trigger.ts";
 
 declare var MyApp: any;
 
@@ -14,6 +18,7 @@ export class Frontend {
   public tabContentContainerId: string;
   
   private Names: Names;
+  public Trigger: Trigger;
   
   private ActiveTabId: number;
   
@@ -22,6 +27,7 @@ export class Frontend {
     this.tabContentContainerId = "tabs";
     
     this.Names = new Names();
+    this.Trigger = new Trigger();
   }
   
   public formTab(tab?: Tab): Tab {
@@ -68,6 +74,7 @@ export class Frontend {
     $("." + this.Names.classWidgetsList).html(html);
   }
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance): void {
+    let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;
     $.ajax({
       url: "widgets/" + widgetInstance.Widget.alias + "/index.hbs",
@@ -76,7 +83,7 @@ export class Frontend {
       },
       success: function(data: string) {
         MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
-        fn(widgetInstance);
+        fn(widgetInstance, currentTabId);
       },
       error: function(e1: any, e2: any) {
         throw "Widget file not found!";
@@ -90,15 +97,37 @@ export class Frontend {
     }
     if(MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
       this._loadWidgetContentAndInsert(widgetInstance);
+    } else {
+      let currentTabId: number = this._getForcedCurrentTabId();
+      this._insertWidget(widgetInstance, currentTabId);
     }
-    this._insertWidget(widgetInstance);
   }
 
-  private _insertWidget(widgetInstance: WidgetInstance): void {
-    var content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-    console.log(content);
-    var html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content});
-    console.log(html);
+  private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number): void {
+    let content: string, html: string;
+    try {
+      content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
+      html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content});
+    } catch(ex) {
+
+    }
+    $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
+  }
+
+  private _getForcedCurrentTabId(): number {
+    let currentTabId: number = this._getCurrentTabId();
+    if(currentTabId === 0) {
+      this.Trigger.newTab();
+    }
+    return this._getCurrentTabId();
+  }
+  private _getCurrentTabId(): number {
+    let tabIdStr: string = $("div.jsTab.jsActive").attr("data-tab-id");
+    if(tabIdStr === undefined) {
+      return 0;
+    }
+    let tabId: number = parseInt(tabIdStr);
+    return tabId;
   }
 
 }

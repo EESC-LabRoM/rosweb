@@ -1,18 +1,14 @@
+// Models
 import {Tab} from "./model/tab.ts";
 import {Widget} from "./model/widget.ts";
 import {WidgetInstance} from "./model/widget_instance.ts";
-import {Frontend} from "./frontend.ts";
 
 export class WidgetsManager {
-
-  private Frontend: Frontend;
 
   public widgets: Array<Widget>;
   private widgetInstanceCurrentId = 0;
 
   constructor() {
-    this.Frontend = new Frontend();
-
     this.widgets = new Array<Widget>();
 
     // load list of available widgets
@@ -29,9 +25,6 @@ export class WidgetsManager {
     widget.alias = "tests";
     widget.url = "./widgets/tests";
     this.widgets.push(widget);
-
-    // render list
-    this.Frontend.widgetsList(this.widgets);
   }
 
   public getByName(widgetAlias: string): Widget {
@@ -44,12 +37,6 @@ export class WidgetsManager {
     });
     if (toReturn === null) throw "Error: Widget alias not found!";
     return toReturn;
-  }
-
-  private _getCurrentTab(): Tab {
-    let tab: Tab = new Tab();
-
-    return tab;
   }
 
   public newInstanceOf(widget: Widget): WidgetInstance {

@@ -1,21 +1,27 @@
 /// <reference path="d/jquery.d.ts" />
 
-import {Frontend} from "./frontend.ts";
+// Models
 import {Tab} from "./model/tab.ts";
+
+// Super classes
 import {Db} from "./db.ts";
+import {Frontend} from "./frontend.ts";
 import {WidgetsManager} from "./widgets_manager.ts";
 
 export class Events {
   
   private eventsClassPrefix : string = "jsEvent";
   private Db: Db;
-  private Frontend: Frontend;
+  public Frontend: Frontend;
   private WidgetsManager: WidgetsManager;
   
   constructor() {
     this.Db = new Db();
     this.Frontend = new Frontend();
     this.WidgetsManager = new WidgetsManager();
+
+    // render list
+    this.Frontend.widgetsList(this.WidgetsManager.widgets);
     
     this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
     this.DelegateClassEvent("Nothing", "click", this.nothing);
@@ -45,8 +51,8 @@ export class Events {
   }
   
   public selectTab = (e?: MouseEvent) => {
-    let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
-    let tab: Tab = this.Db.getTab(tab_id);
+    let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
+    let tab: Tab = this.Db.getTab(tabId);
     this._selectTab(tab);
     e.preventDefault();
   }
@@ -55,15 +61,15 @@ export class Events {
   }
   
   public closeTab = (e?: MouseEvent) => {
-    let tab_id: number = parseInt($(e.toElement).attr("data-tab-id"));
-    if(confirm("Are you sure you want to close tab #" + tab_id + " ?")) {
-      this._closeTab(tab_id);
+    let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
+    if(confirm("Are you sure you want to close tab #" + tabId + " ?")) {
+      this._closeTab(tabId);
     }
     e.preventDefault();
   }
-  private _closeTab(tab_id: number): void {
-    this.Db.removeTab(tab_id);
-    this.Frontend.closeTab(tab_id);
+  private _closeTab(tabId: number): void {
+    this.Db.removeTab(tabId);
+    this.Frontend.closeTab(tabId);
   }
   
   public widgetMenu = (e?: MouseEvent) => {
