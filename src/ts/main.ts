@@ -1,5 +1,5 @@
 // Super classes
-import {Events} from "./super/events.ts";
+import {Events} from "./super/events/events.ts";
 import {DragEvents} from "./super/events/drag.ts";
 
 function init() {

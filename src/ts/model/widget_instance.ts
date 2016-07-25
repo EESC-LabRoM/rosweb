@@ -1,4 +1,4 @@
-import {Geometry} from "../interfaces/Geometry.ts";
+import {Geometry} from "../types/Geometry.ts";
 import {Widget} from "./widget.ts";
 import {Tab} from "./tab.ts";
 

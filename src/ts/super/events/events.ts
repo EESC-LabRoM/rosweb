@@ -1,15 +1,18 @@
-/// <reference path="../d/jquery.d.ts" />
+/// <reference path="../../d/jquery.d.ts" />
+
+// Parent Class
+import {EventsParent} from "./_parent.ts";
 
 // Models
-import {Tab} from "../model/tab.ts";
+import {Tab} from "../../model/tab.ts";
 
 // Super classes
-import {Db} from "./db.ts";
-import {Design} from "./design.ts";
-import {Frontend} from "./frontend.ts";
-import {WidgetsManager} from "./widgets_manager.ts";
+import {Db} from "../db.ts";
+import {Design} from "../design.ts";
+import {Frontend} from "../frontend.ts";
+import {WidgetsManager} from "../widgets_manager.ts";
 
-export class Events {
+export class Events extends EventsParent {
   
   private eventsClassPrefix : string = "jsEvent";
   private Db: Db;
@@ -18,6 +21,7 @@ export class Events {
   private Design: Design;
   
   constructor() {
+    super();
     this.Db = new Db();
     this.Frontend = new Frontend();
     this.WidgetsManager = new WidgetsManager();
@@ -27,27 +31,19 @@ export class Events {
     this.Frontend.widgetsList(this.WidgetsManager.widgets);
 
     // Resize Events
-    this.DelegateResizeEvent(window, this._windowResized);
+    this.DelegateEvent(window, "resize", this._windowResized);
     
     // Left Click Events
-    this.DelegateClassEvent("WidgetsMenu", "click", this.widgetMenu);
-    this.DelegateClassEvent("Nothing", "click", this.nothing);
-    this.DelegateClassEvent("NewTab", "click", this.newTab);
-    this.DelegateClassEvent("Tab", "click", this.selectTab);
-    this.DelegateClassEvent("CloseTab", "click", this.closeTab);
-    this.DelegateClassEvent("WidgetItem", "click", this.widgetItem);
+    this.DelegateEvent("." + this.eventsClassPrefix + "WidgetsMenu", "click", this.widgetMenu);
+    this.DelegateEvent("." + this.eventsClassPrefix + "Nothing", "click", this.nothing);
+    this.DelegateEvent("." + this.eventsClassPrefix + "NewTab", "click", this.newTab);
+    this.DelegateEvent("." + this.eventsClassPrefix + "Tab", "click", this.selectTab);
+    this.DelegateEvent("." + this.eventsClassPrefix + "CloseTab", "click", this.closeTab);
+    this.DelegateEvent("." + this.eventsClassPrefix + "WidgetItem", "click", this.widgetItem);
   }
 
   private _windowResized = (e?: MouseEvent) => {
     this.Design.adjustWindowResize();
-  }
-  
-  private DelegateClassEvent(className: string, eventType: string, method: () => void) {
-    $(document).delegate("." + this.eventsClassPrefix + className, eventType, method);
-  }
-
-  private DelegateResizeEvent(selector: any, method: () => void) {
-    $(selector).resize(method);
   }
   
   public nothing = (e?: MouseEvent) => {
@@ -98,6 +94,7 @@ export class Events {
   public widgetItem = (e?: MouseEvent) => {
     let widgetAlias = $(e.toElement).attr("data-widget-alias");
     this._widgetItem(widgetAlias);
+    this._widgetMenu();
     e.preventDefault();
   }
   private _widgetItem(widgetAlias: string): void {
