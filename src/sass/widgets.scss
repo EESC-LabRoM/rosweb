@@ -1,7 +1,15 @@
 div.cssWidgetContainer {
   position:absolute;
   display:inline-block;
-  &.cssMovable {
-    
+  &[data-widget-movable="1"] {
+    border:1px solid #333;
+    box-shadow:2px 2px 2px 1px rgba(0,0,0,0.7);
+    opacity:0.8;
+    cursor:-webkit-grab;
+    cursor:grab;
+    &:active {
+      cursor:-webkit-grabbing;
+      cursor:grabbing;
+    }
   }
 }

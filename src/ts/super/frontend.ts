@@ -107,7 +107,10 @@ export class Frontend {
     let content: string, html: string;
     try {
       content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-      html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content});
+      let left: string, top: string;
+      left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
+      top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
+      html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content, left: left, top: top});
     } catch(ex) {
 
     }
