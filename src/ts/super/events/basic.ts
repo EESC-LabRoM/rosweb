@@ -12,7 +12,7 @@ import {Design} from "../design.ts";
 import {Frontend} from "../frontend.ts";
 import {WidgetsManager} from "../widgets_manager.ts";
 
-export class Events extends EventsParent {
+export class BasicEvents extends EventsParent {
   
   private eventsClassPrefix : string = "jsEvent";
   private Db: Db;
@@ -44,10 +44,6 @@ export class Events extends EventsParent {
 
   private _windowResized = (e?: MouseEvent) => {
     this.Design.adjustWindowResize();
-  }
-  
-  public nothing = (e?: MouseEvent) => {
-    e.preventDefault();
   }
   
   public newTab = (e?: MouseEvent) => {

@@ -1,4 +1,4 @@
-<div class="jsWidgetContainer cssWidgetContainer" data-widget-instance-id="{{WidgetInstance.id}}" data-widget-conf="1" style="left:{{left}};top:{{top}};">
+<div class="jsWidgetContainer cssWidgetContainer" data-widget-instance-id="{{WidgetInstance.id}}" data-widget-conf="1" style="left:{{left}};top:{{top}};width:{{width}};height:{{height}};">
   <link rel="stylesheet" type="text/css" href="widgets/{{WidgetInstance.Widget.alias}}/main.css" />
 
   <div class="jsWidgetConfiguration cssWidgetConfiguration" data-widget-instance-id="{{WidgetInstance.id}}">
@@ -9,6 +9,7 @@
   </div>
 
   <div class="jsWidgetContent cssWidgetContent">
+    <div class="jsWidgetMask cssWidgetMask"></div>
     {{{content}}}
   </div>
 </div>

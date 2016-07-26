@@ -1,5 +1,6 @@
 div[data-widget-name='tests'] {
-  width:400px;
-  height:300px;
+  float:left;
+  height:100%;
+  width:100%;
   background-color:red;
 }

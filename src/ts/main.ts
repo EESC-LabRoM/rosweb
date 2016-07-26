@@ -1,10 +1,12 @@
 // Super classes
-import {Events} from "./super/events/events.ts";
-import {DragEvents} from "./super/events/drag.ts";
+import {BasicEvents} from "./super/events/basic.ts";
+import {WidgetsEvents} from "./super/events/widgets.ts";
+import {MoveWidgetsEvents} from "./super/events/movewidgets.ts";
 
 function init() {
-  let events: Events = new Events();
-  let dragEvents: DragEvents = new DragEvents();
+  let events: BasicEvents = new BasicEvents();
+  let widgetsEvents: WidgetsEvents = new WidgetsEvents();
+  let moveWidgetsEvents: MoveWidgetsEvents = new MoveWidgetsEvents();
 }
 
 init();
