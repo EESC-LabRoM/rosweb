@@ -4,6 +4,7 @@
 @import 'widgets';
 
 body {
+  overflow:hidden;
   background:#ccc;
   div#container {
     div.header {
@@ -11,10 +12,26 @@ body {
         padding:10px 20px;
         background-color:$ros_color;
         a {
+          $height: 26px;
+          display:inline-block;
           margin:0 10px;
+          height:$height;
+          line-height:$height;
           color:#fff;
           font-weight: bold;
           text-decoration: none;
+          &.cssToggleMovable {
+            width:$height;
+            height:$height;
+            background-image:url(img/maintenance-white.png);
+            background-position: 50%;
+            background-repeat:no-repeat;
+            border-radius:2px;
+            &.active {
+              background-color:#fff;
+              background-image:url(img/maintenance-active.png);
+            }
+          }
         }
       }
       &#header2 {

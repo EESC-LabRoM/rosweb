@@ -12,6 +12,8 @@ export class MoveWidgetsEvents extends EventsParent {
     super();
 
     // Move and Resize
+    this.DelegateEvent(".jsToggleMovable", "click", this.ToggleMovable);
+
     this.DelegateEvent(".jsWidgetContainer[data-widget-conf='1']", "mousedown", this.MouseDown);
     this.DelegateEvent(document, "mousemove", this.MouseMove);
     this.DelegateEvent(document, "mouseup", this.MouseUp);
@@ -24,6 +26,15 @@ export class MoveWidgetsEvents extends EventsParent {
   private moveY: number;
   private lastX: number;
   private lastY: number;
+
+  public ToggleMovable = (e?: MouseEvent) => {
+    $(".jsToggleMovable").toggleClass("active");
+    $(".jsWidgetContainer").attr("data-widget-conf", "0");
+    if($(".jsToggleMovable").hasClass("active")) {
+      $(".jsWidgetContainer").attr("data-widget-conf", "1");
+    }
+    e.preventDefault();
+  }
   
   public MouseDown = (e?: MouseEvent) => {
     if ($(e.toElement).hasClass("jsWidgetResize")) {
@@ -107,10 +118,10 @@ export class MoveWidgetsEvents extends EventsParent {
   }
   private _ApplyPositionBoundaries(pos: Geometry.Point2D): Geometry.Point2D {
     let offset: any = $(".jsTabContent.jsShow").offset();
-    let xMin: number = offset.left;
+    let xMin: number = offset.left + 1;
     let yMin: number = offset.top;
-    let xMax: number = xMin + $(".jsTabContent.jsShow").width() - $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width();
-    let yMax: number = yMin + $(".jsTabContent.jsShow").height() - $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height();
+    let xMax: number = xMin + $(".jsTabContent.jsShow").width() - $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width() - 1;
+    let yMax: number = yMin + $(".jsTabContent.jsShow").height() - $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height() - 1;
 
     if (pos.x > xMax) {
       pos.x = xMax;
