@@ -52,7 +52,7 @@ gulp.task('ts', function() {
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/js'));
 });
 gulp.task('watchts', ['ts'], function() {
   gulp.watch(paths.ts, ['ts']);
@@ -89,7 +89,7 @@ gulp.task('hbs', function() {
       noRedeclare: true, // Avoid duplicate declarations 
     }))
     .pipe(concat('templates.js'))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('dist/js'));
 });
 gulp.task('watchhbs', ['hbs'], function() {
   gulp.watch(paths.hbs, ['hbs']);
@@ -98,7 +98,7 @@ gulp.task('watchhbs', ['hbs'], function() {
 // JavaScript libraries
 gulp.task('js', function() {
   return gulp.src(paths.js)
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/js/'));
 });
 gulp.task('watchjs', ['js'], function() {
   gulp.watch(paths.js, ['js']);
