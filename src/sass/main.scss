@@ -33,6 +33,21 @@ body {
             }
           }
         }
+        p.cssRosUrlPrefix {
+          display:inline-block;
+          height:26px;
+          background-color:#fff;
+          input {
+            margin-left:2px;
+            border:none;
+            height:26px;
+            font-size:16px;
+          }
+        }
+        button.cssRosConnectBtn {
+          padding:0 5px;
+          height:26px;
+        }
       }
       &#header2 {
         $header2Height: 50px;
