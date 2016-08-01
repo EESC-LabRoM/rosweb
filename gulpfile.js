@@ -18,7 +18,7 @@ var paths = {
   ts: ["./src/ts/**/*.ts"],
   sass: ["./src/sass/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
-  js: ["./src/js/**/*.js"],
+  js: ["./src/js/*.js"],
   wdgt: ["./src/widgets/**/*.*"],
   img: ["./src/img/**/*.*"]
 };
@@ -104,6 +104,18 @@ gulp.task('watchjs', ['js'], function() {
   gulp.watch(paths.js, ['js']);
 });
 
+// JavaScript libraries from submodules
+gulp.task('jsl_roslibjs', function() {
+  return gulp.src('src/js/roslibjs/build/roslib.min.js')
+    .pipe(gulp.dest('dist/js/'));
+});
+// JavaScript libraries from NodeModules
+gulp.task('jsl_eventemitter', function() {
+  return gulp.src('node_modules/eventemitter2/lib/eventemitter2.js')
+    .pipe(gulp.dest('dist/js/'));
+});
+gulp.task('jsl', ['jsl_roslibjs', 'jsl_eventemitter']);
+
 // Images
 gulp.task('img', function() {
   return gulp.src(paths.img)
@@ -122,8 +134,8 @@ gulp.task('watchwdgt', ['wdgt'], function() {
   gulp.watch(paths.wdgt, ['wdgt']);
 });
 
-gulp.task('watch0', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'watchts']);
-gulp.task('watch1', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs']);
+gulp.task('watch0', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'jsl', 'watchts']);
+gulp.task('watch1', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'jsl']);
 
 // Watch
 
