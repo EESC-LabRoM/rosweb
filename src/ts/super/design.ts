@@ -1,4 +1,4 @@
-/// <reference path="../d/jquery.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 
 export class Design {
 

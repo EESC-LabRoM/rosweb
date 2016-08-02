@@ -32,16 +32,30 @@ body {
               background-image:url(img/maintenance-active.png);
             }
           }
+          &.cssRosConnect {
+            width:26px;
+            background-image:url(img/disconnected.png);
+            background-position:50%;
+            background-repeat:no-repeat;
+            &.active {
+              background-image:url(img/connected.png);
+            }
+            &.loading {
+              opacity: 0.5;
+            }
+          }
         }
-        p.cssRosUrlPrefix {
+        p {
           display:inline-block;
           height:26px;
-          background-color:#fff;
-          input {
-            margin-left:2px;
-            border:none;
-            height:26px;
-            font-size:16px;
+          &.cssRosUrlPrefix {
+            background-color:#fff;
+            input {
+              margin-left:2px;
+              border:none;
+              height:26px;
+              font-size:16px;
+            }
           }
         }
         button.cssRosConnectBtn {

@@ -1,5 +1,4 @@
-/// <reference path="../d/handlebars.d.ts" />
-/// <reference path="../d/jquery.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 
 // Models
 import {Tab} from "../model/tab.ts";

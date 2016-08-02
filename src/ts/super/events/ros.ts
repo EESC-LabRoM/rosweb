@@ -1,5 +1,4 @@
-/// <reference path="../../d/jquery.d.ts" />
-/// <reference path="../../d/roslib.d.ts" />
+/// <reference path="../../typings/tsd.d.ts" />
 
 // Parent Class
 import {EventsParent} from "./_parent.ts";
@@ -7,33 +6,48 @@ import {EventsParent} from "./_parent.ts";
 export class RosEvents extends EventsParent {
 
   public Ros: ROSLIB.Ros;
+  public connected: boolean = false;
 
   constructor() {
     super();
-    this.DeclareRosConnection();
-    this.DelegateEvent(".jsRosConnectBtn", "click", this.Connect);
-  }
-  private DeclareRosConnection() : void {
-    this.Ros = new ROSLIB.Ros();
+    
+    this.Ros = new ROSLIB.Ros({});
     this.Ros.on("connection", this.OnRosConnection);
     this.Ros.on("close", this.OnRosClose);
     this.Ros.on("error", this.OnRosError);
+    this.DelegateEvent(".jsRosConnect", "click", this.Connect);
   }
 
   public Connect = (e?: MouseEvent) => {
-    let url : string = "ws://" + $(".jsRosUrl").val(); 
-    this.Ros.connect(url);
+    if($(".jsRosConnect").hasClass("loading")) {
+      return;
+    }
+    $(".jsRosConnect").addClass("loading");
 
+    if(!this.connected) {
+      let url : string = "ws://" + $(".jsRosUrl").val();
+      this.Ros.connect(url);
+    } else {
+      this.Ros.close();
+    }
     e.preventDefault();
   }
-  public OnRosConnection() : void {
-    
+  public OnRosConnection = () => {
+    this.connected = true;
+    $(".jsRosConnect").addClass("active");
+    $(".jsRosConnect").removeClass("loading");
   }
-  public OnRosClose() : void {
-    
+  public OnRosClose = () => {
+    this.connected = false;
+    $(".jsRosConnect").removeClass("active");
+    $(".jsRosConnect").removeClass("loading");
   }
-  public OnRosError(error: any) : void {
-    
+  public OnRosError = (error: any) => {
+    this.Ros.close();
+    this.connected = false;
+    $(".jsRosConnect").removeClass("active");
+    $(".jsRosConnect").removeClass("loading");
+    console.log(error);
   }
 
 }
