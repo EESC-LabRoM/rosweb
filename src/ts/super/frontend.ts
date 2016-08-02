@@ -12,26 +12,26 @@ import {Trigger} from "./trigger.ts";
 declare var MyApp: any;
 
 export class Frontend {
-  
+
   public tabContainerId: string;
   public tabContentContainerId: string;
-  
+
   private Names: Names;
   public Trigger: Trigger;
-  
+
   private ActiveTabId: number;
-  
+
   constructor() {
     this.tabContainerId = "header2";
     this.tabContentContainerId = "tabs";
-    
+
     this.Names = new Names();
     this.Trigger = new Trigger();
   }
-  
+
   public formTab(tab?: Tab): Tab {
-    if(tab) {
-      tab.name = "tab #" + tab.id; 
+    if (tab) {
+      tab.name = "tab #" + tab.id;
       return tab;
     }
     return new Tab();
@@ -46,12 +46,12 @@ export class Frontend {
     // insert tab content
     document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
   }
-  
+
   public closeTab(tab_id: number): void {
     $(".jsTab[data-tab-id='" + tab_id + "']").remove();
     $(".jsTabContent[data-tab-id='" + tab_id + "']").remove();
   }
-  
+
   public selectTab(tab: Tab): void {
     let parentClassName = this.Names.classTabParent;
     $("." + parentClassName).removeClass("jsActive");
@@ -64,9 +64,9 @@ export class Frontend {
     $("." + tabClassName + "[data-tab-id=" + tab.id + "]").removeClass("jsHide").addClass("jsShow");
     this.ActiveTabId = tab.id;
   }
-  
+
   public showWidgetsMenu(): void {
-    $("." + this.Names.classWidgetsContainer).animate({width: 'toggle'});
+    $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
   }
   public widgetsList(list: Array<Widget>): void {
     var html = MyApp.templates.widgetList(list);
@@ -77,24 +77,24 @@ export class Frontend {
     let fn = this._insertWidget;
     $.ajax({
       url: "widgets/" + widgetInstance.Widget.alias + "/index.hbs",
-      beforeSend: function() {
+      beforeSend: function () {
 
       },
-      success: function(data: string) {
+      success: function (data: string) {
         MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
         fn(widgetInstance, currentTabId);
       },
-      error: function(e1: any, e2: any) {
+      error: function (e1: any, e2: any) {
         throw "Widget file not found!";
       }
     });
   }
 
   public insertWidget(widgetInstance: WidgetInstance): void {
-    if(MyApp.templates._widgetsTemplates === undefined) {
+    if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }
-    if(MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
+    if (MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
       this._loadWidgetContentAndInsert(widgetInstance);
     } else {
       let currentTabId: number = this._getForcedCurrentTabId();
@@ -106,13 +106,13 @@ export class Frontend {
     let content: string, html: string;
     try {
       content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-      let width:string = $(content).attr("data-min-width") + "px";
-      let height:string = $(content).attr("data-min-height") + "px";
+      let width: string = $(content).attr("data-min-width") + "px";
+      let height: string = $(content).attr("data-min-height") + "px";
       let left: string, top: string;
       left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
       top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
-      html = MyApp.templates.widget({WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height});
-    } catch(ex) {
+      html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
+    } catch (ex) {
 
     }
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
@@ -120,18 +120,33 @@ export class Frontend {
 
   private _getForcedCurrentTabId(): number {
     let currentTabId: number = this._getCurrentTabId();
-    if(currentTabId === 0) {
+    if (currentTabId === 0) {
       this.Trigger.newTab();
     }
     return this._getCurrentTabId();
   }
   private _getCurrentTabId(): number {
     let tabIdStr: string = $("div.jsTab.jsActive").attr("data-tab-id");
-    if(tabIdStr === undefined) {
+    if (tabIdStr === undefined) {
       return 0;
     }
     let tabId: number = parseInt(tabIdStr);
     return tabId;
+  }
+
+  public UpdateRosTopicSelectors(topics: string[]): void {
+    console.log("update ros topic selectors");
+    $(".jsRosTopicSelector").html("");
+    $(".jsRosTopicSelector").append($("<option>", {
+      value: 0,
+      text: "-- Select a topic to subscribe --"
+    }));
+    topics.forEach((value: any, index: number, array: string[]) => {
+      $(".jsRosTopicSelector").append($("<option>", {
+        value: value,
+        text: value
+      }));
+    });
   }
 
 }

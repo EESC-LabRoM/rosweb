@@ -1,10 +1,10 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 
 // Types
-import {Geometry} from "../../types/Geometry.ts";
+import {Geometry} from "../types/Geometry.ts";
 
 // Parent Class
-import {EventsParent} from "./_parent.ts";
+import {EventsParent} from "./events.ts";
 
 export class MoveWidgetsEvents extends EventsParent {
 

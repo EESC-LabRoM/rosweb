@@ -33,6 +33,32 @@
   background-color:#456b91;
   border: 1px solid #ccc;
 }
+a.btn {
+  border-style: solid;
+  border-width:1px 2px 2px 1px;
+  border-radius:3px;
+  padding:4px 7px;
+  color:white;
+  font-size:16px;
+  text-decoration:none;
+  &.btn-green {
+    background-color:$green;
+    border-color:lighten($green, 10%) darken($green, 10%) darken($green, 10%) lighten($green, 10%);
+    &:active {
+      border-color:darken($green, 10%) lighten($green, 10%) lighten($green, 10%) darken($green, 10%);
+    }
+  }
+  &.btn-red {
+    background-color:$red;
+    border-color:lighten($red, 10%) darken($red, 10%) darken($red, 10%) lighten($red, 10%);
+    &:active {
+      border-color:darken($red, 10%) lighten($red, 10%) lighten($red, 10%) darken($red, 10%);
+    }
+  }
+  &:active {
+    border-width:2px 1px 1px 2px;
+  }
+}
 
 .clearfix {
   clear:both;

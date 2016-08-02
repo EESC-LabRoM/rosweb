@@ -1,34 +1,25 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 
 // Parent Class
-import {EventsParent} from "./_parent.ts";
+import {EventsParent} from "./events.ts";
 
 // Models
-import {Tab} from "../../model/tab.ts";
+import {Tab} from "../model/tab.ts";
 
 // Super classes
-import {Db} from "../db.ts";
-import {Design} from "../design.ts";
-import {Frontend} from "../frontend.ts";
-import {WidgetsManager} from "../widgets_manager.ts";
+import {Manager} from "../super/manager.ts";
 
 export class BasicEvents extends EventsParent {
   
   private eventsClassPrefix : string = "jsEvent";
-  private Db: Db;
-  private Frontend: Frontend;
-  private WidgetsManager: WidgetsManager;
-  private Design: Design;
+  private Manager: Manager;
   
-  constructor() {
+  constructor(manager: Manager) {
     super();
-    this.Db = new Db();
-    this.Frontend = new Frontend();
-    this.WidgetsManager = new WidgetsManager();
-    this.Design = new Design();
+    this.Manager = manager;
 
     // render list
-    this.Frontend.widgetsList(this.WidgetsManager.widgets);
+    this.Manager.Frontend.widgetsList(this.Manager.WidgetsManager.widgets);
 
     // Resize Events
     this.DelegateEvent(window, "resize", this._windowResized);
@@ -43,7 +34,7 @@ export class BasicEvents extends EventsParent {
   }
 
   private _windowResized = (e?: MouseEvent) => {
-    this.Design.adjustWindowResize();
+    this.Manager.Design.adjustWindowResize();
   }
   
   public newTab = (e?: MouseEvent) => {
@@ -51,20 +42,20 @@ export class BasicEvents extends EventsParent {
     e.preventDefault();
   }
   private _newTab() {
-    var tab: Tab = this.Db.newTab();
-    tab = this.Frontend.formTab(tab);
-    this.Frontend.newTab(tab);
+    var tab: Tab = this.Manager.Db.newTab();
+    tab = this.Manager.Frontend.formTab(tab);
+    this.Manager.Frontend.newTab(tab);
     this._selectTab(tab);
   }
   
   public selectTab = (e?: MouseEvent) => {
     let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
-    let tab: Tab = this.Db.getTab(tabId);
+    let tab: Tab = this.Manager.Db.getTab(tabId);
     this._selectTab(tab);
     e.preventDefault();
   }
   private _selectTab(tab: Tab): void {
-    this.Frontend.selectTab(tab);
+    this.Manager.Frontend.selectTab(tab);
   }
   
   public closeTab = (e?: MouseEvent) => {
@@ -75,8 +66,8 @@ export class BasicEvents extends EventsParent {
     e.preventDefault();
   }
   private _closeTab(tabId: number): void {
-    this.Db.removeTab(tabId);
-    this.Frontend.closeTab(tabId);
+    this.Manager.Db.removeTab(tabId);
+    this.Manager.Frontend.closeTab(tabId);
   }
   
   public widgetMenu = (e?: MouseEvent) => {
@@ -84,7 +75,7 @@ export class BasicEvents extends EventsParent {
     e.preventDefault();
   }
   private _widgetMenu() {
-    this.Frontend.showWidgetsMenu();
+    this.Manager.Frontend.showWidgetsMenu();
   }
   
   public widgetItem = (e?: MouseEvent) => {
@@ -94,9 +85,9 @@ export class BasicEvents extends EventsParent {
     e.preventDefault();
   }
   private _widgetItem(widgetAlias: string): void {
-    let widget = this.WidgetsManager.getByName(widgetAlias);
-    let widgetInstance = this.WidgetsManager.newInstanceOf(widget);
-    this.Frontend.insertWidget(widgetInstance);
+    let widget = this.Manager.WidgetsManager.getByName(widgetAlias);
+    let widgetInstance = this.Manager.WidgetsManager.newInstanceOf(widget);
+    this.Manager.Frontend.insertWidget(widgetInstance);
   }
   
 }

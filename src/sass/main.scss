@@ -137,6 +137,36 @@ body {
           }
         }
       }
+      div.cssMenuWidgetsSettings {
+        position:absolute;
+        z-index:50;
+        right:-300px;
+        width:300px;
+        background-color:darken($ros_color, 20%);
+        div.cssSettings {
+          width:300px;
+          h2 {
+            padding:8px 0;
+            color:#fff;
+            font-size:20px;
+            text-align:center;
+          }
+          div.cssSettingsSelection {
+            padding:20px;
+            label {
+              color:#fff;
+              font-size:16px;
+            }
+            select {
+              width:100%;
+              height:24px;
+            }
+          }
+          div.cssSettingsBtn {
+            text-align:center;
+          }
+        }
+      }
       div#tabs {
         height:100%;
         .cssTabContent {

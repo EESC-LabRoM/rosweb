@@ -1,17 +1,17 @@
-/// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="../typings/tsd.d.ts" />
 
 // Parent Class
-import {EventsParent} from "./_parent.ts";
+import {EventsParent} from "./events.ts";
 
 export class RosEvents extends EventsParent {
 
   public Ros: ROSLIB.Ros;
   public connected: boolean = false;
 
-  constructor() {
+  constructor(ros: ROSLIB.Ros) {
     super();
     
-    this.Ros = new ROSLIB.Ros({});
+    this.Ros = ros;
     this.Ros.on("connection", this.OnRosConnection);
     this.Ros.on("close", this.OnRosClose);
     this.Ros.on("error", this.OnRosError);
