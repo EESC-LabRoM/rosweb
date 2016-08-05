@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+a.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 .header {
   &#header2 {
     a.cssNewTab {
@@ -53,6 +58,13 @@ a.btn {
     border-color:lighten($red, 10%) darken($red, 10%) darken($red, 10%) lighten($red, 10%);
     &:active {
       border-color:darken($red, 10%) lighten($red, 10%) lighten($red, 10%) darken($red, 10%);
+    }
+  }
+  &.btn-blue {
+    background-color:$blue;
+    border-color:lighten($blue, 10%) darken($blue, 10%) darken($blue, 10%) lighten($blue, 10%);
+    &:active {
+      border-color:darken($blue, 10%) lighten($blue, 10%) lighten($blue, 10%) darken($blue, 10%);
     }
   }
   &:active {

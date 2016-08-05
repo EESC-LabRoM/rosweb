@@ -29,6 +29,17 @@ export class Frontend {
     this.Trigger = new Trigger();
   }
 
+  public LoadingLink(element: Element, disabled: Boolean = true) {
+    if (disabled) {
+      $(element).addClass("disabled");
+    } else {
+      $(element).removeClass("disabled");
+    }
+  }
+  public ReleaseLink(element: Element) {
+    this.LoadingLink(element, false);
+  }
+
   public formTab(tab?: Tab): Tab {
     if (tab) {
       tab.name = "tab #" + tab.id;
@@ -134,8 +145,14 @@ export class Frontend {
     return tabId;
   }
 
+  public ShowWidgetSettings(): void {
+    $(".jsMenuWidgetsSettings").animate({ right: 0 });
+  }
+  public HideWidgetSettings(): void {
+    $(".jsMenuWidgetsSettings").animate({ right: -300 });
+  }
+
   public UpdateRosTopicSelectors(topics: string[]): void {
-    console.log("update ros topic selectors");
     $(".jsRosTopicSelector").html("");
     $(".jsRosTopicSelector").append($("<option>", {
       value: 0,

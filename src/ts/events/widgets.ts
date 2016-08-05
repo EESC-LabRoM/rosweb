@@ -24,6 +24,7 @@ export class WidgetsEvents extends EventsParent {
     this.DelegateEvent(".jsWidgetSettings", "click", this.WidgetSettings);
     this.DelegateEvent(".jsWidgetSettingsConfirm", "click", this.WidgetSettingsConfirm);
     this.DelegateEvent(".jsWidgetSettingsCancel", "click", this.WidgetSettingsCancel);
+    this.DelegateEvent(".jsWidgetSettingsRefresh", "click", this.WidgetSettingsRefresh);
   }
 
   public WidgetConfirm = (e?: MouseEvent) => {
@@ -37,28 +38,45 @@ export class WidgetsEvents extends EventsParent {
   }
 
   public WidgetSettings = (e?: MouseEvent) => {
-    $(".jsMenuWidgetsSettings").animate({right: 0});
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $(".jsSettingsSelection").html("");
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function(k, v) {
       var html = MyApp.templates.topicSelection({desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
       $(".jsSettingsSelection").append(html);
     });
-    this.Ros.getTopics((topics: string[]) => {
-      this.Frontend.UpdateRosTopicSelectors(topics);
-    }, () => function(error: any) {
-      console.log(error);
-    });
+    this.Frontend.ShowWidgetSettings();
+    this._WidgetSettingsRefresh();
     e.preventDefault();
   }
 
+  public WidgetSettingsRefresh = (e?: MouseEvent) => {
+    this.Frontend.LoadingLink(e.toElement);
+    $(".jsRosTopicSelector").attr("disabled", "disabled");
+    this._WidgetSettingsRefresh((e?: MouseEvent) => {
+      this.Frontend.ReleaseLink(e.toElement);
+      $(".jsRosTopicSelector").removeAttr("disabled");
+    }, e);
+    e.preventDefault();
+  }
+  private _WidgetSettingsRefresh(callback?: (e:any) => void, e?: MouseEvent) {
+    this.Ros.getTopics((topics: string[]) => {
+      this.Frontend.UpdateRosTopicSelectors(topics);
+      if(typeof(callback) === 'function') {
+        callback(e);
+      }
+    }, () => function(error: any) {
+      alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
+      console.log(error);
+    });
+  }
+
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
-    $(".jsMenuWidgetsSettings").animate({right: -300});
+    this.Frontend.HideWidgetSettings();
     e.preventDefault();
   }
 
   public WidgetSettingsCancel = (e?: MouseEvent) => {
-    $(".jsMenuWidgetsSettings").animate({right: -300});
+    this.Frontend.HideWidgetSettings();
     e.preventDefault();
   }
 
