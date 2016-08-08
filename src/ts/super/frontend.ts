@@ -11,6 +11,14 @@ import {Trigger} from "./trigger.ts";
 
 declare var MyApp: any;
 
+interface TypeDef {
+  examples: string[],
+  fieldarraylen: number[],
+  fieldnames: string[],
+  fieldtypes: string[],
+  type: string
+}
+
 export class Frontend {
 
   public tabContainerId: string;
@@ -150,18 +158,27 @@ export class Frontend {
     $(".jsMenuWidgetsSettings").animate({ right: -300 });
   }
 
-  public UpdateRosTopicSelectors(topics: string[]): void {
+  public UpdateRosTopicSelectors(response: { topics: string[], types: string[], details: TypeDef[] }): void {
+    console.log(response);
     $(".jsRosTopicSelector").html("");
     $(".jsRosTopicSelector").append($("<option>", {
       value: 0,
       text: "-- Select a topic to subscribe --"
     }));
-    topics.forEach((value: any, index: number, array: string[]) => {
-      $(".jsRosTopicSelector").append($("<option>", {
-        value: value,
-        text: value
-      }));
+    $(".jsRosTopicSelector").each((i: number, element: Element) => {
+      let types = $(element).attr("data-ros-topic-type").split("|");
+      response.topics.forEach((value: string, index: number) => {
+        if(types.indexOf(response.types[index]) > -1) {
+          this._AddOption(element, value, value);
+        }
+      })
     });
+  }
+  private _AddOption(element: Element, value: string, text: string): void {
+    $(element).append($("<option>", {
+      value: value,
+      text: value
+    }));
   }
 
 }

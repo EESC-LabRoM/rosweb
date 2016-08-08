@@ -59,8 +59,8 @@ export class WidgetsEvents extends EventsParent {
     e.preventDefault();
   }
   private _WidgetSettingsRefresh(callback?: (e:any) => void, e?: MouseEvent) {
-    this.Ros.getTopics((topics: string[]) => {
-      this.Frontend.UpdateRosTopicSelectors(topics);
+    this.Ros.getTopicsDetails((response: any) => {
+      this.Frontend.UpdateRosTopicSelectors(response);
       if(typeof(callback) === 'function') {
         callback(e);
       }
