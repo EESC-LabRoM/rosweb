@@ -87,6 +87,7 @@ export class BasicEvents extends EventsParent {
   private _widgetItem(widgetAlias: string): void {
     let widget = this.Manager.WidgetsManager.getByName(widgetAlias);
     let widgetInstance = this.Manager.WidgetsManager.newInstanceOf(widget);
+    this.Manager.WidgetsManager.widgetInstances.push(widgetInstance);
     this.Manager.Frontend.insertWidget(widgetInstance);
   }
   

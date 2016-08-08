@@ -8,6 +8,8 @@ export class WidgetInstance {
   public Widget: Widget;
   public Tab: Tab;
   public position: Geometry.Point2D;
+
+  public obj: any;
   
   constructor() {
     

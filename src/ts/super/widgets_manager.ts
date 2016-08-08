@@ -6,6 +6,7 @@ import {WidgetInstance} from "../model/widget_instance.ts";
 export class WidgetsManager {
 
   public widgets: Array<Widget>;
+  public widgetInstances: WidgetInstance[];
   private widgetInstanceCurrentId = 0;
 
   constructor() {
