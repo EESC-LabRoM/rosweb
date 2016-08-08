@@ -11,6 +11,7 @@
   "devDependencies": {
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
+    "eventemitter2": "^2.1.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-declare": "^0.3.0",
