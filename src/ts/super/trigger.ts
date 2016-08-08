@@ -10,4 +10,8 @@ export class Trigger {
     $(".jsEventNewTab")[0].click();
   }
 
+  public widgetSettings(widgetInstanceId: number): void {
+    $(".jsWidgetSettings")[0].click();
+  }
+
 }
