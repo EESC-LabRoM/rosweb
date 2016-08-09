@@ -7,32 +7,40 @@ import {EventsParent} from "./events.ts";
 import {Tab} from "../model/tab.ts";
 
 // Super classes
-import {Manager} from "../super/manager.ts";
+import {db} from "../super/db.ts";
+import {Design} from "../super/design.ts";
+import {Frontend} from "../super/frontend.ts";
+
+console.log(db);
 
 export class TabEvents extends EventsParent {
   
-  private eventsClassPrefix : string = "jsEvent";
-  private Manager: Manager;
+  private Frontend: Frontend;
+  private Design: Design;
   
-  constructor(manager: Manager) {
+  constructor() {
     super();
-    this.Manager = manager;
+
+    console.log(db);
+
+    this.Frontend = new Frontend();
+    this.Design = new Design();
 
     // render list
-    this.Manager.Frontend.widgetsList(this.Manager.WidgetsManager.widgets);
+    this.Frontend.widgetsList(db.Widgets);
 
     // Resize Events
     this.DelegateEvent(window, "resize", this._windowResized);
     
     // Left Click Events
-    this.DelegateEvent("." + this.eventsClassPrefix + "Nothing", "click", this.nothing);
-    this.DelegateEvent("." + this.eventsClassPrefix + "NewTab", "click", this.newTab);
-    this.DelegateEvent("." + this.eventsClassPrefix + "Tab", "click", this.selectTab);
-    this.DelegateEvent("." + this.eventsClassPrefix + "CloseTab", "click", this.closeTab);
+    this.DelegateEvent(".jsEventNothing", "click", this.nothing);
+    this.DelegateEvent(".jsEventNewTab", "click", this.newTab);
+    this.DelegateEvent(".jsEventTab", "click", this.selectTab);
+    this.DelegateEvent(".jsEventCloseTab", "click", this.closeTab);
   }
 
   private _windowResized = (e?: MouseEvent) => {
-    this.Manager.Design.adjustWindowResize();
+    this.Design.adjustWindowResize();
   }
   
   public newTab = (e?: MouseEvent) => {
@@ -40,20 +48,20 @@ export class TabEvents extends EventsParent {
     e.preventDefault();
   }
   private _newTab() {
-    var tab: Tab = this.Manager.Db.newTab();
-    tab = this.Manager.Frontend.formTab(tab);
-    this.Manager.Frontend.newTab(tab);
+    var tab: Tab = db.newTab();
+    tab = this.Frontend.formTab(tab);
+    this.Frontend.newTab(tab);
     this._selectTab(tab);
   }
   
   public selectTab = (e?: MouseEvent) => {
     let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
-    let tab: Tab = this.Manager.Db.getTab(tabId);
+    let tab: Tab = db.getTab(tabId);
     this._selectTab(tab);
     e.preventDefault();
   }
   private _selectTab(tab: Tab): void {
-    this.Manager.Frontend.selectTab(tab);
+    this.Frontend.selectTab(tab);
   }
   
   public closeTab = (e?: MouseEvent) => {
@@ -64,8 +72,8 @@ export class TabEvents extends EventsParent {
     e.preventDefault();
   }
   private _closeTab(tabId: number): void {
-    this.Manager.Db.removeTab(tabId);
-    this.Manager.Frontend.closeTab(tabId);
+    db.removeTab(tabId);
+    this.Frontend.closeTab(tabId);
   }
   
 }

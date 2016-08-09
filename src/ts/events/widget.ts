@@ -2,16 +2,13 @@
 
 // Super
 import {Frontend} from "../super/frontend.ts";
-import {Db} from "../super/db.ts";
+import {db} from "../super/db.ts";
 
 // Model
 import {Widget} from "../model/widget.ts";
 
 // Parent Class
 import {EventsParent} from "./events.ts";
-
-declare var MyApp: any;
-declare var db: Db;
 
 export class WidgetEvents extends EventsParent {
 
