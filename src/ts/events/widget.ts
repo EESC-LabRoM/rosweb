@@ -43,7 +43,7 @@ export class WidgetEvents extends EventsParent {
   private _widgetItem(widgetAlias: string): void {
     let widget: Widget = db.getWidgetByAlias(widgetAlias);
     let widgetInstance = db.newWidgetInstance(widget);
-    this.Frontend.insertWidget(widgetInstance);
+    this.Frontend.insertWidgetInstance(widgetInstance);
   }
 
 }

@@ -8,6 +8,7 @@ import {WidgetInstance} from "../model/widget_instance.ts";
 // Super classes
 import {Names} from "./names.ts";
 import {Trigger} from "./trigger.ts";
+import {db} from "./db.ts";
 
 declare var MyApp: any;
 
@@ -85,6 +86,7 @@ export class Frontend {
   }
 
   public showWidgetsMenu(): void {
+    this.widgetsList(db.Widgets);
     $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
   }
   public widgetsList(list: Array<Widget>): void {
@@ -109,7 +111,7 @@ export class Frontend {
     });
   }
 
-  public insertWidget(widgetInstance: WidgetInstance): void {
+  public insertWidgetInstance(widgetInstance: WidgetInstance): void {
     if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }

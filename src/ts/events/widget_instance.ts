@@ -19,6 +19,8 @@ export class WidgetInstanceEvents extends EventsParent {
   constructor() {
     super();
 
+    this.Frontend = new Frontend();
+
     // Settings
     this.DelegateEvent(".jsWidgetConfirm", "click", this.WidgetConfirm);
     this.DelegateEvent(".jsWidgetDelete", "click", this.WidgetDelete);

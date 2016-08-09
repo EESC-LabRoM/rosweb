@@ -11,8 +11,8 @@ export class WidgetInstance {
 
   public obj: any;
   
-  constructor() {
-    
+  constructor(widget: Widget) {
+    this.Widget = widget;
   }
   
 }

@@ -33,6 +33,11 @@ export class TabEvents extends EventsParent {
     this.DelegateEvent(".jsEventNewTab", "click", this.newTab);
     this.DelegateEvent(".jsEventTab", "click", this.selectTab);
     this.DelegateEvent(".jsEventCloseTab", "click", this.closeTab);
+    
+    this.DelegateEvent(".jsRosweb", "click", (e?: MouseEvent) => {
+      console.log(db);
+      e.preventDefault();
+    });
   }
 
   private _windowResized = (e?: MouseEvent) => {

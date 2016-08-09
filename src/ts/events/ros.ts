@@ -32,17 +32,17 @@ export class RosEvents extends EventsParent {
     }
     e.preventDefault();
   }
-  public OnRosConnection = () => {
+  private OnRosConnection = () => {
     this.connected = true;
     $(".jsRosConnect").addClass("active");
     $(".jsRosConnect").removeClass("loading");
   }
-  public OnRosClose = () => {
+  private OnRosClose = () => {
     this.connected = false;
     $(".jsRosConnect").removeClass("active");
     $(".jsRosConnect").removeClass("loading");
   }
-  public OnRosError = (error: any) => {
+  private OnRosError = (error: any) => {
     this.Ros.close();
     this.connected = false;
     $(".jsRosConnect").removeClass("active");

@@ -3,7 +3,7 @@ import {Tab} from "../model/tab.ts";
 import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
 
-export class Db {
+class Db {
   
   constructor() {
     this.TabCounter = 0;
@@ -19,6 +19,7 @@ export class Db {
 
   }
   
+  // Tab
   private TabCounter: number;
   private Tabs: Array<Tab>;
   public newTab(): Tab {
@@ -45,6 +46,7 @@ export class Db {
     return false;
   }
   
+  // Widget
   private WidgetCounter: number;
   public Widgets: Array<Widget>;
   public newWidget(): Widget {
@@ -53,8 +55,8 @@ export class Db {
     this.Widgets.push(widget);
     return widget;
   }
-  public setWidget(widget: Widget) {
-
+  public setWidget(widget: Widget) : void {
+    return;
   }
   public getWidget(id: number): Widget {
     for(let widget of this.Widgets) {
@@ -62,7 +64,6 @@ export class Db {
     }
     return null;
   }
-
   public getWidgetByAlias(widgetAlias: string): Widget {
     let widget = new Widget();
     let toReturn: Widget = null;
@@ -86,10 +87,11 @@ export class Db {
     return false;
   }
 
+  // Widget Instance
   private WidgetInstanceCounter: number;
   private WidgetInstances: Array<WidgetInstance>;
   public newWidgetInstance(widget: Widget): WidgetInstance {
-    let widgetInstance = new WidgetInstance();
+    let widgetInstance = new WidgetInstance(widget);
     widgetInstance.id = ++this.WidgetInstanceCounter;
     this.WidgetInstances.push(widgetInstance);
     return widgetInstance;
