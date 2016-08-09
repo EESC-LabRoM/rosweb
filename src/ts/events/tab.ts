@@ -9,7 +9,7 @@ import {Tab} from "../model/tab.ts";
 // Super classes
 import {Manager} from "../super/manager.ts";
 
-export class BasicEvents extends EventsParent {
+export class TabEvents extends EventsParent {
   
   private eventsClassPrefix : string = "jsEvent";
   private Manager: Manager;
@@ -25,12 +25,10 @@ export class BasicEvents extends EventsParent {
     this.DelegateEvent(window, "resize", this._windowResized);
     
     // Left Click Events
-    this.DelegateEvent("." + this.eventsClassPrefix + "WidgetsMenu", "click", this.widgetMenu);
     this.DelegateEvent("." + this.eventsClassPrefix + "Nothing", "click", this.nothing);
     this.DelegateEvent("." + this.eventsClassPrefix + "NewTab", "click", this.newTab);
     this.DelegateEvent("." + this.eventsClassPrefix + "Tab", "click", this.selectTab);
     this.DelegateEvent("." + this.eventsClassPrefix + "CloseTab", "click", this.closeTab);
-    this.DelegateEvent("." + this.eventsClassPrefix + "WidgetItem", "click", this.widgetItem);
   }
 
   private _windowResized = (e?: MouseEvent) => {
@@ -68,27 +66,6 @@ export class BasicEvents extends EventsParent {
   private _closeTab(tabId: number): void {
     this.Manager.Db.removeTab(tabId);
     this.Manager.Frontend.closeTab(tabId);
-  }
-  
-  public widgetMenu = (e?: MouseEvent) => {
-    this._widgetMenu();
-    e.preventDefault();
-  }
-  private _widgetMenu() {
-    this.Manager.Frontend.showWidgetsMenu();
-  }
-  
-  public widgetItem = (e?: MouseEvent) => {
-    let widgetAlias = $(e.toElement).attr("data-widget-alias");
-    this._widgetItem(widgetAlias);
-    this._widgetMenu();
-    e.preventDefault();
-  }
-  private _widgetItem(widgetAlias: string): void {
-    let widget = this.Manager.WidgetsManager.getByName(widgetAlias);
-    let widgetInstance = this.Manager.WidgetsManager.newInstanceOf(widget);
-    this.Manager.WidgetsManager.widgetInstances.push(widgetInstance);
-    this.Manager.Frontend.insertWidget(widgetInstance);
   }
   
 }

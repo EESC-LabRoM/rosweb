@@ -15,6 +15,9 @@ export class Db {
     this.WidgetInstanceCounter = 0;
     this.WidgetInstances = new Array<WidgetInstance>();
   }
+  private saveAll(): void {
+
+  }
   
   private TabCounter: number;
   private Tabs: Array<Tab>;
@@ -43,17 +46,33 @@ export class Db {
   }
   
   private WidgetCounter: number;
-  private Widgets: Array<Widget>;
+  public Widgets: Array<Widget>;
   public newWidget(): Widget {
     let widget = new Widget();
     widget.id = ++this.WidgetCounter;
+    this.Widgets.push(widget);
     return widget;
+  }
+  public setWidget(widget: Widget) {
+
   }
   public getWidget(id: number): Widget {
     for(let widget of this.Widgets) {
       if(widget.id == id) return widget;
     }
     return null;
+  }
+
+  public getWidgetByAlias(widgetAlias: string): Widget {
+    let widget = new Widget();
+    let toReturn: Widget = null;
+    this.Widgets.forEach(widget => {
+      if (widget.alias === widgetAlias) {
+        toReturn = widget;
+      }
+    });
+    if (toReturn === null) throw "Error: Widget alias not found!";
+    return toReturn;
   }
   public removeWidget(widget_id: number): boolean {
     let index: number = 0;
@@ -69,9 +88,10 @@ export class Db {
 
   private WidgetInstanceCounter: number;
   private WidgetInstances: Array<WidgetInstance>;
-  public newWidgetInstance(): WidgetInstance {
+  public newWidgetInstance(widget: Widget): WidgetInstance {
     let widgetInstance = new WidgetInstance();
     widgetInstance.id = ++this.WidgetInstanceCounter;
+    this.WidgetInstances.push(widgetInstance);
     return widgetInstance;
   }
   public getWidgetInstance(id: number): WidgetInstance {
