@@ -113,3 +113,5 @@ export class Db {
   }
   
 }
+
+export var db: Db = new Db();

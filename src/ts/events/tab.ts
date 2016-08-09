@@ -11,8 +11,6 @@ import {db} from "../super/db.ts";
 import {Design} from "../super/design.ts";
 import {Frontend} from "../super/frontend.ts";
 
-console.log(db);
-
 export class TabEvents extends EventsParent {
   
   private Frontend: Frontend;
@@ -20,8 +18,6 @@ export class TabEvents extends EventsParent {
   
   constructor() {
     super();
-
-    console.log(db);
 
     this.Frontend = new Frontend();
     this.Design = new Design();
