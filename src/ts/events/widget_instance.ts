@@ -53,7 +53,7 @@ export class WidgetInstanceEvents extends EventsParent {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $(".jsSettingsSelection").html("");
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function(k, v) {
-      var html = MyApp.templates.rosTopicSelector({desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
+      var html = MyApp.templates.rosTopicSelector({widget_instance_id: widgetInstanceId,desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
       $(".jsSettingsSelection").append(html);
     });
     this.Frontend.ShowWidgetSettings();
@@ -85,9 +85,9 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // manage subscriptions
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
-      console.log(elem);
-      console.log($(elem).children("option:selected").val());
-      console.log($(elem).children("option:selected").html());
+      let topic_name = $(elem).children("option:selected").attr("data-ros-topic-name");
+      let topic_type = $(elem).children("option:selected").attr("data-ros-topic-type");
+      let widget_instance_id = $(elem).attr("data-widget-instance-id");
     });
 
     //this.Frontend.HideWidgetSettings();

@@ -174,11 +174,5 @@ export class Frontend {
       $(element).append(html);
     });
   }
-  private _AddOption(element: Element, value: string, text: string): void {
-    $(element).append($("<option>", {
-      value: value,
-      text: value
-    }));
-  }
 
 }

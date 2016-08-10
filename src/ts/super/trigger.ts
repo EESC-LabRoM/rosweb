@@ -11,7 +11,7 @@ export class Trigger {
   }
 
   public widgetSettings(widgetInstanceId: number): void {
-    $(".jsWidgetSettings")[0].click();
+    $(".jsWidgetSettings[data-widget-instance-id=" + widgetInstanceId + "]")[0].click();
   }
 
 }
