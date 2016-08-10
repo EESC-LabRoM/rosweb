@@ -23,7 +23,7 @@ function init() {
 function events(ros: ROSLIB.Ros): void {
   let tabEvents: TabEvents = new TabEvents();
   let widgetEvents: WidgetEvents = new WidgetEvents(ros);
-  let widgetInstanceEvents: WidgetInstanceEvents = new WidgetInstanceEvents();
+  let widgetInstanceEvents: WidgetInstanceEvents = new WidgetInstanceEvents(ros);
   let rosEvents: RosEvents = new RosEvents(ros);
 }
 

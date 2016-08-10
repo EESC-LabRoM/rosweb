@@ -72,9 +72,7 @@ declare namespace ROSLIB {
 		 * @param failedCallback - the callback function when the ros call failed (optional). Params:
 		 *   * error - the error message reported by ROS
 		 */
-		getTopics(callback:(topics:string[]) => void, failedCallback?:(error:any)=>void):void;
-
-		getTopicsDetails(callback:(response:any) => void, failedCallback?:(error:any)=>void):void;
+		getTopics(callback:(response: {topics:string[], types: string[]}) => void, failedCallback?:(error:any)=>void):void;
 
 		/**
 		 * Retrieves Topics in ROS as an array as specific type

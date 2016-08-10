@@ -16,8 +16,10 @@ export class WidgetInstanceEvents extends EventsParent {
   public Frontend: Frontend;
   public Ros: ROSLIB.Ros;
 
-  constructor() {
+  constructor(ros: ROSLIB.Ros) {
     super();
+
+    this.Ros = ros;
 
     this.Frontend = new Frontend();
 
@@ -51,7 +53,7 @@ export class WidgetInstanceEvents extends EventsParent {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $(".jsSettingsSelection").html("");
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function(k, v) {
-      var html = MyApp.templates.topicSelection({desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
+      var html = MyApp.templates.rosTopicSelector({desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
       $(".jsSettingsSelection").append(html);
     });
     this.Frontend.ShowWidgetSettings();
@@ -69,7 +71,7 @@ export class WidgetInstanceEvents extends EventsParent {
     e.preventDefault();
   }
   private _WidgetSettingsRefresh(callback?: (e:any) => void, e?: MouseEvent) {
-    this.Ros.getTopicsDetails((response: any) => {
+    this.Ros.getTopics((response: any) => {
       this.Frontend.UpdateRosTopicSelectors(response);
       if(typeof(callback) === 'function') {
         callback(e);
@@ -81,7 +83,14 @@ export class WidgetInstanceEvents extends EventsParent {
   }
 
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
-    this.Frontend.HideWidgetSettings();
+    // manage subscriptions
+    $(".jsRosTopicSelector").each((index: number, elem: Element) => {
+      console.log(elem);
+      console.log($(elem).children("option:selected").val());
+      console.log($(elem).children("option:selected").html());
+    });
+
+    //this.Frontend.HideWidgetSettings();
     e.preventDefault();
   }
 

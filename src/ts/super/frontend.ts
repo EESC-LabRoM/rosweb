@@ -161,19 +161,17 @@ export class Frontend {
   }
 
   public UpdateRosTopicSelectors(response: { topics: string[], types: string[], details: TypeDef[] }): void {
-    console.log(response);
     $(".jsRosTopicSelector").html("");
-    $(".jsRosTopicSelector").append($("<option>", {
-      value: 0,
-      text: "-- Select a topic to subscribe --"
-    }));
+    var html = '';
     $(".jsRosTopicSelector").each((i: number, element: Element) => {
+      html = MyApp.templates.rosTopicSelectorOptions({name: '-- Select a topic to subscribe', value: 0});
       let types = $(element).attr("data-ros-topic-type").split("|");
       response.topics.forEach((value: string, index: number) => {
         if(types.indexOf(response.types[index]) > -1) {
-          this._AddOption(element, value, value);
+          html += MyApp.templates.rosTopicSelectorOptions({name: value, type: response.types[index]});
         }
-      })
+      });
+      $(element).append(html);
     });
   }
   private _AddOption(element: Element, value: string, text: string): void {

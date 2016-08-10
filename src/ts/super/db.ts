@@ -1,4 +1,5 @@
 // Models
+import {Subscription} from "../model/subscription.ts";
 import {Tab} from "../model/tab.ts";
 import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
@@ -18,6 +19,10 @@ class Db {
   private saveAll(): void {
 
   }
+
+  // ROS Topics subscriptions
+  private SubscriptionCounter: number
+  private Subscriptions: Array<Subscription>;
   
   // Tab
   private TabCounter: number;
