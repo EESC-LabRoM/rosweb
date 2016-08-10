@@ -1,3 +1,8 @@
+/// <reference path="../typings/tsd.d.ts" />
+
+// Db
+import {db} from "../super/db.ts";
+
 export class Widget {
   
   public id: number;

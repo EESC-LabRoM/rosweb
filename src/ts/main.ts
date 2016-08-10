@@ -12,10 +12,9 @@ import {db} from "./super/db.ts";
 // Models
 import {Widget} from "./model/widget.ts";
 
+export var ros: ROSLIB.Ros = new ROSLIB.Ros("");
+
 function init() {
-
-  let ros: ROSLIB.Ros = new ROSLIB.Ros("");
-
   events(ros);
   insertWidgets();
 }

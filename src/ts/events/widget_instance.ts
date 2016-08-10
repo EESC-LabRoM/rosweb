@@ -2,9 +2,11 @@
 
 // Types
 import {Geometry} from "../types/Geometry.ts";
+import {Subscription} from "../model/subscription.ts";
 
 // Super
 import {Frontend} from "../super/frontend.ts";
+import {db} from "../super/db.ts";
 
 // Parent Class
 import {EventsParent} from "./events.ts";
@@ -52,8 +54,8 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettings = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $(".jsSettingsSelection").html("");
-    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function(k, v) {
-      var html = MyApp.templates.rosTopicSelector({widget_instance_id: widgetInstanceId,desc: $(v).attr("data-desc"), type: $(v).attr("data-type")});
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
+      var html = MyApp.templates.rosTopicSelector({ widget_instance_id: widgetInstanceId, desc: $(v).attr("data-desc"), type: $(v).attr("data-type") });
       $(".jsSettingsSelection").append(html);
     });
     this.Frontend.ShowWidgetSettings();
@@ -70,13 +72,13 @@ export class WidgetInstanceEvents extends EventsParent {
     }, e);
     e.preventDefault();
   }
-  private _WidgetSettingsRefresh(callback?: (e:any) => void, e?: MouseEvent) {
+  private _WidgetSettingsRefresh(callback?: (e: any) => void, e?: MouseEvent) {
     this.Ros.getTopics((response: any) => {
       this.Frontend.UpdateRosTopicSelectors(response);
-      if(typeof(callback) === 'function') {
+      if (typeof (callback) === 'function') {
         callback(e);
       }
-    }, () => function(error: any) {
+    }, () => function (error: any) {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(error);
     });
@@ -85,9 +87,14 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // manage subscriptions
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
-      let topic_name = $(elem).children("option:selected").attr("data-ros-topic-name");
-      let topic_type = $(elem).children("option:selected").attr("data-ros-topic-type");
-      let widget_instance_id = $(elem).attr("data-widget-instance-id");
+      let topic_name: string = $(elem).children("option:selected").attr("data-ros-topic-name");
+      let topic_type: string = $(elem).children("option:selected").attr("data-ros-topic-type");
+      let widget_instance_id: number = parseInt($(elem).attr("data-widget-instance-id"));
+
+      let widgetInstance = db.getWidgetInstance(widget_instance_id);
+      console.log("new subscription");
+      let subscription = new Subscription(widgetInstance, topic_name, topic_type);
+      widgetInstance.Subscriptions.push(subscription);
     });
 
     //this.Frontend.HideWidgetSettings();
@@ -110,12 +117,12 @@ export class WidgetInstanceEvents extends EventsParent {
   public ToggleMovable = (e?: MouseEvent) => {
     $(".jsToggleMovable").toggleClass("active");
     $(".jsWidgetContainer").attr("data-widget-conf", "0");
-    if($(".jsToggleMovable").hasClass("active")) {
+    if ($(".jsToggleMovable").hasClass("active")) {
       $(".jsWidgetContainer").attr("data-widget-conf", "1");
     }
     e.preventDefault();
   }
-  
+
   public MouseDown = (e?: MouseEvent) => {
     if ($(e.toElement).hasClass("jsWidgetResize")) {
       this.toMove = false;
@@ -165,12 +172,12 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
   }
-  private _ApplySizeBoundaries(size: Geometry.Point2D) : Geometry.Point2D {
+  private _ApplySizeBoundaries(size: Geometry.Point2D): Geometry.Point2D {
     let widthMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
     let widthMax: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-max-width"));
     let heightMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-height"));
     let heightMax: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-max-height"));
-    
+
     if (size.x > widthMax) {
       size.x = widthMax;
     }
