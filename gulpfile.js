@@ -6,6 +6,8 @@ var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+// tsd
+var tsd = require('gulp-tsd');
 // hbs
 var handlebars = require('gulp-handlebars');
 var wrap = require('gulp-wrap');
@@ -26,6 +28,13 @@ var paths = {
 gulp.task('default', ['html', 'ts', 'sass', 'img', 'hbs', 'js', 'wdgt', 'ws'], function() {
 
 });
+gulp.task('tsd', function (callback) {
+    tsd({
+        command: 'reinstall',
+        config: './src/ts/tsd.json'
+    }, callback);
+});
+gulp.task('config', ['tsd']);
 
 // HTML
 gulp.task('html', function() {
@@ -114,6 +123,12 @@ gulp.task('jsl_eventemitter', function() {
   return gulp.src('node_modules/eventemitter2/lib/eventemitter2.js')
     .pipe(gulp.dest('dist/js/'));
 });
+gulp.task('jsl_handlebars', function() {
+
+});
+gulp.task('jsl_jquery', function() {
+
+});
 gulp.task('jsl', ['jsl_roslibjs', 'jsl_eventemitter']);
 
 // Images
@@ -136,8 +151,6 @@ gulp.task('watchwdgt', ['wdgt'], function() {
 
 gulp.task('watch0', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'jsl', 'watchts']);
 gulp.task('watch1', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchwdgt', 'watchjs', 'jsl']);
-
-// Watch
 
 // Web server
 gulp.task('ws', function() {

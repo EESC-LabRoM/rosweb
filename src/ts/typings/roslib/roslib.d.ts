@@ -72,7 +72,7 @@ declare namespace ROSLIB {
 		 * @param failedCallback - the callback function when the ros call failed (optional). Params:
 		 *   * error - the error message reported by ROS
 		 */
-		getTopics(callback:(response: {topics:string[], types: string[]}) => void, failedCallback?:(error:any)=>void):void;
+		getTopics(callback:(topics:string[]) => void, failedCallback?:(error:any)=>void):void;
 
 		/**
 		 * Retrieves Topics in ROS as an array as specific type
@@ -117,16 +117,6 @@ declare namespace ROSLIB {
 		getNodes(callback:(nodes:string[]) => void, failedCallback?:(error:any)=>void):void;
 
 		/**
-		 * Retrieves node subscriptions, publishing topics and services.
-		 *
-		 * @param callback - function with the following params:
-		 *   * details - object with 3 arrays: publishing, services and subscribing
-		 * @param failedCallback - the callback function when the ros call failed (optional). Params:
-		 *   * error - the error message reported by ROS
-		 */
-		getNodeDetails(node: string, callback:(details:{publishing:string[], services:string[], subscribing:string[]}) => void, failedCallback?:(error:any)=>void):void;
-
-		/**
 		 * Retrieves list of param names from the ROS Parameter Server.
 		 *
 		 * @param callback function with params:
@@ -157,28 +147,6 @@ declare namespace ROSLIB {
 		 *   * error - the error message reported by ROS
 		 */
 		getServiceType(service:string, callback:(type:string) => void, failedCallback?:(error:any)=>void):void;
-
-		/**
-		 * Retrieves a detail of ROS service request.
-		 *
-		 * @param callback - function with params:
-		 *   * details - Array of the service request detail
-		 * @param message - String of a service type
-		 * @param failedCallback - the callback function when the ros call failed (optional). Params:
-		 *   * error - the error message reported by ROS
-		 */
-		getServiceRequestDetails(type: string, callback:(detail:any) => void, failedCallback:(error:any) => void):void;
-
-		/**
-		 * Retrieves a detail of ROS service response.
-		 *
-		 * @param callback - function with params:
-		 *   * details - Array of the service request detail
-		 * @param message - String of a service type
-		 * @param failedCallback - the callback function when the ros call failed (optional). Params:
-		 *   * error - the error message reported by ROS
-		 */
-		getServiceResponseDetails(type: string, callback:(detail:any) => void, failedCallback:(error:any) => void):void;
 
 		/**
 		 * Retrieves a detail of ROS message.
