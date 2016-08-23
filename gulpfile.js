@@ -15,6 +15,11 @@ var declare = require('gulp-declare');
 var concat = require('gulp-concat');
 // sass
 var sass = require('gulp-sass');
+// webserver
+var webserver = require('gulp-webserver');
+var http = require('http');
+var stream;
+// paths
 var paths = {
   html: ["src/*.html"],
   ts: ["./src/ts/**/*.ts"],
@@ -26,14 +31,12 @@ var paths = {
 };
 
 // Big Tasks
-gulp.task('default', ['config', 'dist', 'ws']);
-gulp.task('config', ['tsd']);
-gulp.task('dist', ['html', 'ts', 'sass', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
-gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt']);
-gulp.task('ws', function() {
-  var gulp = require('gulp');
-  var webserver = require('gulp-webserver');
-  var stream = gulp.src('./dist/')
+gulp.task('default', ['install', 'build', 'start']);
+gulp.task('install', ['tsd']);
+gulp.task('build', ['ts', 'html', 'sass', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
+gulp.task('watch', ['watchhtml', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt']);
+gulp.task('start', function() {
+  stream = gulp.src('./dist/')
     .pipe(webserver({
       livereload: true,
       directoryListing: false,
