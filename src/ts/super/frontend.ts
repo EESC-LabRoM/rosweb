@@ -38,6 +38,14 @@ export class Frontend {
     this.Trigger = new Trigger();
   }
 
+  public InsertWidgetsTags(): void {
+    db.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
+      console.log(value);
+      $("body").append($("script", {src: value.url + "main.js"}));
+      $("body").append($("link", {rel: "stylesheet", type: "text/css", href: value.url + "main.css"}));
+    });
+  }
+
   public LoadingLink(element: Element, disabled: Boolean = true) {
     if (disabled) {
       $(element).addClass("disabled");
@@ -164,11 +172,11 @@ export class Frontend {
     $(".jsRosTopicSelector").html("");
     var html = '';
     $(".jsRosTopicSelector").each((i: number, element: Element) => {
-      html = MyApp.templates.rosTopicSelectorOptions({name: '-- Select a topic to subscribe', value: 0});
+      html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe', value: 0 });
       let types = $(element).attr("data-ros-topic-type").split("|");
       response.topics.forEach((value: string, index: number) => {
-        if(types.indexOf(response.types[index]) > -1) {
-          html += MyApp.templates.rosTopicSelectorOptions({name: value, type: response.types[index]});
+        if (types.indexOf(response.types[index]) > -1) {
+          html += MyApp.templates.rosTopicSelectorOptions({ name: value, type: response.types[index] });
         }
       });
       $(element).append(html);

@@ -8,6 +8,7 @@ import {RosEvents} from "./events/ros.ts";
 
 // Super
 import {db} from "./super/db.ts";
+import {Frontend} from "./super/frontend.ts";
 
 // Models
 import {Widget} from "./model/widget.ts";
@@ -15,8 +16,8 @@ import {Widget} from "./model/widget.ts";
 export var ros: ROSLIB.Ros = new ROSLIB.Ros("");
 
 function init() {
-  events(ros);
   insertWidgets();
+  events(ros);
 }
 
 function events(ros: ROSLIB.Ros): void {
@@ -39,6 +40,10 @@ function insertWidgets(): void {
   widget.name = "Tests";
   widget.alias = "tests";
   widget.url = "./widgets/tests";
+
+  // insert Widgets JS and CSS tags
+  let frontend = new Frontend();
+  frontend.InsertWidgetsTags();
 }
 
 init();
