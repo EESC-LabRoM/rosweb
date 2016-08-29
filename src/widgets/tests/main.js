@@ -1,14 +1,9 @@
-WidgetTest = function() {
-  console.log("here I am!");
-
-  this.testFn = function(message) {
+var WidgetTests = function(widgetInstanceId) {
+  this.callback1 = function(message) {
     console.log(message);
   }
 }
 
 $(document).ready(function() {
-  console.log("here I am!");
-  test = function(message) {
-    console.log(message);
-  }
+  // If you need an onload callback
 });

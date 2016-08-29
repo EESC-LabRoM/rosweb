@@ -92,9 +92,13 @@ export class WidgetInstanceEvents extends EventsParent {
       let widget_instance_id: number = parseInt($(elem).attr("data-widget-instance-id"));
 
       let widgetInstance = db.getWidgetInstance(widget_instance_id);
-      console.log("new subscription");
       let subscription = new Subscription(widgetInstance, topic_name, topic_type);
-      widgetInstance.Subscriptions.push(subscription);
+      if(widgetInstance.Subscriptions.length < (index + 1)) {
+        widgetInstance.Subscriptions.push(subscription);
+      } else {
+        widgetInstance.Subscriptions[index].topic.unsubscribe();
+        widgetInstance.Subscriptions[index] = subscription;
+      }
     });
 
     //this.Frontend.HideWidgetSettings();
