@@ -178,7 +178,8 @@ export class Frontend {
       let subscribedTopic: string = $(elementMeta).attr("data-subscribed-topic");
 
       html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe --', value: "" });
-      let types = $(element).attr("data-ros-topic-type").split("|");
+      let strTypes: string = $(element).attr("data-ros-topic-type");
+      let types = (strTypes == "") ? [] : strTypes.split("|");
       response.topics.forEach((value: string, index: number) => {
         let selected: boolean = (value == subscribedTopic) ? true : false;
         if ((types.indexOf(response.types[index]) > -1) || types.length == 0) {

@@ -32,6 +32,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.DelegateEvent(".jsWidgetSettingsConfirm", "click", this.WidgetSettingsConfirm);
     this.DelegateEvent(".jsWidgetSettingsCancel", "click", this.WidgetSettingsCancel);
     this.DelegateEvent(".jsWidgetSettingsRefresh", "click", this.WidgetSettingsRefresh);
+    this.DelegateEvent(".jsWidgetSettingsRemove", "click", this.WidgetSettingsRemove);
 
     // Move and Resize
     this.DelegateEvent(".jsToggleMovable", "click", this.ToggleMovable);
@@ -123,6 +124,10 @@ export class WidgetInstanceEvents extends EventsParent {
     e.preventDefault();
   }
 
+  public WidgetSettingsRemove = (e?: MouseEvent) => {
+    e.preventDefault();
+  }
+
   private toMove: Boolean;
   private toResize: Boolean;
   private widgetInstanceId: number;
@@ -133,9 +138,11 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public ToggleMovable = (e?: MouseEvent) => {
     $(".jsToggleMovable").toggleClass("active");
-    $(".jsWidgetContainer").attr("data-widget-conf", "0");
     if ($(".jsToggleMovable").hasClass("active")) {
       $(".jsWidgetContainer").attr("data-widget-conf", "1");
+    } else {
+      $(".jsWidgetContainer").attr("data-widget-conf", "0");
+      this.Frontend.HideWidgetSettings();
     }
     e.preventDefault();
   }

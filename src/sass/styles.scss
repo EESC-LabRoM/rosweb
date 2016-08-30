@@ -67,6 +67,13 @@ a.btn {
       border-color:darken($blue, 10%) lighten($blue, 10%) lighten($blue, 10%) darken($blue, 10%);
     }
   }
+  &.btn-grey {
+    background-color:$grey;
+    border-color:lighten($grey, 10%) darken($grey, 10%) darken($grey, 10%) lighten($grey, 10%);
+    &:active {
+      border-color:darken($grey, 10%) lighten($grey, 10%) lighten($grey, 10%) darken($grey, 10%);
+    }
+  }
   &:active {
     border-width:2px 1px 1px 2px;
   }
