@@ -36,14 +36,14 @@ export class WidgetEvents extends EventsParent {
   
   public widgetItem = (e?: MouseEvent) => {
     let widgetAlias = $(e.toElement).attr("data-widget-alias");
-    this._widgetItem(widgetAlias);
+    this._widgetItem(widgetAlias);''
     this._widgetMenu();
     e.preventDefault();
   }
   private _widgetItem(widgetAlias: string): void {
     let widget: Widget = db.getWidgetByAlias(widgetAlias);
     let widgetInstance = db.newWidgetInstance(widget);
-    this.Frontend.insertWidgetInstance(widgetInstance);
+    this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.afterContent);
   }
 
 }

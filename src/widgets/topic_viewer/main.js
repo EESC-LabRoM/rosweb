@@ -1,6 +1,6 @@
 var WidgetTopicViewer = function (widgetInstanceId) {
   var self = this;
-  this.widgetInstanceId;
+  this.widgetInstanceId = widgetInstanceId;
 
   // callback1 method
   this.callback1 = function (message) {

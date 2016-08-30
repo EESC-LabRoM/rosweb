@@ -1,0 +1,13 @@
+.cssWidgetContainer[data-widget-conf='0'] div[data-widget-name='google-maps-gps-viewer'] {
+  border:1px solid #333;
+}
+div[data-widget-name='google-maps-gps-viewer'] div.mapContainer {
+  width:100%;
+  height:100%;
+}
+div[data-widget-name='google-maps-gps-viewer'] div.mapContainer div.map {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+}

@@ -18,8 +18,8 @@ export class WidgetInstance {
     this.id = id;
     this.Widget = widget;
     this.Subscriptions = new Array<Subscription>();
-    this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + this.Widget.alias.charAt(0).toUpperCase() + this.Widget.alias.slice(1));
-    this.WidgetCallbackClass.widgetInstanceId = this.id;
+    this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + this.Widget.alias.charAt(0).toUpperCase() + this.Widget.alias.slice(1), this.id);
+    // this.WidgetCallbackClass.widgetInstanceId = this.id;
   }
   
 }

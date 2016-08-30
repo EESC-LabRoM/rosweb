@@ -100,7 +100,7 @@ export class Frontend {
     var html = MyApp.templates.widgetList(list);
     $("." + this.Names.classWidgetsList).html(html);
   }
-  private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance): void {
+  private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;
     $.ajax({
@@ -110,7 +110,7 @@ export class Frontend {
       },
       success: function (data: string) {
         MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
-        fn(widgetInstance, currentTabId);
+        fn(widgetInstance, currentTabId, afterContentCallback);
       },
       error: function (e1: any, e2: any) {
         throw "Widget file not found!";
@@ -118,19 +118,19 @@ export class Frontend {
     });
   }
 
-  public insertWidgetInstance(widgetInstance: WidgetInstance): void {
+  public insertWidgetInstance(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }
     if (MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
-      this._loadWidgetContentAndInsert(widgetInstance);
+      this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
     } else {
       let currentTabId: number = this._getForcedCurrentTabId();
-      this._insertWidget(widgetInstance, currentTabId);
+      this._insertWidget(widgetInstance, currentTabId, afterContentCallback);
     }
   }
 
-  private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number): void {
+  private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
     content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
     let width: string = $(content).attr("data-min-width") + "px";
@@ -142,6 +142,7 @@ export class Frontend {
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
     let trigger = new Trigger();
     trigger.widgetSettings(widgetInstance.id);
+    afterContentCallback();
   }
 
   private _getForcedCurrentTabId(): number {
