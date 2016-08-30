@@ -14,10 +14,12 @@ export class WidgetInstance {
   public Tab: Tab;
   public position: Geometry.Point2D;
   
-  constructor(widget: Widget) {
+  constructor(id:number, widget: Widget) {
+    this.id = id;
     this.Widget = widget;
     this.Subscriptions = new Array<Subscription>();
     this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + this.Widget.alias.charAt(0).toUpperCase() + this.Widget.alias.slice(1));
+    this.WidgetCallbackClass.widgetInstanceId = this.id;
   }
   
 }

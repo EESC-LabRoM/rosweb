@@ -96,8 +96,8 @@ class Db {
   private WidgetInstanceCounter: number;
   private WidgetInstances: Array<WidgetInstance>;
   public newWidgetInstance(widget: Widget): WidgetInstance {
-    let widgetInstance = new WidgetInstance(widget);
-    widgetInstance.id = ++this.WidgetInstanceCounter;
+    let id: number = ++this.WidgetInstanceCounter;
+    let widgetInstance = new WidgetInstance(id, widget);
     this.WidgetInstances.push(widgetInstance);
     return widgetInstance;
   }
