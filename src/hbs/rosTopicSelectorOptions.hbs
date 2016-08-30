@@ -1,1 +1,5 @@
-<option value="{{name}}" data-ros-topic-type="{{type}}" data-ros-topic-name="{{name}}">{{name}}</option>
+{{#if selected}}
+  <option value="{{value}}" data-ros-topic-type="{{type}}" data-ros-topic-name="{{name}}" selected="selected">{{name}}</option>
+{{else}}
+  <option value="{{value}}" data-ros-topic-type="{{type}}" data-ros-topic-name="{{name}}">{{name}}</option>
+{{/if}}

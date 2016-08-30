@@ -55,7 +55,12 @@ export class WidgetInstanceEvents extends EventsParent {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $(".jsSettingsSelection").html("");
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
-      var html = MyApp.templates.rosTopicSelector({ widget_instance_id: widgetInstanceId, desc: $(v).attr("data-desc"), type: $(v).attr("data-type") });
+      var html = MyApp.templates.rosTopicSelector({
+        widget_topic_id: $(v).attr("data-widget-topic-id"),
+        widget_instance_id: widgetInstanceId,
+        desc: $(v).attr("data-desc"),
+        type: $(v).attr("data-type")
+      });
       $(".jsSettingsSelection").append(html);
     });
     this.Frontend.ShowWidgetSettings();
@@ -93,18 +98,23 @@ export class WidgetInstanceEvents extends EventsParent {
 
       let widgetInstance = db.getWidgetInstance(widget_instance_id);
       let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]");
-      let callbackName: string = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")").attr("data-clbk-fn");
+      let htmlMeta = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")");
+      $(htmlMeta).attr("data-subscribed-topic", topic_name);
+
+      let callbackName: string = $(htmlMeta).attr("data-clbk-fn");
       let callback: any = widgetInstance.WidgetCallbackClass[callbackName];
-      let subscription = new Subscription(widgetInstance, topic_name, topic_type, callback);
-      if (widgetInstance.Subscriptions.length < (index + 1)) {
-        widgetInstance.Subscriptions.push(subscription);
-      } else {
-        widgetInstance.Subscriptions[index].topic.unsubscribe();
-        widgetInstance.Subscriptions[index] = subscription;
+      if($(elem).children("option:selected").val() !== "") {
+        let subscription = new Subscription(widgetInstance, topic_name, topic_type, callback);
+        if (widgetInstance.Subscriptions.length < (index + 1)) {
+          widgetInstance.Subscriptions.push(subscription);
+        } else {
+          widgetInstance.Subscriptions[index].topic.unsubscribe();
+          widgetInstance.Subscriptions[index] = subscription;
+        }
       }
     });
 
-    //this.Frontend.HideWidgetSettings();
+    this.Frontend.HideWidgetSettings();
     e.preventDefault();
   }
 

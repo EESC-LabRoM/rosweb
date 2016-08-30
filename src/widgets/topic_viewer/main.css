@@ -1,3 +1,6 @@
+.cssWidgetContainer[data-widget-conf='0'] div[data-widget-name='topic-viewer'] {
+  border:1px solid #333;
+}
 div[data-widget-name='topic-viewer'] {
   float:left;
   height:100%;

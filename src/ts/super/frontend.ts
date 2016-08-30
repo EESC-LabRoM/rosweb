@@ -165,17 +165,24 @@ export class Frontend {
   }
   public HideWidgetSettings(): void {
     $(".jsMenuWidgetsSettings").animate({ right: -300 });
+    $(".jsWidgetContainer").attr("data-widget-conf", "0");
+    $(".jsToggleMovable").removeClass("active");
   }
 
   public UpdateRosTopicSelectors(response: { topics: string[], types: string[], details: TypeDef[] }): void {
     $(".jsRosTopicSelector").html("");
     var html = '';
     $(".jsRosTopicSelector").each((i: number, element: Element) => {
-      html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe', value: 0 });
+      let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-widget-topic-id='" + $(element).attr("data-widget-topic-id") + "']");
+      let subscribedTopic: string = $(elementMeta).attr("data-subscribed-topic");
+
+      html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe --', value: "" });
       let types = $(element).attr("data-ros-topic-type").split("|");
       response.topics.forEach((value: string, index: number) => {
-        if (types.indexOf(response.types[index]) > -1) {
-          html += MyApp.templates.rosTopicSelectorOptions({ name: value, type: response.types[index] });
+        let selected: boolean = (value == subscribedTopic) ? true : false;
+        if ((types.indexOf(response.types[index]) > -1) || types.length == 0) {
+          html += MyApp.templates.rosTopicSelectorOptions({ name: value, value: value, type: response.types[index], selected: selected });
         }
       });
       $(element).append(html);

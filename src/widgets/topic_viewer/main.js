@@ -4,8 +4,6 @@ var WidgetTopicViewer = function (widgetInstanceId) {
 
   // callback1 method
   this.callback1 = function (message) {
-    console.log(self.widgetInstanceId);
-    console.log(message);
     var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find(".datatopic1");
     $(elem).html("");
     debugObjectInsideElement(elem, message);
