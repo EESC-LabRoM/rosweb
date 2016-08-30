@@ -1,12 +1,13 @@
-var WidgetTests = function (widgetInstanceId) {
+var WidgetTopicViewer = function (widgetInstanceId) {
   var self = this;
   this.widgetInstanceId;
 
   // callback1 method
   this.callback1 = function (message) {
-    var elem = $(".jsWidgetContainer[data-widget-instance-id]").find(".datatopic1");
-    $(elem).html("");
+    console.log(self.widgetInstanceId);
     console.log(message);
+    var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find(".datatopic1");
+    $(elem).html("");
     debugObjectInsideElement(elem, message);
   }
 

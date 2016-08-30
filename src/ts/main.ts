@@ -39,9 +39,9 @@ function insertWidgets(): void {
 
   let widget = db.newWidget();
   widget.id = 1;
-  widget.name = "Tests";
-  widget.alias = "tests";
-  widget.url = "./widgets/tests";
+  widget.name = "Topic Viewer";
+  widget.alias = "TopicViewer";
+  widget.url = "./widgets/topic_viewer";
 
   // insert Widgets JS and CSS tags
   let frontend = new Frontend();

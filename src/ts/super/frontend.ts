@@ -104,7 +104,7 @@ export class Frontend {
     let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;
     $.ajax({
-      url: "widgets/" + widgetInstance.Widget.alias + "/index.hbs",
+      url: widgetInstance.Widget.url.slice(2) + "/index.hbs",
       beforeSend: function () {
 
       },
