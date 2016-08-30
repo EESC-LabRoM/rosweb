@@ -13,13 +13,16 @@ export class Subscription {
   public WidgetInstance: WidgetInstance;
   public topic_name: string;
   public topic_type: string;
+  public callback: (message: any) => {};
+
   public typedef: {};
   public topic: ROSLIB.Topic;
 
-  constructor(WidgetInstance: WidgetInstance, topic_name: string, topic_type: string) {
+  constructor(WidgetInstance: WidgetInstance, topic_name: string, topic_type: string, callback: (message) => {}) {
     this.WidgetInstance = WidgetInstance;
     this.topic_name = topic_name;
     this.topic_type = topic_type;
+    this.callback = callback;
 
     this._subscribe();
   }
@@ -30,11 +33,11 @@ export class Subscription {
       name: this.topic_name,
       messageType: this.topic_type
     });
-    this.topic.subscribe(function (message: any) {
-      console.log(message);
+    this.topic.subscribe((message: any) => {
+      this.callback(message);
     });
   }
-  public unsubscribe() : void {
+  public unsubscribe(): void {
     this.topic.unsubscribe();
   }
 

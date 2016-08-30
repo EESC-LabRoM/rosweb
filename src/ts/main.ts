@@ -29,14 +29,16 @@ function events(ros: ROSLIB.Ros): void {
 
 function insertWidgets(): void {
   // load list of available widgets
+  /*
   let widget = db.newWidget();
   widget.id = 1;
   widget.name = "GMaps Viewer";
   widget.alias = "gmaps_gps";
   widget.url = "./widgets/gmaps_gps";
+  */
 
-  widget = db.newWidget();
-  widget.id = 2;
+  let widget = db.newWidget();
+  widget.id = 1;
   widget.name = "Tests";
   widget.alias = "tests";
   widget.url = "./widgets/tests";

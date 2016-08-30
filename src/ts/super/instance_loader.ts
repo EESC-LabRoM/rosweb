@@ -6,4 +6,4 @@ class InstanceLoader {
   }
 }
 
-export var loader: InstanceLoader = new InstanceLoader();
+export var instance_loader: InstanceLoader = new InstanceLoader();

@@ -40,9 +40,8 @@ export class Frontend {
 
   public InsertWidgetsTags(): void {
     db.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
-      console.log(value);
-      $("body").append($("script", {src: value.url + "main.js"}));
-      $("body").append($("link", {rel: "stylesheet", type: "text/css", href: value.url + "main.css"}));
+      $("body").append("<script type='text/javascript' src='" + value.url.slice(2) + "/main.js" + "'></script>");
+      $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
     });
   }
 

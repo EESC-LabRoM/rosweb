@@ -92,8 +92,11 @@ export class WidgetInstanceEvents extends EventsParent {
       let widget_instance_id: number = parseInt($(elem).attr("data-widget-instance-id"));
 
       let widgetInstance = db.getWidgetInstance(widget_instance_id);
-      let subscription = new Subscription(widgetInstance, topic_name, topic_type);
-      if(widgetInstance.Subscriptions.length < (index + 1)) {
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]");
+      let callbackName: string = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")").attr("data-clbk-fn");
+      let callback: any = widgetInstance.WidgetCallbackClass[callbackName];
+      let subscription = new Subscription(widgetInstance, topic_name, topic_type, callback);
+      if (widgetInstance.Subscriptions.length < (index + 1)) {
         widgetInstance.Subscriptions.push(subscription);
       } else {
         widgetInstance.Subscriptions[index].topic.unsubscribe();
