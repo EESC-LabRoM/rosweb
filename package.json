@@ -1,7 +1,7 @@
 {
   "name": "rosweb",
   "version": "1.0.0",
-  "description": "my description",
+  "description": "Web based supervisory system for ROS",
   "main": "./dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
