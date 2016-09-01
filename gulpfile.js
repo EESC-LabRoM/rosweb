@@ -19,6 +19,8 @@ var sass = require('gulp-sass');
 var webserver = require('gulp-webserver');
 var http = require('http');
 var stream;
+// typedoc
+var typedoc = require("gulp-typedoc");
 // paths
 var paths = {
   html: ["src/*.html"],
@@ -35,7 +37,7 @@ gulp.task('default', ['install', 'build', 'start']);
 gulp.task('install', ['tsd']);
 gulp.task('build', ['html', 'ts', 'sass', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
 gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt']);
-gulp.task('start', function() {
+gulp.task('start', function () {
   stream = gulp.src('./dist/')
     .pipe(webserver({
       livereload: true,
@@ -50,26 +52,48 @@ gulp.task('start', function() {
 // Config
 {
   gulp.task('tsd', function (callback) {
-      tsd({
-          command: 'reinstall',
-          config: './src/ts/tsd.json'
-      }, callback);
+    tsd({
+      command: 'reinstall',
+      config: './src/ts/tsd.json'
+    }, callback);
   });
 }
 
 // Dist
 {
+  // TypeDoc
+  gulp.task("typedoc", function () {
+    return gulp
+      .src(["src/ts/**/*.ts"])
+      .pipe(typedoc({
+        // TypeScript options (see typescript docs) 
+        module: "commonjs",
+        target: "es5",
+        includeDeclarations: true,
+
+        // Output options (see typedoc docs) 
+        out: "./typedoc/",
+        json: "./typedoc/log.json",
+
+        // TypeDoc options (see typedoc docs) 
+        name: "my-project",
+        //theme: "/path/to/my/theme",
+        ignoreCompilerErrors: false,
+        version: true,
+      }))
+      ;
+  });
   // HTML
-  gulp.task('html', function() {
+  gulp.task('html', function () {
     return gulp.src(paths.html)
       .pipe(gulp.dest('dist'));
   });
-  gulp.task('watchhtml', ['html'], function() {
+  gulp.task('watchhtml', ['html'], function () {
     gulp.watch(paths.html, ['html']);
   });
 
   // TypeScript
-  gulp.task('ts', function() {
+  gulp.task('ts', function () {
     return browserify({
       basedir: '.',
       debug: true,
@@ -86,31 +110,31 @@ gulp.task('start', function() {
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('dist/js'));
   });
-  gulp.task('watchts', ['ts'], function() {
+  gulp.task('watchts', ['ts'], function () {
     gulp.watch(paths.ts, ['ts']);
   });
 
   // SASS
-  gulp.task('sass', function() {
+  gulp.task('sass', function () {
     return gulp.src('./src/sass/main.scss')
       .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
       .pipe(gulp.dest('./dist/'));
   });
-  gulp.task('watchsass', ['sass'], function() {
+  gulp.task('watchsass', ['sass'], function () {
     gulp.watch(paths.sass, ['sass']);
   });
 
   // Images
-  gulp.task('img', function() {
+  gulp.task('img', function () {
     return gulp.src(paths.img)
       .pipe(gulp.dest('dist/img/'));
   });
-  gulp.task('watchimg', ['img'], function() {
+  gulp.task('watchimg', ['img'], function () {
     gulp.watch(paths.img, ['img']);
   });
 
   // Handlebars
-  gulp.task('hbs', function() {
+  gulp.task('hbs', function () {
     gulp.src('src/hbs/**/*.hbs')
       .pipe(handlebars({
         handlebars: require('handlebars')
@@ -123,54 +147,54 @@ gulp.task('start', function() {
       .pipe(concat('templates.js'))
       .pipe(gulp.dest('dist/js'));
   });
-  gulp.task('watchhbs', ['hbs'], function() {
+  gulp.task('watchhbs', ['hbs'], function () {
     gulp.watch(paths.hbs, ['hbs']);
   });
 
   // JavaScript libraries
-  gulp.task('js', function() {
+  gulp.task('js', function () {
     return gulp.src(paths.js)
       .pipe(gulp.dest('dist/js/'));
   });
-  gulp.task('watchjs', ['js'], function() {
+  gulp.task('watchjs', ['js'], function () {
     gulp.watch(paths.js, ['js']);
   });
 
   // JavaScript libraries from submodules
-  gulp.task('jsl_roslibjs', function() {
+  gulp.task('jsl_roslibjs', function () {
     return gulp.src('src/js/roslibjs/build/roslib.min.js')
       .pipe(gulp.dest('dist/js/'));
   });
   // JavaScript libraries from NodeModules
-  gulp.task('jsl_eventemitter', function() {
+  gulp.task('jsl_eventemitter', function () {
     return gulp.src('node_modules/eventemitter2/lib/eventemitter2.js')
       .pipe(gulp.dest('dist/js/'));
   });
-  gulp.task('jsl_handlebars', function() {
+  gulp.task('jsl_handlebars', function () {
     return gulp.src('node_modules/handlebars/dist/handlebars.min.js')
       .pipe(gulp.dest('dist/js/'));
   });
-  gulp.task('jsl_jquery', function() {
+  gulp.task('jsl_jquery', function () {
     return gulp.src('node_modules/jquery/dist/jquery.min.js')
       .pipe(gulp.dest('dist/js/'));
   });
   gulp.task('jsl', ['jsl_roslibjs', 'jsl_eventemitter', 'jsl_handlebars', 'jsl_jquery']);
 
   // Images
-  gulp.task('img', function() {
+  gulp.task('img', function () {
     return gulp.src(paths.img)
       .pipe(gulp.dest('dist/img'));
   });
-  gulp.task('watchimg', ['img'], function() {
+  gulp.task('watchimg', ['img'], function () {
     gulp.watch(paths.img, ['img']);
   });
 
   // Widgets
-  gulp.task('wdgt', function() {
+  gulp.task('wdgt', function () {
     return gulp.src(paths.wdgt)
       .pipe(gulp.dest('dist/widgets'));
   });
-  gulp.task('watchwdgt', ['wdgt'], function() {
+  gulp.task('watchwdgt', ['wdgt'], function () {
     gulp.watch(paths.wdgt, ['wdgt']);
   });
 }
