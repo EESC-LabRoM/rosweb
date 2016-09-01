@@ -2,30 +2,37 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
   // Mandatory properties
   var self = this;
   this.widgetInstanceId = widgetInstanceId;
+  this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
   this.afterContent = function () {
-
     self.generateGpsVisualizer();
+
+    // delegate events
+    $(document).delegate(self.selector + " .jsCenterMap", "click", self.centerMap);
   }
 
-  this.mapGenerated = false;
+  // Subscriptions Callbacks
   this.callback1 = function (message) {
-    var latLng = { lat: parseFloat(message.latitude), lng: parseFloat(message.longitude) };
-    self.gpsVars.marker.setPosition(latLng);
-    self.gpsVars.map.setCenter(latLng);
+    self.latLng = { lat: parseFloat(message.latitude), lng: parseFloat(message.longitude) };
+    self.gpsVars.marker.setPosition(self.latLng);
   }
 
+  // helper methods and functions
+  this.latLng = { lat: 0, lng: 0 };
+  this.centerMap = function () {
+    google.maps.event.trigger(self.gpsVars.map, "resize");
+    self.gpsVars.map.setCenter(self.latLng);
+  };
   this.gpsVars = {
     map: null,
     marker: null
   };
-
   this.generateGpsVisualizer = function () {
-    var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find("div.map");
+    var divMap = $(self.selector).find("div.map");
     var map;
     var latLng = { lat: 0, lng: 0 };
-    self.gpsVars.map = new google.maps.Map($(elem)[0], {
+    self.gpsVars.map = new google.maps.Map($(divMap)[0], {
       center: latLng,
       zoom: 18
     });
@@ -35,7 +42,7 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
       title: 'I\'m here',
     });
   };
-}
+};
 
 $(document).ready(function () {
   // If you need an onload callback
