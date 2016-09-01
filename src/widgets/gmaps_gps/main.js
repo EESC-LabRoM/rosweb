@@ -18,7 +18,7 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
     self.gpsVars.marker.setPosition(self.latLng);
   }
 
-  // helper methods and functions
+  // helper methods
   this.latLng = { lat: 0, lng: 0 };
   this.centerMap = function () {
     google.maps.event.trigger(self.gpsVars.map, "resize");
