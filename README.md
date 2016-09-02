@@ -16,11 +16,14 @@ It is a web application and it depends on websockets provided by [rosbridge serv
 
 1. Install rosbridge package
 
-> sudo apt-get install ros-\<your_distro\>-rosbridge-suite
+    ```sh
+    $ sudo apt-get install ros-\<your_distro\>-rosbridge-suite
+    ```
 
 2. Launch rosbridge websocket server
-
-> roslaunch rosbridge_server rosbridge_websocket.launch
+    ```sh
+    $ roslaunch rosbridge_server rosbridge_websocket.launch
+    ```
 
 3. Open the [working demo page][demo] (or download it to your computer) and connect to your ROS server (usually on ws://localhost:9090)
 
