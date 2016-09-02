@@ -22,7 +22,7 @@ It is a web application and it depends on websockets provided by [rosbridge serv
 
 2. Launch rosbridge websocket server
     ```sh
-    roslaunch rosbridge_server rosbridge_websocket.launch
+    $ roslaunch rosbridge_server rosbridge_websocket.launch
     ```
 
 3. Open the [working demo page][demo] (or download it to your computer) and connect to your ROS server (usually on ws://localhost:9090)
