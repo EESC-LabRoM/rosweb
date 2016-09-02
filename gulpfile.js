@@ -165,6 +165,10 @@ gulp.task('start', function () {
     return gulp.src('src/js/roslibjs/build/roslib.min.js')
       .pipe(gulp.dest('dist/js/'));
   });
+  gulp.task('jsl_mjpegcanvasjs', function () {
+    return gulp.src('src/js/mjpegcanvasjs/build/mjpegcanvas.min.js')
+      .pipe(gulp.dest('dist/js/'));
+  });
   // JavaScript libraries from NodeModules
   gulp.task('jsl_eventemitter', function () {
     return gulp.src('node_modules/eventemitter2/lib/eventemitter2.js')
@@ -178,7 +182,7 @@ gulp.task('start', function () {
     return gulp.src('node_modules/jquery/dist/jquery.min.js')
       .pipe(gulp.dest('dist/js/'));
   });
-  gulp.task('jsl', ['jsl_roslibjs', 'jsl_eventemitter', 'jsl_handlebars', 'jsl_jquery']);
+  gulp.task('jsl', ['jsl_roslibjs', 'jsl_mjpegcanvasjs', 'jsl_eventemitter', 'jsl_handlebars', 'jsl_jquery']);
 
   // Images
   gulp.task('img', function () {

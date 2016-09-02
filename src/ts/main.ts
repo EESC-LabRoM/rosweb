@@ -41,6 +41,12 @@ function insertWidgets(): void {
   widget.alias = "GoogleMapsGpsViewer";
   widget.url = "./widgets/gmaps_gps";
 
+  widget = db.newWidget();
+  widget.id = 3;
+  widget.name = "Camera Viewer";
+  widget.alias = "CameraViewer";
+  widget.url = "./widgets/camera_viewer";
+
   // insert Widgets JS and CSS tags
   let frontend = new Frontend();
   frontend.InsertWidgetsTags();
