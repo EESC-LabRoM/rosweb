@@ -37,7 +37,7 @@ See [AUTHORS](AUTHORS.md) file.
 
 ## How to contribute
 
-For contribution and development tools details, see the [CONTRIBUTION](CONTRIBUTION.md).
+For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.md).
 
 [//]: #
 
