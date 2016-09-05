@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <title>ROSWeb</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="header1" class="header">
+      <a href="#" class="jsRosweb">ROSWeb</a>
+      <p class="cssRosUrlPrefix">
+        ws://<input type="text" class="cssRosUrl jsRosUrl" value="192.168.1.105:9090" />
+      </p>
+      <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
+
+      <a href="#" class="jsEventWidgetsMenu">Widgets</a>
+      <a href="#" class="jsToggleMovable cssToggleMovable">&nbsp;</a>
+    </div>
+    <div id="header2" class="header">
+      <a href="#" class="jsEventNewTab cssNewTab">New tab</a>
+      <div class="clearfix"></div>
+    </div>
+
+    <div id="content">
+      <div class="cssWidgetsContainer jsWidgetsContainer">
+        <div class="cssWidgets jsWidgets">
+          <h2>Widgets</h2>
+          <div class="cssWidgetsList jsWidgetsList"></div>
+        </div>
+      </div>
+      <div class="cssMenuWidgetsSettings jsMenuWidgetsSettings">
+        <div class="cssSettings">
+          <h2>Widget Settings</h2>
+          <div class="cssSettingsSelection jsSettingsSelection">
+
+          </div>
+          <div class="cssSettingsBtn">
+            <a href="#" class="btn btn-blue jsWidgetSettingsRefresh cssWidgetSettingsRefresh">Refresh</a>
+            <a href="#" class="btn btn-grey jsWidgetSettingsCancel cssWidgetSettingsCancel">Cancel</a>
+            <a href="#" class="btn btn-green jsWidgetSettingsConfirm cssWidgetSettingsConfirm">Confirm</a>
+            <br /><br />
+            <a href="#" class="btn btn-red jsWidgetSettingsRemove cssWidgetSettingsRemove">Remove</a>
+          </div>
+        </div>
+      </div>
+      <div id="tabs"></div>
+    </div>
+
+    <div id="footer">
+
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="js/handlebars.min.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/eventemitter2.js"></script>
+  <script src="js/roslib.min.js"></script>
+  <script src="js/mjpegcanvas.min.js"></script>
+  <script src="js/bundle.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGir7uuIvdEOH24VRmNcDCUCHSwmWS6No" async defer></script>
+</body>
+
+</html>
