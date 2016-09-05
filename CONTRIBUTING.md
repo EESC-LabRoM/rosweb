@@ -22,32 +22,38 @@ sudo apt-get install google-chrome-stable
 
 1. Clone the repo
 
-2. Instal NodeJS dependencies
+2. Clone submodules
+  ```sh
+  git submodule init
+  git submodule update
+  ```
+
+3. Instal NodeJS dependencies
   ```sh
   npm install
   ```
   
-3. Install Gulp globally
+4. Install Gulp globally
   ```sh
   sudo npm install -g gulp-cli
   ```
   
-4. Download TypeScript definition files
+5. Download TypeScript definition files
   ```sh
   gulp install
   ```
   
-5. Build
+6. Build
   ```sh
   gulp build
   ```
   
-6. Run
+7. Run
   ```sh
   gulp start
   ```
   
-7. Tip: While developing, to keep your local server updated, use the watch task:
+8. Tip: While developing, to keep your local server updated, use the watch task:
   ```sh
   gulp watch
   ```
