@@ -202,3 +202,10 @@ gulp.task('start', function () {
     gulp.watch(paths.wdgt, ['wdgt']);
   });
 }
+
+// gh-pages
+{
+  gulp.task('publish', function () {
+    gulp.src('dist/**/*.*').pipe(gulp.dest('./docs/'));
+  });
+}
