@@ -206,6 +206,6 @@ gulp.task('start', function () {
 // for gh-pages
 {
   gulp.task('publish', ['install', 'build'], function () {
-    gulp.src('dist/**/*.*').pipe(gulp.dest('./docs/'));
+    gulp.src('dist/**/*.*').pipe(gulp.dest('./'));
   });
 }
