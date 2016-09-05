@@ -51,5 +51,5 @@ For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.
 
 [ros]: <http://www.ros.org>
 [doc]: <http://www.labrom.eesc.usp.br/rosweb/typedoc>
-[demo]: <http://www.labrom.eesc.usp.br/rosweb>
+[demo]: <https://eesc-labrom.github.io/rosweb/>
 [rosbridge]: <http://www.github.com/RobotWebTools/rosbridge_suite>
