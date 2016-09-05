@@ -13,19 +13,27 @@ See the [working demo][demo].
 
 As ROSWeb is a tool for [ROS (Robot Operation System)][ros], it depends on a machine running the roscore process.
 It is a web application and it depends on websockets provided by [rosbridge server][rosbridge].
+Until now, it is being developed and tested using Google Chrome browser.
 
-1. Install rosbridge package
+1. Clone this rosbridge fork into your ROS workspace (usually catkin_ws directory)
 
     ```sh
-    $ sudo apt-get install ros-\<your_distro\>-rosbridge-suite
+    $ git clone https://github.com/marcoarruda/rosbridge_suite.git
     ```
 
-2. Launch rosbridge websocket server
+2. Install dependencies and compile workspace
+    ```sh
+    $ rosdep update
+    $ rosdep install rosbridge_server
+    $ catkin_make
+    ```
+
+3. Launch rosbridge websocket server
     ```sh
     $ roslaunch rosbridge_server rosbridge_websocket.launch
     ```
 
-3. Open the [working demo page][demo] (or download it to your computer) and connect to your ROS server (usually on ws://localhost:9090)
+4. Open the [working demo page][demo] (or download it to your computer) and connect to your ROS server (usually ws://localhost:9090)
 
 ## License
 
@@ -43,5 +51,5 @@ For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.
 
 [ros]: <http://www.ros.org>
 [doc]: <http://www.labrom.eesc.usp.br/rosweb/typedoc>
-[demo]: <http://www.labrom.eesc.usp.br/rosweb/demo>
+[demo]: <http://www.labrom.eesc.usp.br/rosweb>
 [rosbridge]: <http://www.github.com/RobotWebTools/rosbridge_suite>
