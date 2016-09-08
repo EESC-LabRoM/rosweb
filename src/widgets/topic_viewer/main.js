@@ -13,7 +13,7 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   }
 
   // Subscriptions Callbacks
-  this.callback1 = function (message) {
+  this.callback1 = function (topic_name, topic_type, message) {
     var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find(".datatopic1");
     $(elem).html("");
     self.debugObjectInsideElement(elem, message);

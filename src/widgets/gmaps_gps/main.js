@@ -17,7 +17,7 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
   }
 
   // Subscriptions Callbacks
-  this.callback1 = function (message) {
+  this.callback1 = function (topic_name, topic_type, message) {
     self.latLng = { lat: parseFloat(message.latitude), lng: parseFloat(message.longitude) };
     self.gpsVars.marker.setPosition(self.latLng);
   }
