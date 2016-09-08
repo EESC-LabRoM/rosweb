@@ -13,7 +13,7 @@ export class Subscription {
   public WidgetInstance: WidgetInstance;
   public topic_name: string;
   public topic_type: string;
-  public callback: (message: any) => {};
+  public callback: (topic_name: string, topic_type: string, message: any) => {};
 
   public typedef: {};
   public topic: ROSLIB.Topic;
@@ -34,7 +34,7 @@ export class Subscription {
       messageType: this.topic_type
     });
     this.topic.subscribe((message: any) => {
-      this.callback(message);
+      this.callback(this.topic_name, this.topic_type, message);
     });
   }
   public unsubscribe(): void {

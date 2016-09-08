@@ -3,6 +3,7 @@
 // Types
 import {Geometry} from "../types/Geometry.ts";
 import {Subscription} from "../model/subscription.ts";
+import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super
 import {Frontend} from "../super/frontend.ts";
@@ -54,6 +55,7 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettings = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
+    $("#widgetSettings").val(widgetInstanceId);
     $(".jsSettingsSelection").html("");
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
@@ -95,16 +97,16 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
       let topic_name: string = $(elem).children("option:selected").attr("data-ros-topic-name");
       let topic_type: string = $(elem).children("option:selected").attr("data-ros-topic-type");
-      let widget_instance_id: number = parseInt($(elem).attr("data-widget-instance-id"));
+      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
 
-      let widgetInstance = db.getWidgetInstance(widget_instance_id);
+      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
       let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]");
       let htmlMeta = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")");
       $(htmlMeta).attr("data-subscribed-topic", topic_name);
 
       let callbackName: string = $(htmlMeta).attr("data-clbk-fn");
       let callback: any = widgetInstance.WidgetCallbackClass[callbackName];
-      if($(elem).children("option:selected").val() !== "") {
+      if ($(elem).children("option:selected").val() !== "") {
         let subscription = new Subscription(widgetInstance, topic_name, topic_type, callback);
         if (widgetInstance.Subscriptions.length < (index + 1)) {
           widgetInstance.Subscriptions.push(subscription);
@@ -125,6 +127,9 @@ export class WidgetInstanceEvents extends EventsParent {
   }
 
   public WidgetSettingsRemove = (e?: MouseEvent) => {
+    let widgetInstanceId: number = parseInt($("#widgetSettings").val());
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
+    this.Frontend.HideWidgetSettings();
     e.preventDefault();
   }
 
@@ -195,6 +200,9 @@ export class WidgetInstanceEvents extends EventsParent {
     let size: Geometry.Point2D = this._ApplySizeBoundaries({ x: width + d.x, y: height + d.y });
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
+
+    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
   }
   private _ApplySizeBoundaries(size: Geometry.Point2D): Geometry.Point2D {
     let widthMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
@@ -226,6 +234,9 @@ export class WidgetInstanceEvents extends EventsParent {
     let pos: Geometry.Point2D = this._ApplyPositionBoundaries({ x: left + d.x, y: top + d.y });
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
+
+    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
   }
   private _ApplyPositionBoundaries(pos: Geometry.Point2D): Geometry.Point2D {
     let offset: any = $(".jsTabContent.jsShow").offset();
