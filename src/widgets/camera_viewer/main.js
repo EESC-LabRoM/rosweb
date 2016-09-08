@@ -6,14 +6,22 @@ var WidgetCameraViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.afterContent = function () {
-    var viewer = new MJPEGCANVAS.Viewer({
-      divID: 'mjpeg',
-      host: '192.168.1.105',
-      width: 640,
-      height: 480,
-      topic: '/wide_stereo/left/image_color'
-    });
-  }
+    self.host = $(".jsRosUrl").val().split(":")[0];
+  };
+
+  this.host = '';
+  this.viewer = null;
+  this.fnCallback = function(message) {
+    if(self.viewer == null) {
+      self.viewer = new MJPEGCANVAS.Viewer({
+        divID: 'mjpeg',
+        host: self.host,
+        width: 480,
+        height: 360,
+        topic: '/wide_stereo/left/image_color'
+      });
+    }
+  };
 
 };
 

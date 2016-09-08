@@ -16,6 +16,7 @@ import {Widget} from "./model/widget.ts";
 export var ros: ROSLIB.Ros = new ROSLIB.Ros("");
 
 function init() {
+  const a: any = 1;
   insertWidgets();
   events(ros);
 }
@@ -46,6 +47,12 @@ function insertWidgets(): void {
   widget.name = "Camera Viewer";
   widget.alias = "CameraViewer";
   widget.url = "./widgets/camera_viewer";
+
+  widget = db.newWidget();
+  widget.id = 4;
+  widget.name = "URDF Viewer";
+  widget.alias = "UrdfViewer";
+  widget.url = "./widgets/urdf_viewer";
 
   // insert Widgets JS and CSS tags
   let frontend = new Frontend();
