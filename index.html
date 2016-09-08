@@ -12,7 +12,7 @@
     <div id="header1" class="header">
       <a href="#" class="jsRosweb">ROSWeb</a>
       <p class="cssRosUrlPrefix">
-        ws://<input type="text" class="cssRosUrl jsRosUrl" value="192.168.1.105:9090" />
+        ws://<input type="text" class="cssRosUrl jsRosUrl" value="localhost:9090" />
       </p>
       <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
 
@@ -34,6 +34,7 @@
       <div class="cssMenuWidgetsSettings jsMenuWidgetsSettings">
         <div class="cssSettings">
           <h2>Widget Settings</h2>
+          <input type="hidden" id="widgetSettings" data-widget-instance-id="" />
           <div class="cssSettingsSelection jsSettingsSelection">
 
           </div>
@@ -62,6 +63,13 @@
   <script src="js/roslib.min.js"></script>
   <script src="js/mjpegcanvas.min.js"></script>
   <script src="js/bundle.js"></script>
+
+  <script src="http://cdn.robotwebtools.org/threejs/current/three.min.js"></script>
+  <script src="http://cdn.robotwebtools.org/threejs/current/ColladaLoader.min.js"></script>
+  <script src="http://cdn.robotwebtools.org/ColladaAnimationCompress/current/ColladaLoader2.min.js"></script>
+  <script src="http://cdn.robotwebtools.org/threejs/current/STLLoader.min.js"></script>
+<script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGir7uuIvdEOH24VRmNcDCUCHSwmWS6No" async defer></script>
 </body>
 

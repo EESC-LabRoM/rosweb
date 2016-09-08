@@ -5,20 +5,24 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.afterContent = function () {
+  this.clbkCreated = function () {
     self.generateGpsVisualizer();
-
-    // delegate events
     $(document).delegate(self.selector + " .jsCenterMap", "click", self.centerMap);
+  }
+  this.clbkResized = function() {
+    google.maps.event.trigger(self.gpsVars.map, "resize");
+    self.gpsVars.map.setCenter(self.latLng);
+  }
+  this.clbkMoved = function() {
   }
 
   // Subscriptions Callbacks
-  this.callback1 = function (message) {
+  this.callback1 = function (topic_name, topic_type, message) {
     self.latLng = { lat: parseFloat(message.latitude), lng: parseFloat(message.longitude) };
     self.gpsVars.marker.setPosition(self.latLng);
   }
 
-  // helper methods
+  // helper properties and methods
   this.latLng = { lat: 0, lng: 0 };
   this.centerMap = function () {
     google.maps.event.trigger(self.gpsVars.map, "resize");

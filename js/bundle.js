@@ -166,7 +166,7 @@ class WidgetEvents extends events_ts_1.EventsParent {
     _widgetItem(widgetAlias) {
         let widget = db_ts_1.db.getWidgetByAlias(widgetAlias);
         let widgetInstance = db_ts_1.db.newWidgetInstance(widget);
-        this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.afterContent);
+        this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.clbkCreated);
     }
 }
 exports.WidgetEvents = WidgetEvents;
@@ -193,6 +193,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         };
         this.WidgetSettings = (e) => {
             let widgetInstanceId = parseInt($(e.toElement).attr("data-widget-instance-id"));
+            $("#widgetSettings").val(widgetInstanceId);
             $(".jsSettingsSelection").html("");
             $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
                 var html = MyApp.templates.rosTopicSelector({
@@ -221,8 +222,8 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
             $(".jsRosTopicSelector").each((index, elem) => {
                 let topic_name = $(elem).children("option:selected").attr("data-ros-topic-name");
                 let topic_type = $(elem).children("option:selected").attr("data-ros-topic-type");
-                let widget_instance_id = parseInt($(elem).attr("data-widget-instance-id"));
-                let widgetInstance = db_ts_1.db.getWidgetInstance(widget_instance_id);
+                let widgetInstanceId = parseInt($(elem).attr("data-widget-instance-id"));
+                let widgetInstance = db_ts_1.db.getWidgetInstance(widgetInstanceId);
                 let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]");
                 let htmlMeta = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")");
                 $(htmlMeta).attr("data-subscribed-topic", topic_name);
@@ -247,6 +248,9 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
             e.preventDefault();
         };
         this.WidgetSettingsRemove = (e) => {
+            let widgetInstanceId = parseInt($("#widgetSettings").val());
+            $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
+            this.Frontend.HideWidgetSettings();
             e.preventDefault();
         };
         this.ToggleMovable = (e) => {
@@ -334,6 +338,8 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         let size = this._ApplySizeBoundaries({ x: width + d.x, y: height + d.y });
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
+        let widgetInstance = db_ts_1.db.getWidgetInstance(this.widgetInstanceId);
+        widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
     }
     _ApplySizeBoundaries(size) {
         let widthMin = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
@@ -361,6 +367,8 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         let pos = this._ApplyPositionBoundaries({ x: left + d.x, y: top + d.y });
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
+        let widgetInstance = db_ts_1.db.getWidgetInstance(this.widgetInstanceId);
+        widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
     }
     _ApplyPositionBoundaries(pos) {
         let offset = $(".jsTabContent.jsShow").offset();
@@ -401,6 +409,7 @@ const db_ts_1 = require("./super/db.ts");
 const frontend_ts_1 = require("./super/frontend.ts");
 exports.ros = new ROSLIB.Ros("");
 function init() {
+    const a = 1;
     insertWidgets();
     events(exports.ros);
 }
@@ -427,6 +436,11 @@ function insertWidgets() {
     widget.name = "Camera Viewer";
     widget.alias = "CameraViewer";
     widget.url = "./widgets/camera_viewer";
+    widget = db_ts_1.db.newWidget();
+    widget.id = 4;
+    widget.name = "URDF Viewer";
+    widget.alias = "UrdfViewer";
+    widget.url = "./widgets/urdf_viewer";
     // insert Widgets JS and CSS tags
     let frontend = new frontend_ts_1.Frontend();
     frontend.InsertWidgetsTags();
@@ -452,7 +466,7 @@ class Subscription {
             messageType: this.topic_type
         });
         this.topic.subscribe((message) => {
-            this.callback(message);
+            this.callback(this.topic_name, this.topic_type, message);
         });
     }
     unsubscribe() {

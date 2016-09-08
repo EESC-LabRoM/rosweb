@@ -5,11 +5,15 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.afterContent = function () {
+  this.clbkCreated = function () {
+  }
+  this.clbkResized = function() {
+  }
+  this.clbkMoved = function() {
   }
 
   // Subscriptions Callbacks
-  this.callback1 = function (message) {
+  this.callback1 = function (topic_name, topic_type, message) {
     var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find(".datatopic1");
     $(elem).html("");
     self.debugObjectInsideElement(elem, message);
