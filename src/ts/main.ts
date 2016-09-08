@@ -54,6 +54,12 @@ function insertWidgets(): void {
   widget.alias = "UrdfViewer";
   widget.url = "./widgets/urdf_viewer";
 
+  widget = db.newWidget();
+  widget.id = 5;
+  widget.name = "LaserScan Viewer";
+  widget.alias = "LaserScanViewer";
+  widget.url = "./widgets/laser_scan_viewer";
+
   // insert Widgets JS and CSS tags
   let frontend = new Frontend();
   frontend.InsertWidgetsTags();
