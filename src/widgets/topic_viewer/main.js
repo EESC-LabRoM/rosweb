@@ -6,13 +6,10 @@ var WidgetTopicViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
-    console.log("i've just been created");
   }
   this.clbkResized = function() {
-    console.log("i've just been resized");
   }
   this.clbkMoved = function() {
-    console.log("i've just been moved");
   }
 
   // Subscriptions Callbacks
