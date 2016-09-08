@@ -5,7 +5,14 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.afterContent = function () {
+  this.clbkCreated = function () {
+    console.log("i've just been created");
+  }
+  this.clbkResized = function() {
+    console.log("i've just been resized");
+  }
+  this.clbkMoved = function() {
+    console.log("i've just been moved");
   }
 
   // Subscriptions Callbacks

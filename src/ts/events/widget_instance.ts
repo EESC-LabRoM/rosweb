@@ -3,6 +3,7 @@
 // Types
 import {Geometry} from "../types/Geometry.ts";
 import {Subscription} from "../model/subscription.ts";
+import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super
 import {Frontend} from "../super/frontend.ts";
@@ -195,6 +196,9 @@ export class WidgetInstanceEvents extends EventsParent {
     let size: Geometry.Point2D = this._ApplySizeBoundaries({ x: width + d.x, y: height + d.y });
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
+
+    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    widgetInstance.WidgetCallbackClass.clbkResized();
   }
   private _ApplySizeBoundaries(size: Geometry.Point2D): Geometry.Point2D {
     let widthMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
@@ -226,6 +230,9 @@ export class WidgetInstanceEvents extends EventsParent {
     let pos: Geometry.Point2D = this._ApplyPositionBoundaries({ x: left + d.x, y: top + d.y });
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
+
+    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    widgetInstance.WidgetCallbackClass.clbkMoved();
   }
   private _ApplyPositionBoundaries(pos: Geometry.Point2D): Geometry.Point2D {
     let offset: any = $(".jsTabContent.jsShow").offset();
