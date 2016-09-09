@@ -7,9 +7,9 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   // Mandatory callback methods
   this.clbkCreated = function () {
   }
-  this.clbkResized = function() {
+  this.clbkResized = function () {
   }
-  this.clbkMoved = function() {
+  this.clbkMoved = function () {
   }
 
   // Subscriptions Callbacks
@@ -25,15 +25,19 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   this.debugObjectInsideElement = function (elem, obj, level = 0) {
     for (var k in obj) {
       if (Array.isArray(obj[k])) {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k));
-        self.debugObjectInsideElement(elem, obj[k], level + 1);
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + " []"));
+        var arr = obj[k].slice(0, 10);
+        if (obj[k].length > 10) arr.push("-- more --");
+        self.debugObjectInsideElement(elem, arr, level + 1);
       }
       else if (typeof obj[k] == "object") {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k));
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + " { }"));
         self.debugObjectInsideElement(elem, obj[k], level + 1);
       }
       else {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + ": " + obj[k]));
+        var maxLength = 50;
+        var val = obj[k].toString().length > maxLength ? obj[k].toString().slice(0, maxLength) + "..." : obj[k].toString();
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + ": " + val));
       }
     }
   }

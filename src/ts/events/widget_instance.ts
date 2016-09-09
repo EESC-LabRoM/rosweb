@@ -94,6 +94,13 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // manage subscriptions
+    this._WidgetSettingsConfirmSubscriptions();
+    // manage params
+
+    this.Frontend.HideWidgetSettings();
+    e.preventDefault();
+  }
+  private _WidgetSettingsConfirmSubscriptions() {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
       let topic_name: string = $(elem).children("option:selected").attr("data-ros-topic-name");
       let topic_type: string = $(elem).children("option:selected").attr("data-ros-topic-type");
@@ -116,10 +123,7 @@ export class WidgetInstanceEvents extends EventsParent {
         }
       }
     });
-
-    this.Frontend.HideWidgetSettings();
-    e.preventDefault();
-  }
+  };
 
   public WidgetSettingsCancel = (e?: MouseEvent) => {
     this.Frontend.HideWidgetSettings();
