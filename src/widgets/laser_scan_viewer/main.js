@@ -6,13 +6,18 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
+    self.callback1Worker = new Worker("widgets/laser_scan_viewer/worker.js");
+
     self.svg = $(self.selector + " svg")[0];
     var center = self.createElement("circle", null, { cx: 150, cy: 150, r: 5, fill: "red" });
-    var min = self.circle({ cx: 150, cy: 150, r: 30, stroke: "red", "stroke-width": 1, fill: "transparent" });
+    var min = self.circle({ cx: 150, cy: 150, r: 10, stroke: "red", "stroke-width": 1, fill: "transparent" });
     var max = self.circle({ cx: 150, cy: 150, r: 150, stroke: "red", "stroke-width": 1, fill: "transparent" });
+    self.pointsGroup = self.g({ "class": "points" });
+
     self.svg.appendChild(center);
     self.svg.appendChild(min);
     self.svg.appendChild(max);
+    self.svg.appendChild(self.pointsGroup);
   };
   this.clbkResized = function (width, height) {
     self.resizeSVG(width, height);
@@ -20,34 +25,31 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   this.clbkMoved = function (x, y) { }
 
   // Subscriptions Callbacks
-  self.console = false;
+  self.callback1Worker = null;
+  self.log = true;
   this.callback1 = function (topic_name, topic_type, message) {
-    var point;
-    var point_attr;
-    var angle;
-    var dist;
-    var max = 1080;
-    if (self.points.length < max) {
-      for (var i in message.ranges) {
-        if (i == max) break;
-        angle = 180 * (message.angle_min + message.angle_increment * i) / Math.PI;
-        dist = 120 - (150 * (message.ranges[i] / message.range_max));
-        point_attr = { cx: 150, cy: dist, r: 2, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
-        point = self.createElement("circle", null, point_attr);
-        self.svg.appendChild(point);
-        self.points.push(point);
-      }
-    } else {
-      for (var i in message.ranges) {
-        if (i == max) break;
-        dist = 120 - (150 * (message.ranges[i] / message.range_max));
-        self.points[i].setAttributeNS(null, "cy", dist);
-      }
+    if(self.log) {
+      self.callback1Worker.postMessage({ widgetInstanceId: self.widgetInstanceId, topic_name: topic_name, topic_type: topic_type, msg: message });
+      self.callback1Worker.onmessage = function (msgEvnt) {
+        var point;
+        var length = self.points.length;
+        for(i in msgEvnt.data) {
+          if(length == 0) {
+            point = self.circle(msgEvnt.data[i]);
+            self.svg.appendChild(point);
+            self.points.push(point);
+          } else {
+            self.points[i].setAttributeNS(null, "cy", msgEvnt.data[i].cy);
+          }
+        }
+      };
+      //self.log = false;
     }
   };
 
   // helper properties and methods
   this.svg = null;
+  this.pointsGroup;
   this.points = [];
   this.radius = 150;
   this.resizeSVG = function (width, height) {

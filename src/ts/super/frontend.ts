@@ -133,8 +133,8 @@ export class Frontend {
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
     content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-    let width: string = $(content).attr("data-min-width") + "px";
-    let height: string = $(content).attr("data-min-height") + "px";
+    let width: string = $(content).attr("data-width") + "px";
+    let height: string = $(content).attr("data-height") + "px";
     let left: string, top: string;
     left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
     top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
