@@ -7,3 +7,16 @@ div[data-widget-name='topic-viewer'] {
   width:100%;
   overflow:hidden;
 }
+div[data-widget-name='topic-viewer'] div.header p {
+  text-align:center;
+  padding: 0 10px;
+}
+div[data-widget-name='topic-viewer'] div.header p.name {
+  font-weight:bold;
+}
+div[data-widget-name='topic-viewer'] div.header p.type {
+  font-style: italic;
+}
+div[data-widget-name='topic-viewer'] div.datatopic1 {
+  padding:10px;
+}
