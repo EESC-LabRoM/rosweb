@@ -27,6 +27,8 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   // Subscriptions Callbacks
   self.callback1Worker = null;
   self.log = true;
+  self.rangeMax = 30;
+  self.rangeMin = 0;
   this.callback1 = function (topic_name, topic_type, message) {
     if(self.log) {
       self.callback1Worker.postMessage({ widgetInstanceId: self.widgetInstanceId, topic_name: topic_name, topic_type: topic_type, msg: message });

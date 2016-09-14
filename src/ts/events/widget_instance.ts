@@ -57,6 +57,17 @@ export class WidgetInstanceEvents extends EventsParent {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
     $("#widgetSettings").val(widgetInstanceId);
     $(".jsSettingsSelection").html("");
+
+    // generate fields
+    this._WidgetSettingsSubscriptions(widgetInstanceId);
+    this._WidgetSettingsParams(widgetInstanceId);
+
+    // frontend actions
+    this.Frontend.ShowWidgetSettings();
+    this._WidgetSettingsRefresh();
+    e.preventDefault();
+  }
+  private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
         widget_topic_id: $(v).attr("data-widget-topic-id"),
@@ -66,9 +77,18 @@ export class WidgetInstanceEvents extends EventsParent {
       });
       $(".jsSettingsSelection").append(html);
     });
-    this.Frontend.ShowWidgetSettings();
-    this._WidgetSettingsRefresh();
-    e.preventDefault();
+  }
+  private _WidgetSettingsParams(widgetInstanceId: number): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-wdgt-param=1]").each(function (k, v) {
+      var html = MyApp.templates.wdgtParamField({
+        widget_instance_id: widgetInstanceId,
+        widget_param_id: $(v).attr("data-widget-param-id"),
+        widget_param_desc: $(v).attr("data-widget-param-desc"),
+        widget_param_var: $(v).attr("data-widget-param-var"),
+        default_value: $(v).attr("data-widget-param-value")
+      });
+      $(".jsSettingsSelection").append(html);
+    });
   }
 
   public WidgetSettingsRefresh = (e?: MouseEvent) => {
@@ -95,12 +115,15 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // manage subscriptions
     this._WidgetSettingsConfirmSubscriptions();
-    // manage params
 
+    // manage params
+    this._WidgetSettingsConfirmParams();
+
+    // frontend action
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
-  }
-  private _WidgetSettingsConfirmSubscriptions() {
+  };
+  private _WidgetSettingsConfirmSubscriptions(): void {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
       let topic_name: string = $(elem).children("option:selected").attr("data-ros-topic-name");
       let topic_type: string = $(elem).children("option:selected").attr("data-ros-topic-type");
@@ -122,6 +145,21 @@ export class WidgetInstanceEvents extends EventsParent {
           widgetInstance.Subscriptions[index] = subscription;
         }
       }
+    });
+  };
+  private _WidgetSettingsConfirmParams(): void {
+    $(".jsWidgetParam").each((index: number, elem: Element) => {
+      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
+      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+
+      let varName = $(elem).attr("data-widget-param-var");
+      let varValue = $(elem).val();
+      widgetInstance.WidgetCallbackClass[varName] = varValue;
+
+      let widgetParamId = $(elem).attr("data-widget-param-id");
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-widget-param-id=" + widgetParamId + "]");
+      $(htmlMeta).attr("data-widget-param-value", varValue);
     });
   };
 

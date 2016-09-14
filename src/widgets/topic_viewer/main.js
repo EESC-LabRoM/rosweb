@@ -20,14 +20,17 @@ var WidgetTopicViewer = function (widgetInstanceId) {
     $(self.selector).find("p.type").html(topic_type);
     self.debugObjectInsideElement(elem, message);
   }
+  // Adjustable params
+  this.arrayShowLimit = 5;
+  this.valueShowLimit = 10;
 
   // helper methods
   this.debugObjectInsideElement = function (elem, obj, level = 0) {
     for (var k in obj) {
       if (Array.isArray(obj[k])) {
         $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + " []"));
-        var arr = obj[k].slice(0, 10);
-        if (obj[k].length > 10) arr.push("-- more --");
+        var arr = obj[k].slice(0, self.arrayShowLimit);
+        if (obj[k].length > self.arrayShowLimit) arr.push("-- more --");
         self.debugObjectInsideElement(elem, arr, level + 1);
       }
       else if (typeof obj[k] == "object") {
@@ -35,8 +38,7 @@ var WidgetTopicViewer = function (widgetInstanceId) {
         self.debugObjectInsideElement(elem, obj[k], level + 1);
       }
       else {
-        var maxLength = 50;
-        var val = obj[k].toString().length > maxLength ? obj[k].toString().slice(0, maxLength) + "..." : obj[k].toString();
+        var val = obj[k].toString().length > self.valueShowLimit ? obj[k].toString().slice(0, self.valueShowLimit) + "..." : obj[k].toString();
         $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + ": " + val));
       }
     }
