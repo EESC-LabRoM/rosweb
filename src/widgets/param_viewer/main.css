@@ -1,0 +1,19 @@
+.cssWidgetContainer[data-widget-conf='0'] div[data-widget-name='param-viewer'] {
+  border:1px solid #333;
+}
+
+div[data-widget-name='param-viewer'] label {
+  display:inline-block;
+  margin:3px 4%;
+  width:90%;
+  text-align:center;
+}
+div[data-widget-name='param-viewer'] input[type="text"] {
+  display:inline-block;
+  margin:3px 4%;
+  width:90%;
+}
+div[data-widget-name='param-viewer'] button {
+  margin:3px 4%;
+  width:40%;
+}
