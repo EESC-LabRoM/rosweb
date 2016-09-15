@@ -18,14 +18,13 @@ Until now, it is being developed and tested using Google Chrome browser.
 1. Clone this rosbridge fork into your ROS workspace (usually catkin_ws directory)
 
     ```sh
-    $ git clone https://github.com/marcoarruda/rosbridge_suite.git
+    $ sudo apt-get instal ros-indigo-rosbridge-suite
     ```
 
-2. Install dependencies and compile workspace
+2. Install dependencies
     ```sh
     $ rosdep update
     $ rosdep install rosbridge_server
-    $ catkin_make
     ```
 
 3. Launch rosbridge websocket server
