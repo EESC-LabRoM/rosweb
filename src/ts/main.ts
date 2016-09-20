@@ -16,7 +16,7 @@ import {Widget} from "./model/widget.ts";
 export var ros: ROSLIB.Ros = new ROSLIB.Ros("");
 
 function init() {
-  const a: any = 1;
+  window["ros"] = ros;
   insertWidgets();
   events(ros);
 }
