@@ -190,5 +190,21 @@ export class Frontend {
       $(element).append(html);
     });
   }
+  public UpdateRosParamSelectors(response: string[]): void {
+    $(".jsRosParamSelector").html("");
+    var html = '';
+    $(".jsRosParamSelector").each((i: number, element: Element) => {
+      let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-ros-param-id='" + $(element).attr("data-ros-param-id") + "']");
+      let selectedParam: string = $(elementMeta).attr("data-ros-param-slctd");
+
+      html = MyApp.templates.rosParamSelectorOptions({ name: '-- Select a param to manage --', value: "" });
+      response.forEach((value: string, index: number) => {
+        let selected: boolean = (value == selectedParam) ? true : false;
+        html += MyApp.templates.rosParamSelectorOptions({ name: value, value: value, selected: selected });
+      });
+      $(element).append(html);
+    });
+  }
 
 }

@@ -5,13 +5,17 @@ data-max-height="1000" data-max-width="1000"
 data-height="80" data-width="140">
 
   <!--  META Tags to describe topics subscription -->
-  <meta data-ros-param="1" data-widget-param-id="1" data-on-change-fn="callback1" data-desc="Param selector 1" data-selected-param="" />
+  <meta data-ros-param="1"
+  data-ros-param-id="1"
+  data-ros-param-desc="Param selector 1"
+  data-ros-param-chng="param1Changed"
+  data-ros-param-sltcd="" />
 
   <!-- The content which could be manipulated by widget class -->
   <div class="datatopic1">
     <label>-- param name --</label>
     <input type="text" name="doesnotmatter" value="-- param value --" />
-    <button type="button" class="jsWidgetParamViewerRefresh">Refresh</button>
-    <button type="button" class="jsWidgetParamViewerSave">Save</button>
+    <button type="button" class="jsWidgetParamViewerRefresh">Get</button>
+    <button type="button" class="jsWidgetParamViewerSave">Set</button>
   </div>
 </div>

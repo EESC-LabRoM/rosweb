@@ -2,6 +2,7 @@ div.cssWidgetContainer {
   position:absolute;
   z-index:20;
   display:inline-block;
+  overflow:hidden;
   div.cssWidgetContent {
     float:left;
     width:100%;

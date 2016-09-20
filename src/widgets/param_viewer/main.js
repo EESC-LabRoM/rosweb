@@ -6,16 +6,46 @@ var WidgetParamViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
-  }
+    self.param1 = new ROSLIB.Param({ ros: ros, name: "" });
+    $(self.selector).find(".jsWidgetParamViewerRefresh").click(function (e) {
+      self.refresh();
+      e.preventDefault();
+    });
+    $(self.selector).find(".jsWidgetParamViewerSave").click(function (e) {
+      self.save();
+      e.preventDefault();
+    });
+  };
   this.clbkResized = function () {
-  }
+  };
   this.clbkMoved = function () {
-  }
+  };
 
-  // param changed
-  this.callback1 = function (val) {
+  // Param selector callback
+  this.param1Changed = function (selectedParam) {
+    $(self.selector).find("label").html(selectedParam);
+    self.param1.name = selectedParam;
+    self.refresh();
+  };
 
-  }
+  // helper methods
+  this.refresh = function () {
+    $(self.selector).find("button, input").attr("disabled", "disabled");
+    self.param1.get(function (a) {
+      if (typeof (a) == "object" || a == null) {
+      } else {
+        $(self.selector).find("input[type=text]").val(a);
+        $(self.selector).find("button, input").removeAttr("disabled");
+      }
+    });
+  };
+  this.save = function () {
+    var value = $(self.selector).find("input[type=text]").val();
+    $(self.selector).find("button, input").attr("disabled", "disabled");
+    self.param1.set(value, function (a) {
+      $(self.selector).find("button, input").removeAttr("disabled");
+    });
+  };
 }
 
 $(document).ready(function () {

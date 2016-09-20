@@ -60,6 +60,7 @@ export class WidgetInstanceEvents extends EventsParent {
 
     // generate fields
     this._WidgetSettingsSubscriptions(widgetInstanceId);
+    this._WidgetSettingsRosParams(widgetInstanceId);
     this._WidgetSettingsParams(widgetInstanceId);
 
     // frontend actions
@@ -74,6 +75,17 @@ export class WidgetInstanceEvents extends EventsParent {
         widget_instance_id: widgetInstanceId,
         desc: $(v).attr("data-desc"),
         type: $(v).attr("data-type")
+      });
+      $(".jsSettingsSelection").append(html);
+    });
+  }
+  private _WidgetSettingsRosParams(widgetInstanceId: number): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-param=1]").each(function (k, v) {
+      var html = MyApp.templates.rosParamSelector({
+        widget_instance_id: widgetInstanceId,
+        ros_param_id: $(v).attr("data-ros-param-id"),
+        ros_param_desc: $(v).attr("data-ros-param-desc"),
+        ros_param_chng: $(v).attr("data-ros-param-chng")
       });
       $(".jsSettingsSelection").append(html);
     });
@@ -101,20 +113,29 @@ export class WidgetInstanceEvents extends EventsParent {
     e.preventDefault();
   }
   private _WidgetSettingsRefresh(callback?: (e: any) => void, e?: MouseEvent) {
-    this.Ros.getTopics((response: any) => {
-      this.Frontend.UpdateRosTopicSelectors(response);
-      if (typeof (callback) === 'function') {
-        callback(e);
-      }
-    }, () => function (error: any) {
+    this.Ros.getTopics((topicsResponse: any) => {
+      this.Frontend.UpdateRosTopicSelectors(topicsResponse);
+      this.Ros.getParams((paramsResponse: any) => {
+        this.Frontend.UpdateRosParamSelectors(paramsResponse);
+        if (typeof (callback) === 'function') {
+          callback(e);
+        }
+      }, () => function (paramsError: any) {
+        alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
+        console.log(paramsError);
+      });
+    }, () => function (topicsError: any) {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
-      console.log(error);
+      console.log(topicsError);
     });
   }
 
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // manage subscriptions
     this._WidgetSettingsConfirmSubscriptions();
+
+    // manage ros params
+    this._WidgetSettingsConfirmRosParams();
 
     // manage params
     this._WidgetSettingsConfirmParams();
@@ -145,6 +166,21 @@ export class WidgetInstanceEvents extends EventsParent {
           widgetInstance.Subscriptions[index] = subscription;
         }
       }
+    });
+  };
+  private _WidgetSettingsConfirmRosParams(): void {
+    $(".jsRosParamSelector").each((index: number, elem: Element) => {
+      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
+      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+
+      let paramChangeCallback: any = $(elem).attr("data-ros-param-chng");
+      let paramSelected: string = $(elem).val();
+      widgetInstance.WidgetCallbackClass[paramChangeCallback](paramSelected);
+
+      let widgetParamId = $(elem).attr("data-widget-param-id");
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-widget-param-id=" + widgetParamId + "]");
+      $(htmlMeta).attr("data-ros-param-slctd", paramSelected);
     });
   };
   private _WidgetSettingsConfirmParams(): void {
