@@ -26,6 +26,7 @@ var paths = {
   html: ["src/*.html"],
   ts: ["./src/ts/**/*.ts"],
   sass: ["./src/sass/**/*.scss"],
+  sass_wdgt: ["./src/widgets/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
   js: ["./src/js/*.js"],
   wdgt: ["./src/widgets/**/*.*"],
@@ -120,8 +121,15 @@ gulp.task('start', function () {
       .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
       .pipe(gulp.dest('./dist/'));
   });
-  gulp.task('watchsass', ['sass'], function () {
+  gulp.task('sass_wdgt', function () {
+    return gulp.src('./src/widgets/**/*.scss')
+      .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+      .pipe(concat('widgets.css'))
+      .pipe(gulp.dest('./dist/'));
+  });
+  gulp.task('watchsass', ['sass', 'sass_wdgt'], function () {
     gulp.watch(paths.sass, ['sass']);
+    gulp.watch(paths.sass_wdgt, ['sass_wdgt']);
   });
 
   // Images
