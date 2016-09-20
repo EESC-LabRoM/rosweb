@@ -3,4 +3,4 @@
 	url = https://github.com/marcoarruda/roslibjs.git
 [submodule "src/js/mjpegcanvasjs"]
 	path = src/js/mjpegcanvasjs
-	url = https://github.com/rctoris/mjpegcanvasjs.git
+	url = https://github.com/marcoarruda/mjpegcanvasjs.git
