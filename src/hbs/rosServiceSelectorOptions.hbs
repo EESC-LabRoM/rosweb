@@ -1,0 +1,5 @@
+{{#if selected}}
+  <option value="{{value}}" data-ros-service-type="{{type}}" data-ros-service-name="{{name}}" selected="selected">{{name}}</option>
+{{else}}
+  <option value="{{value}}" data-ros-service-type="{{type}}" data-ros-service-name="{{name}}">{{name}}</option>
+{{/if}}

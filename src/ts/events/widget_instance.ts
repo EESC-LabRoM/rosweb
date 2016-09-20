@@ -41,17 +41,17 @@ export class WidgetInstanceEvents extends EventsParent {
     this.DelegateEvent(".jsWidgetContainer[data-widget-conf='1']", "mousedown", this.MouseDown);
     this.DelegateEvent(document, "mousemove", this.MouseMove);
     this.DelegateEvent(document, "mouseup", this.MouseUp);
-  }
+  };
 
   public WidgetConfirm = (e?: MouseEvent) => {
     $(e.toElement).closest(".jsWidgetContainer").attr("data-widget-conf", "0");
     e.preventDefault();
-  }
+  };
 
   public WidgetDelete = (e?: MouseEvent) => {
     $(e.toElement).closest(".jsWidgetContainer").remove();
     e.preventDefault();
-  }
+  };
 
   public WidgetSettings = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
@@ -61,13 +61,14 @@ export class WidgetInstanceEvents extends EventsParent {
     // generate fields
     this._WidgetSettingsSubscriptions(widgetInstanceId);
     this._WidgetSettingsRosParams(widgetInstanceId);
+    this._WidgetSettingsRosServices(widgetInstanceId);
     this._WidgetSettingsParams(widgetInstanceId);
 
     // frontend actions
     this.Frontend.ShowWidgetSettings();
     this._WidgetSettingsRefresh();
     e.preventDefault();
-  }
+  };
   private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
@@ -78,7 +79,7 @@ export class WidgetInstanceEvents extends EventsParent {
       });
       $(".jsSettingsSelection").append(html);
     });
-  }
+  };
   private _WidgetSettingsRosParams(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-param=1]").each(function (k, v) {
       var html = MyApp.templates.rosParamSelector({
@@ -89,7 +90,18 @@ export class WidgetInstanceEvents extends EventsParent {
       });
       $(".jsSettingsSelection").append(html);
     });
-  }
+  };
+  private _WidgetSettingsRosServices(widgetInstanceId: number): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-service=1]").each(function (k, v) {
+      var html = MyApp.templates.rosServiceSelector({
+        widget_instance_id: widgetInstanceId,
+        ros_service_id: $(v).attr("data-ros-service-id"),
+        ros_service_desc: $(v).attr("data-ros-service-desc"),
+        ros_service_chng: $(v).attr("data-ros-service-chng")
+      });
+      $(".jsSettingsSelection").append(html);
+    });
+  };
   private _WidgetSettingsParams(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-wdgt-param=1]").each(function (k, v) {
       var html = MyApp.templates.wdgtParamField({
@@ -101,41 +113,49 @@ export class WidgetInstanceEvents extends EventsParent {
       });
       $(".jsSettingsSelection").append(html);
     });
-  }
+  };
 
   public WidgetSettingsRefresh = (e?: MouseEvent) => {
     this.Frontend.LoadingLink(e.toElement);
     $(".jsRosTopicSelector").attr("disabled", "disabled");
-    this._WidgetSettingsRefresh((e?: MouseEvent) => {
-      this.Frontend.ReleaseLink(e.toElement);
-      $(".jsRosTopicSelector").removeAttr("disabled");
-    }, e);
+    this._WidgetSettingsRefresh();
     e.preventDefault();
-  }
-  private _WidgetSettingsRefresh(callback?: (e: any) => void, e?: MouseEvent) {
+  };
+  private _WidgetSettingsRefresh() {
+    this._WidgetSettingsRefreshTopics();
+  };
+  private _WidgetSettingsRefreshTopics() {
     this.Ros.getTopics((topicsResponse: any) => {
       this.Frontend.UpdateRosTopicSelectors(topicsResponse);
-      this.Ros.getParams((paramsResponse: any) => {
-        this.Frontend.UpdateRosParamSelectors(paramsResponse);
-        if (typeof (callback) === 'function') {
-          callback(e);
-        }
-      }, () => function (paramsError: any) {
-        alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
-        console.log(paramsError);
-      });
+      this._WidgetSettingsRefreshParams();
     }, () => function (topicsError: any) {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(topicsError);
     });
-  }
+  };
+  private _WidgetSettingsRefreshParams() {
+    this.Ros.getParams((paramsResponse: any) => {
+      this.Frontend.UpdateRosParamSelectors(paramsResponse);
+      this._WidgetSettingsRefreshsServices();
+    }, () => function (paramsError: any) {
+      alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
+      console.log(paramsError);
+    });
+  };
+  private _WidgetSettingsRefreshsServices() {
+    this.Ros.getServices((servicesResponse: any) => {
+      this.Frontend.UpdateRosServiceSelectors(servicesResponse);
+    }, () => function (servicesError: any) {
+      alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
+      console.log(servicesError);
+    });
+  };
 
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
-    // manage subscriptions
+    // manage ros data
     this._WidgetSettingsConfirmSubscriptions();
-
-    // manage ros params
     this._WidgetSettingsConfirmRosParams();
+    this._WidgetSettingsConfirmRosServices();
 
     // manage params
     this._WidgetSettingsConfirmParams();
@@ -177,12 +197,27 @@ export class WidgetInstanceEvents extends EventsParent {
       let paramSelected: string = $(elem).val();
       widgetInstance.WidgetCallbackClass[paramChangeCallback](paramSelected);
 
-      let widgetParamId = $(elem).attr("data-widget-param-id");
+      let rosParamId = $(elem).attr("data-ros-param-id");
       let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
-      let htmlMeta = $(htmlWidgetInstance).find("meta[data-widget-param-id=" + widgetParamId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-ros-param-id=" + rosParamId + "]");
       $(htmlMeta).attr("data-ros-param-slctd", paramSelected);
     });
   };
+  private _WidgetSettingsConfirmRosServices(): void {
+    $(".jsRosServiceSelector").each((index: number, elem: Element) => {
+      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
+      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+
+      let serviceChangeCallback: any = $(elem).attr("data-ros-service-chng");
+      let serviceSelected: string = $(elem).val();
+      widgetInstance.WidgetCallbackClass[serviceChangeCallback](serviceSelected);
+
+      let rosServiceId = $(elem).attr("data-ros-service-id");
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-ros-service-id=" + rosServiceId + "]");
+      $(htmlMeta).attr("data-ros-service-slctd", serviceSelected);
+    });
+  }
   private _WidgetSettingsConfirmParams(): void {
     $(".jsWidgetParam").each((index: number, elem: Element) => {
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
@@ -202,14 +237,14 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettingsCancel = (e?: MouseEvent) => {
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
-  }
+  };
 
   public WidgetSettingsRemove = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($("#widgetSettings").val());
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
-  }
+  };
 
   private toMove: Boolean;
   private toResize: Boolean;
@@ -228,7 +263,7 @@ export class WidgetInstanceEvents extends EventsParent {
       this.Frontend.HideWidgetSettings();
     }
     e.preventDefault();
-  }
+  };
 
   public MouseDown = (e?: MouseEvent) => {
     if ($(e.toElement).hasClass("jsWidgetResize")) {
@@ -243,7 +278,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(e.toElement).closest(".jsWidgetContainer").css("z-index", "30");
     this.lastX = e.pageX;
     this.lastY = e.pageY;
-  }
+  };
   public MouseMove = (e?: MouseEvent) => {
     if (parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id")) == this.widgetInstanceId) {
       if (this.toMove) {
@@ -262,12 +297,12 @@ export class WidgetInstanceEvents extends EventsParent {
 
     this.lastX = e.pageX;
     this.lastY = e.pageY;
-  }
+  };
   public MouseUp = (e?: MouseEvent) => {
     this.widgetInstanceId = 0;
     this.toMove = this.toResize = false;
     $(".jsWidgetContainer").css("z-index", "20");
-  }
+  };
 
   private _WidgetResize(e: MouseEvent): void {
     let d: Geometry.Point2D = this._GetMouseDistance(e);
@@ -281,7 +316,7 @@ export class WidgetInstanceEvents extends EventsParent {
 
     let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
     widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
-  }
+  };
   private _ApplySizeBoundaries(size: Geometry.Point2D): Geometry.Point2D {
     let widthMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
     let widthMax: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-max-width"));
@@ -302,7 +337,7 @@ export class WidgetInstanceEvents extends EventsParent {
     }
 
     return size;
-  }
+  };
   private _WidgetMove(e: MouseEvent): void {
     let d: Geometry.Point2D = this._GetMouseDistance(e);
 
@@ -315,7 +350,7 @@ export class WidgetInstanceEvents extends EventsParent {
 
     let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
     widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
-  }
+  };
   private _ApplyPositionBoundaries(pos: Geometry.Point2D): Geometry.Point2D {
     let offset: any = $(".jsTabContent.jsShow").offset();
     let xMin: number = offset.left + 1;
@@ -337,9 +372,9 @@ export class WidgetInstanceEvents extends EventsParent {
     }
 
     return pos;
-  }
+  };
   private _GetMouseDistance(e: MouseEvent): Geometry.Point2D {
     return { x: e.pageX - this.lastX, y: e.pageY - this.lastY };
-  }
+  };
 
 }

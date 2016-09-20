@@ -30,41 +30,55 @@ function events(ros: ROSLIB.Ros): void {
 
 function insertWidgets(): void {
   // load list of available widgets
+  let count: number = 1;
   let widget = db.newWidget();
-  widget.id = 1;
+  widget.id = count;
   widget.name = "Topic Viewer";
   widget.alias = "TopicViewer";
   widget.url = "./widgets/topic_viewer";
+  count++;
 
   widget = db.newWidget();
-  widget.id = 2;
-  widget.name = "Google Maps GPS Viewer";
-  widget.alias = "GoogleMapsGpsViewer";
-  widget.url = "./widgets/gmaps_gps";
-
-  widget = db.newWidget();
-  widget.id = 3;
-  widget.name = "Camera Viewer";
-  widget.alias = "CameraViewer";
-  widget.url = "./widgets/camera_viewer";
-
-  widget = db.newWidget();
-  widget.id = 4;
-  widget.name = "URDF Viewer";
-  widget.alias = "UrdfViewer";
-  widget.url = "./widgets/urdf_viewer";
-
-  widget = db.newWidget();
-  widget.id = 5;
-  widget.name = "LaserScan Viewer";
-  widget.alias = "LaserScanViewer";
-  widget.url = "./widgets/laser_scan_viewer";
-
-  widget = db.newWidget();
-  widget.id = 6;
+  widget.id = count;
   widget.name = "Param Viewer";
   widget.alias = "ParamViewer";
   widget.url = "./widgets/param_viewer";
+  count++;
+
+  widget = db.newWidget();
+  widget.id = count;
+  widget.name = "Service Viewer";
+  widget.alias = "ServiceViewer";
+  widget.url = "./widgets/service_viewer";
+  count++;
+
+  widget = db.newWidget();
+  widget.id = count;
+  widget.name = "Google Maps GPS Viewer";
+  widget.alias = "GoogleMapsGpsViewer";
+  widget.url = "./widgets/gmaps_gps";
+  count++;
+
+  widget = db.newWidget();
+  widget.id = count;
+  widget.name = "Camera Viewer";
+  widget.alias = "CameraViewer";
+  widget.url = "./widgets/camera_viewer";
+  count++;
+
+  widget = db.newWidget();
+  widget.id = count;
+  widget.name = "URDF Viewer";
+  widget.alias = "UrdfViewer";
+  widget.url = "./widgets/urdf_viewer";
+  count++;
+
+  widget = db.newWidget();
+  widget.id = count;
+  widget.name = "LaserScan Viewer";
+  widget.alias = "LaserScanViewer";
+  widget.url = "./widgets/laser_scan_viewer";
+  count++;
 
   // insert Widgets JS and CSS tags
   let frontend = new Frontend();

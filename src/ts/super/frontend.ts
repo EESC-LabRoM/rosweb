@@ -206,5 +206,21 @@ export class Frontend {
       $(element).append(html);
     });
   }
+  public UpdateRosServiceSelectors(response: string[]): void {
+    $(".jsRosServiceSelector").html("");
+    var html = '';
+    $(".jsRosServiceSelector").each((i: number, element: Element) => {
+      let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-ros-service-id='" + $(element).attr("data-ros-service-id") + "']");
+      let selectedService: string = $(elementMeta).attr("data-ros-service-slctd");
+
+      html = MyApp.templates.rosServiceSelectorOptions({ name: '-- Select a service --', value: "" });
+      response.forEach((value: string, index: number) => {
+        let selected: boolean = (value == selectedService) ? true : false;
+        html += MyApp.templates.rosServiceSelectorOptions({ name: value, value: value, selected: selected });
+      });
+      $(element).append(html);
+    });
+  }
 
 }
