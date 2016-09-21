@@ -13,11 +13,27 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   }
 
   // Subscriptions Callbacks
-  this.callback1 = function (topic_name, topic_type, message) {
+  this.topic1 = new ROSLIB.Topic({
+    ros: ros,
+    name: "",
+    messageType: ""
+  });
+  this.onchange1 = function (selectedTopic) {
+    self.topic1.unsubscribe();
+    self.topic1.name = selectedTopic;
     var elem = $(self.selector).find(".datatopic1");
     $(elem).html("");
-    $(self.selector).find("p.name").html(topic_name);
-    $(self.selector).find("p.type").html(topic_type);
+
+    ros.getTopicType(selectedTopic, function (type) {
+      self.topic1.messageType = type;
+      $(self.selector).find("p.name").html(selectedTopic);
+      $(self.selector).find("p.type").html(type);
+      self.topic1.subscribe(self.callback1);
+    });
+  };
+  this.callback1 = function (message) {
+    var elem = $(self.selector).find(".datatopic1");
+    $(elem).html("");
     self.debugObjectInsideElement(elem, message);
   }
   // Adjustable params

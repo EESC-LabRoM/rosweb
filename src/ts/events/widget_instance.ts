@@ -77,10 +77,11 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
-        widget_topic_id: $(v).attr("data-widget-topic-id"),
         widget_instance_id: widgetInstanceId,
-        desc: $(v).attr("data-desc"),
-        type: $(v).attr("data-type")
+        ros_topic_id: $(v).attr("data-ros-topic-id"),
+        ros_topic_chng: $(v).attr("data-ros-topic-chng"),
+        ros_topic_desc: $(v).attr("data-ros-topic-desc"),
+        ros_topic_type: $(v).attr("data-ros-topic-type")
       });
       $(".jsSettingsSelection").append(html);
     });
@@ -182,26 +183,17 @@ export class WidgetInstanceEvents extends EventsParent {
   };
   private _WidgetSettingsConfirmSubscriptions(): void {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
-      let topic_name: string = $(elem).children("option:selected").attr("data-ros-topic-name");
-      let topic_type: string = $(elem).children("option:selected").attr("data-ros-topic-type");
+      let topic_name: string = $(elem).val();
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-
       let widgetInstance = db.getWidgetInstance(widgetInstanceId);
-      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]");
-      let htmlMeta = $(htmlWidgetInstance).find("meta:nth-child(" + (index + 1) + ")");
-      $(htmlMeta).attr("data-subscribed-topic", topic_name);
 
-      let callbackName: string = $(htmlMeta).attr("data-clbk-fn");
-      let callback: any = widgetInstance.WidgetCallbackClass[callbackName];
-      if ($(elem).children("option:selected").val() !== "") {
-        let subscription = new Subscription(widgetInstance, topic_name, topic_type, callback);
-        if (widgetInstance.Subscriptions.length < (index + 1)) {
-          widgetInstance.Subscriptions.push(subscription);
-        } else {
-          widgetInstance.Subscriptions[index].topic.unsubscribe();
-          widgetInstance.Subscriptions[index] = subscription;
-        }
-      }
+      let topicChangeCallback: string = $(elem).attr("data-ros-topic-chng");
+      widgetInstance.WidgetCallbackClass[topicChangeCallback](topic_name);
+
+      let rosTopicId = $(elem).attr("data-ros-topic-id");
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-ros-topic-id=" + rosTopicId + "]");
+      $(htmlMeta).attr("data-ros-topic-slctd", topic_name);
     });
   };
   private _WidgetSettingsConfirmRosParams(): void {
