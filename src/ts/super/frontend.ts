@@ -44,7 +44,6 @@ export class Frontend {
       // $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
     });
   }
-
   public LoadingLink(element: Element, disabled: Boolean = true) {
     if (disabled) {
       $(element).addClass("disabled");

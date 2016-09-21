@@ -24,7 +24,7 @@ div[data-widget-name='service-viewer'] {
     }
   }
   div.details {
-    div.serviceRequest {
+    div.service{
       margin:3px;
       border:1px solid #333;
       padding:3px;
@@ -33,6 +33,8 @@ div[data-widget-name='service-viewer'] {
         padding:0px;
         height:20px;
       }
+    }
+    div.serviceRequest {
       input {
         margin-left:3px;
         height:18px;

@@ -11,7 +11,10 @@ var WidgetServiceViewer = function (widgetInstanceId) {
       self.call();
       e.preventDefault();
     });
-    self.declareSerializeObject();
+    $(self.selector).find(".jsWidgetServiceViewerClear").click(function (e) {
+      self.reset();
+      e.preventDefault();
+    });
   };
   this.clbkResized = function () {
   };
@@ -22,12 +25,13 @@ var WidgetServiceViewer = function (widgetInstanceId) {
   this.service1Changed = function (selectedServiceName) {
     // disable button
     $(self.selector).find("input, select").attr("disabled", "disabled");
+    // clear content
+    $(self.selector).find(".serviceRequest form").html("");
     // get service type and details
     typeDefs = {};
     ros.getServiceType(selectedServiceName, function (type) {
       selectedServiceType = type;
       ros.getServiceRequestDetails(type, function (typeDefs) {
-        console.log(typeDefs);
         self.updateService(selectedServiceName, selectedServiceType, typeDefs);
       }, function (e) {
         console.log("get service request details error");
@@ -35,15 +39,23 @@ var WidgetServiceViewer = function (widgetInstanceId) {
     });
   };
 
-  // helper methods
-  this.service1 = null;
+  // elements callbacks
   this.call = function () {
-    var request = $(self.selector).find(".serviceRequest form").serializeJSON();
-    var serviceRequest = new ROSLIB.ServiceRequest(request.request);
-    self.service1.callService(serviceRequest, function (response) {
-      console.log(response);
+    $(self.selector + " div.serviceResponse").html("");
+    var request = self.getObjectForm(self.selector + " .serviceRequest form");
+    self.service1.callService(request, function (response) {
+      self.debugObjectInsideElement(self.selector + " div.serviceResponse", response);
+    }, function (error) {
+      $(self.selector + " div.serviceResponse").html($("<p style='color:red;'>" + error + "</p>"));
     });
   };
+  this.reset = function() {
+    $(self.selector).find("form input").val("");
+    $(self.selector).find(".serviceResponse").html("");
+  }
+
+  // helper methods and properties
+  this.service1 = null;
   this.getTypeDef = function (type, typeDefs, request = 1) {
     suffix = request == 1 ? "Request" : "Response";
     var typeDef = {};
@@ -57,37 +69,46 @@ var WidgetServiceViewer = function (widgetInstanceId) {
     var elem = $(self.selector).find(".serviceRequest form");
     var typeDef = self.getTypeDef(type, typeDefs);
     var iname, itype;
+    var hType = $("<span style='color:#777;'>&nbsp;(" + type + ")</span>").prop('outerHTML');
     if (typeDef == null) {
-      input = $("<input type='text' name='" + formName + "' value='' />").prop('outerHTML');
-      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + input + "</p>"));
+      input = self.generateInputField(formName, type);
+      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + hType + input + "</p>"));
     } else if (typeDef.fieldnames.length == 0) {
-      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + "</p>"));
+      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + hType + "</p>"));
     } else {
-      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + "</p>"));
+      $(elem).append($("<p style='padding-left:" + (level * 20) + "px'>" + name + hType + "</p>"));
       for (i in typeDef.fieldnames) {
         iname = typeDef.fieldnames[i];
         itype = typeDef.fieldtypes[i];
-        self.updateRequestDetails(iname, formName + "[" + iname + "]", itype, typeDefs, level + 1);
+        self.updateRequestDetails(iname, formName + "." + iname, itype, typeDefs, level + 1);
       }
     }
   };
-  this.declareSerializeObject = function () {
-    $.fn.serializeObject = function () {
-      var o = {};
-      var a = this.serializeArray();
-      $.each(a, function () {
-        if (o[this.name] !== undefined) {
-          if (!o[this.name].push) {
-            o[this.name] = [o[this.name]];
-          }
-          o[this.name].push(this.value || '');
-        } else {
-          o[this.name] = this.value || '';
-        }
-      });
-      return o;
-    };
-  }
+  this.generateInputField = function (name, type) {
+    var aInt = ["int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64"];
+    var aFloat = ["float32", "float64"];
+    var aString = ["string"];
+    var aTime = ["time", "duration"]
+    var aBool = ["bool"];
+
+    if (aInt.indexOf(type) != -1) {
+      return $("<input type='number' name='" + name + "' value='' />").prop('outerHTML');
+    }
+    else if (aFloat.indexOf(type) != -1) {
+      return $("<input type='number' name='" + name + "' value='' />").prop('outerHTML');
+    }
+    else if (aString.indexOf(type) != -1) {
+      return $("<input type='text' name='" + name + "' value='' />").prop('outerHTML');
+    }
+    else if (aTime.indexOf(type) != -1) {
+      return $("<input type='number' name='" + name + "' value='' />").prop('outerHTML');
+    }
+    else if (aBool.indexOf(type) != -1) {
+      return $("<input type='checkbox' name='" + name + "' value='' />").prop('outerHTML');
+    } else {
+      throw new Error("Unknown primitive type");
+    }
+  };
   this.updateService = function (serviceName, serviceType, typeDefs) {
     // html update
     $(self.selector).find("p.name").html(serviceName);
@@ -96,11 +117,51 @@ var WidgetServiceViewer = function (widgetInstanceId) {
     self.service1.name = serviceName;
     self.service1.serviceType = serviceType;
     // service request details update
-    $(self.selector).find(".serviceRequest form").html = "";
     self.updateRequestDetails(serviceName, "request", serviceType, typeDefs);
     // enable button
     $(self.selector).find("input, select").removeAttr("disabled");
   };
+  this.getObjectForm = function (selector) {
+    var request = {};
+    var input, name, type;
+    var tree;
+    var inputs = $(selector).find("input[type=text], input[type=checkbox], input[type=number]");
+    for (var i = 0; i < inputs.length; i++) {
+      input = inputs[i];
+      name = $(input).attr("name");
+      type = $(input).attr("type");
+      switch (type) {
+        case 'text':
+          eval(name + " = '" + $(input).val() + "'");
+          break;
+        case 'number':
+          eval(name + " = " + parseFloat($(input).val()));
+          break;
+        case 'checkbox':
+          eval(name + " = '" + Boolean($(input).val()));
+          break;
+      }
+    }
+    return request;
+  };
+  this.debugObjectInsideElement = function (elem, obj, level = 0) {
+    for (var k in obj) {
+      if (Array.isArray(obj[k])) {
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + " []"));
+        var arr = obj[k].slice(0, self.arrayShowLimit);
+        if (obj[k].length > self.arrayShowLimit) arr.push("-- more --");
+        self.debugObjectInsideElement(elem, arr, level + 1);
+      }
+      else if (typeof obj[k] == "object") {
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + " { }"));
+        self.debugObjectInsideElement(elem, obj[k], level + 1);
+      }
+      else {
+        var val = obj[k].toString().length > self.valueShowLimit ? obj[k].toString().slice(0, self.valueShowLimit) + "..." : obj[k].toString();
+        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + ": " + val));
+      }
+    }
+  }
 }
 
 $(document).ready(function () {

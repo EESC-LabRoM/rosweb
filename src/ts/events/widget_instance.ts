@@ -30,6 +30,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.DelegateEvent(".jsWidgetConfirm", "click", this.WidgetConfirm);
     this.DelegateEvent(".jsWidgetDelete", "click", this.WidgetDelete);
     this.DelegateEvent(".jsWidgetSettings", "click", this.WidgetSettings);
+    this.DelegateEvent(".jsWidgetContainer", "dblclick", this.WidgetContainerDblClick);
     this.DelegateEvent(".jsWidgetSettingsConfirm", "click", this.WidgetSettingsConfirm);
     this.DelegateEvent(".jsWidgetSettingsCancel", "click", this.WidgetSettingsCancel);
     this.DelegateEvent(".jsWidgetSettingsRefresh", "click", this.WidgetSettingsRefresh);
@@ -55,6 +56,10 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettings = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
+    this._WidgetSettings(widgetInstanceId);
+    e.preventDefault();
+  };
+  private _WidgetSettings(widgetInstanceId: number): void {
     $("#widgetSettings").val(widgetInstanceId);
     $(".jsSettingsSelection").html("");
 
@@ -67,8 +72,8 @@ export class WidgetInstanceEvents extends EventsParent {
     // frontend actions
     this.Frontend.ShowWidgetSettings();
     this._WidgetSettingsRefresh();
-    e.preventDefault();
-  };
+  }
+
   private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
@@ -115,8 +120,18 @@ export class WidgetInstanceEvents extends EventsParent {
     });
   };
 
+  public WidgetContainerDblClick = (e?: MouseEvent) => {
+    let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
+    this.ToggleMovable();
+    if ($(".jsToggleMovable").hasClass("active")) {
+      this._WidgetSettings(widgetInstanceId);
+    }
+    document.getSelection().removeAllRanges();
+    e.preventDefault();
+  }
+
   public WidgetSettingsRefresh = (e?: MouseEvent) => {
-    this.Frontend.LoadingLink(e.toElement);
+    this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0]);
     $(".jsRosTopicSelector").attr("disabled", "disabled");
     this._WidgetSettingsRefresh();
     e.preventDefault();
@@ -145,6 +160,7 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsRefreshsServices() {
     this.Ros.getServices((servicesResponse: any) => {
       this.Frontend.UpdateRosServiceSelectors(servicesResponse);
+      this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
     }, () => function (servicesError: any) {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(servicesError);
@@ -262,7 +278,7 @@ export class WidgetInstanceEvents extends EventsParent {
       $(".jsWidgetContainer").attr("data-widget-conf", "0");
       this.Frontend.HideWidgetSettings();
     }
-    e.preventDefault();
+    if (e != undefined) e.preventDefault();
   };
 
   public MouseDown = (e?: MouseEvent) => {
@@ -282,6 +298,7 @@ export class WidgetInstanceEvents extends EventsParent {
   public MouseMove = (e?: MouseEvent) => {
     if (parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id")) == this.widgetInstanceId) {
       if (this.toMove) {
+        document.getSelection().removeAllRanges();
         this._WidgetMove(e);
       }
       if (this.toResize) {
