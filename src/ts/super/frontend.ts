@@ -128,7 +128,6 @@ export class Frontend {
       this._insertWidget(widgetInstance, currentTabId, afterContentCallback);
     }
   }
-
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
     content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
@@ -137,6 +136,8 @@ export class Frontend {
     let left: string, top: string;
     left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
     top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
+    widgetInstance.position = { x: parseInt(left), y: parseInt(top) };
+    widgetInstance.Tab = db.getTab(currentTabId);
     html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
     let trigger = new Trigger();

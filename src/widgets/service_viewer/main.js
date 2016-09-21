@@ -138,10 +138,11 @@ var WidgetServiceViewer = function (widgetInstanceId) {
           eval(name + " = " + parseFloat($(input).val()));
           break;
         case 'checkbox':
-          eval(name + " = '" + Boolean($(input).val()));
+          eval(name + " = " + $(input).is(":checked")) ? 1 : 0;
           break;
       }
     }
+    console.log(request);
     return request;
   };
   this.debugObjectInsideElement = function (elem, obj, level = 0) {

@@ -367,6 +367,8 @@ export class WidgetInstanceEvents extends EventsParent {
 
     let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
     widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
+    widgetInstance.position.x = pos.x;
+    widgetInstance.position.y = pos.y;
   };
   private _ApplyPositionBoundaries(pos: Geometry.Point2D): Geometry.Point2D {
     let offset: any = $(".jsTabContent.jsShow").offset();
