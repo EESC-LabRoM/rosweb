@@ -2,6 +2,7 @@
 @import 'vars';
 @import 'js';
 @import 'widgets';
+@import 'lightbox';
 body {
   overflow: hidden;
   background: #ccc;
@@ -65,6 +66,7 @@ body {
           /*height:26px;*/
           &.cssRosUrlPrefix {
             background-color: #fff;
+            color: #000 !important;
           }
         }
         button.cssRosConnectBtn {
@@ -77,7 +79,7 @@ body {
           border: solid #fff;
           border-width: 0px 1px;
           display: inline-block;
-          &.cssWorkspace p {
+          p {
             color: white;
           }
           input {

@@ -5,9 +5,11 @@ import {TabEvents} from "./events/tab.ts";
 import {WidgetEvents} from "./events/widget.ts";
 import {WidgetInstanceEvents} from "./events/widget_instance.ts";
 import {RosEvents} from "./events/ros.ts";
+import {WorkspaceEvents} from "./events/workspace.ts";
 
 // Super
 import {db} from "./super/db.ts";
+import {lightbox} from "./super/lightbox.ts";
 import {Frontend} from "./super/frontend.ts";
 
 // Models
@@ -19,6 +21,9 @@ function init() {
   window["ros"] = ros;
   insertWidgets();
   events(ros);
+  $(document).ready(function () {
+    lightbox.CreateLightbox();
+  });
 }
 
 function events(ros: ROSLIB.Ros): void {
@@ -26,6 +31,7 @@ function events(ros: ROSLIB.Ros): void {
   let widgetEvents: WidgetEvents = new WidgetEvents(ros);
   let widgetInstanceEvents: WidgetInstanceEvents = new WidgetInstanceEvents(ros);
   let rosEvents: RosEvents = new RosEvents(ros);
+  let workspace: WorkspaceEvents = new WorkspaceEvents();
 }
 
 function insertWidgets(): void {
