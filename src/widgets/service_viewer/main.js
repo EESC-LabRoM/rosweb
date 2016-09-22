@@ -22,19 +22,20 @@ var WidgetServiceViewer = function (widgetInstanceId) {
   };
 
   // Param selector callback
-  this.service1Changed = function (selectedServiceName) {
+  this.service1Changed = function (selectedService) {
     // disable button
     $(self.selector).find("input, select").attr("disabled", "disabled");
     // clear content
     $(self.selector).find(".serviceRequest form").html("");
     // get service type and details
     typeDefs = {};
-    ros.getServiceType(selectedServiceName, function (type) {
+    if (selectedService == "") return;
+    ros.getServiceType(selectedService, function (type) {
       selectedServiceType = type;
       ros.getServiceRequestDetails(type, function (typeDefs) {
-        self.updateService(selectedServiceName, selectedServiceType, typeDefs);
+        self.updateService(selectedService, selectedServiceType, typeDefs);
       }, function (e) {
-        console.log("get service request details error");
+        throw new Error(e);
       });
     });
   };
@@ -49,7 +50,7 @@ var WidgetServiceViewer = function (widgetInstanceId) {
       $(self.selector + " div.serviceResponse").html($("<p style='color:red;'>" + error + "</p>"));
     });
   };
-  this.reset = function() {
+  this.reset = function () {
     $(self.selector).find("form input").val("");
     $(self.selector).find(".serviceResponse").html("");
   }
@@ -142,7 +143,6 @@ var WidgetServiceViewer = function (widgetInstanceId) {
           break;
       }
     }
-    console.log(request);
     return request;
   };
   this.debugObjectInsideElement = function (elem, obj, level = 0) {

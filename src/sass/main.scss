@@ -2,43 +2,58 @@
 @import 'vars';
 @import 'js';
 @import 'widgets';
-
 body {
-  overflow:hidden;
-  background:#ccc;
+  overflow: hidden;
+  background: #ccc;
   div#container {
     div.header {
       &#header1 {
-        padding:10px 20px;
-        background-color:$ros_color;
+        padding: 10px 20px;
+        background-color: $ros_color;
         a {
           $height: 26px;
-          display:inline-block;
-          margin:0 10px;
-          height:$height;
-          line-height:$height;
-          color:#fff;
+          display: inline-block;
+          margin: 0 10px;
+          height: $height;
+          line-height: $height;
+          color: #fff;
           font-weight: bold;
           text-decoration: none;
           &.cssToggleMovable {
-            width:$height;
-            height:$height;
-            background-image:url(img/maintenance-white.png);
+            width: $height;
+            height: $height;
+            background-image: url(img/maintenance-white.png);
             background-position: 50%;
-            background-repeat:no-repeat;
-            border-radius:2px;
+            background-repeat: no-repeat;
+            border-radius: 2px;
             &.active {
-              background-color:#fff;
-              background-image:url(img/maintenance-active.png);
+              background-color: #fff;
+              background-image: url(img/maintenance-active.png);
             }
           }
+          &.cssOpenWorkspace {
+            width: $height;
+            height: $height;
+            background-image: url(img/open-white.png);
+            background-position: 50%;
+            background-repeat: no-repeat;
+            border-radius: 2px;
+          }
+          &.cssSaveWorkspace {
+            width: $height;
+            height: $height;
+            background-image: url(img/save-white.png);
+            background-position: 50%;
+            background-repeat: no-repeat;
+            border-radius: 2px;
+          }
           &.cssRosConnect {
-            width:26px;
-            background-image:url(img/disconnected.png);
-            background-position:50%;
-            background-repeat:no-repeat;
+            width: 26px;
+            background-image: url(img/disconnected.png);
+            background-position: 50%;
+            background-repeat: no-repeat;
             &.active {
-              background-image:url(img/connected.png);
+              background-image: url(img/connected.png);
             }
             &.loading {
               opacity: 0.5;
@@ -46,67 +61,77 @@ body {
           }
         }
         p {
-          display:inline-block;
-          height:26px;
+          display: inline-block;
+          /*height:26px;*/
           &.cssRosUrlPrefix {
-            background-color:#fff;
-            input {
-              margin-left:2px;
-              border:none;
-              height:26px;
-              font-size:16px;
-            }
+            background-color: #fff;
           }
         }
         button.cssRosConnectBtn {
-          padding:0 5px;
-          height:26px;
+          padding: 0 5px;
+          height: 26px;
+        }
+        div {
+          margin: 0 10px;
+          padding: 0 10px 0;
+          border: solid #fff;
+          border-width: 0px 1px;
+          display: inline-block;
+          &.cssWorkspace p {
+            color: white;
+          }
+          input {
+            margin-left: 2px;
+            border: none;
+            height: 24px;
+            font-size: 16px;
+          }
         }
       }
       &#header2 {
         $header2Height: 50px;
-        height:$header2Height;
-        background-color:darken($ros_color, 10%);
-        border-bottom:1px solid #fff;
-        > a.cssNewTab, > div.cssTab {
-          float:left;
+        height: $header2Height;
+        background-color: darken($ros_color, 10%);
+        border-bottom: 1px solid #fff;
+        >div.cssTab {
+          float: left;
         }
-        a.cssNewTab {
+        a.cssHeader2Link {
+          float: left;
           margin: 10px 10px 0;
           padding: 5px;
-          border:1px solid #fff;
+          border: 1px solid #fff;
           border-radius: 6px;
-          color:#fff;
+          color: #fff;
           text-decoration: none;
         }
-
         div.cssTab {
-          display:inline-block;
+          display: inline-block;
           margin: 20px 3px 0px;
           $cssTabHeight: 30px;
           height: $cssTabHeight;
-          border:solid #fff;
-          border-radius:6px 6px 0 0;
-          border-width:1px 1px 0;
+          border: solid #fff;
+          border-radius: 6px 6px 0 0;
+          border-width: 1px 1px 0;
           overflow: hidden;
           a {
-            float:left;
-            height:100%;
-            text-decoration:none;
+            float: left;
+            height: 100%;
+            text-decoration: none;
             &.cssEventTab {
               padding: 0 5px;
-              color:#333;
-              line-height:$cssTabHeight;
+              color: #333;
+              line-height: $cssTabHeight;
             }
             &.cssEventCloseTab {
-              display:inline-block;
-              padding:0 7px;
-              background-image:url(img/close.png);
-              background-size:100%;
+              display: inline-block;
+              padding: 0 7px;
+              background-image: url(img/close.png);
+              background-size: 100%;
               background-position: 50%;
-              background-repeat:no-repeat;
+              background-repeat: no-repeat;
               &:hover {
-                background-color:#ddd;
+                background-color: #ddd;
               }
             }
           }
@@ -115,74 +140,74 @@ body {
     }
     div#content {
       div.cssWidgetsContainer {
-        display:none;
-        position:absolute;
-        z-index:50;
-        width:300px;
-        background-color:darken($ros_color, 20%);
+        display: none;
+        position: absolute;
+        z-index: 50;
+        width: 300px;
+        background-color: darken($ros_color, 20%);
         div.cssWidgets {
-          width:300px;
+          width: 300px;
           h2 {
-            padding:8px 0;
-            color:#fff;
-            font-size:20px;
-            text-align:center;
+            padding: 8px 0;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
           }
           div.cssWidgetsList {
             a {
-              display:inline-block;
-              padding:5px 0 0 10px;
-              width:100%;
+              display: inline-block;
+              padding: 5px 0 0 10px;
+              width: 100%;
             }
           }
         }
       }
       div.cssMenuWidgetsSettings {
-        position:absolute;
-        z-index:50;
-        right:-300px;
-        width:300px;
-        background-color:darken($ros_color, 20%);
+        position: absolute;
+        z-index: 50;
+        right: -300px;
+        width: 300px;
+        background-color: darken($ros_color, 20%);
         div.cssSettings {
-          width:300px;
+          width: 300px;
           h2 {
-            padding:8px 0;
-            color:#fff;
-            font-size:20px;
-            text-align:center;
+            padding: 8px 0;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
           }
           div.cssSettingsSelection {
-            padding:20px;
+            padding: 20px;
             label {
-              display:inline-block;
-              margin-top:10px;
-              color:#fff;
-              font-size:16px;
+              display: inline-block;
+              margin-top: 10px;
+              color: #fff;
+              font-size: 16px;
             }
             input[type=text] {
-              width:100%;
-              height:24px;
+              width: 100%;
+              height: 24px;
             }
             select {
-              width:100%;
-              height:24px;
+              width: 100%;
+              height: 24px;
             }
           }
           div.cssSettingsBtn {
-            text-align:center;
+            text-align: center;
           }
         }
       }
       div#tabs {
-        height:100%;
+        height: 100%;
         .cssTabContent {
-          width:100%;
-          height:100%;
+          width: 100%;
+          height: 100%;
         }
       }
     }
     div#footer {
-      display:block;
+      display: block;
     }
   }
 }

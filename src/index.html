@@ -12,16 +12,25 @@
   <div id="container">
     <div id="header1" class="header">
       <a href="#" class="jsRosweb">ROSWeb</a>
-      <p class="cssRosUrlPrefix">
-        ws://<input type="text" class="cssRosUrl jsRosUrl" value="localhost:9090" />
-      </p>
-      <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
 
-      <a href="#" class="jsEventWidgetsMenu">Widgets</a>
-      <a href="#" class="jsToggleMovable cssToggleMovable">&nbsp;</a>
+      <div class="cssConnection">
+        <p class="cssRosUrlPrefix">
+          ws://<input type="text" class="cssRosUrl jsRosUrl" value="localhost:9090" />
+        </p>
+        <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
+      </div>
+
+      <!--<a href="#" class="jsToggleMovable cssToggleMovable">&nbsp;</a>-->
+      <div class="cssWorkspace">
+        <p>Current Workspace</p>
+        <input type="text" class="" value="blank workspace" />
+        <a href="#" class="jsOpenWorkspace cssOpenWorkspace">&nbsp;</a>
+        <a href="#" class="jsSaveWorkspace cssSaveWorkspace">&nbsp;</a>
+      </div>
     </div>
     <div id="header2" class="header">
-      <a href="#" class="jsEventNewTab cssNewTab">New tab</a>
+      <a href="#" class="jsEventWidgetsMenu cssHeader2Link">Widgets</a>
+      <a href="#" class="jsEventNewTab cssHeader2Link">New tab</a>
       <div class="clearfix"></div>
     </div>
 

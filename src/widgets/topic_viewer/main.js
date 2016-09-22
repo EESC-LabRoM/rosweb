@@ -24,11 +24,14 @@ var WidgetTopicViewer = function (widgetInstanceId) {
     var elem = $(self.selector).find(".datatopic1");
     $(elem).html("");
 
+    if(selectedTopic == "") return;
     ros.getTopicType(selectedTopic, function (type) {
       self.topic1.messageType = type;
       $(self.selector).find("p.name").html(selectedTopic);
       $(self.selector).find("p.type").html(type);
       self.topic1.subscribe(self.callback1);
+    }, function (e) {
+      throw new Error(e);
     });
   };
   this.callback1 = function (message) {
