@@ -5,7 +5,7 @@ import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
 
 class Db {
-  
+
   constructor() {
     this.TabCounter = 0;
     this.Tabs = new Array<Tab>();
@@ -23,7 +23,7 @@ class Db {
   // ROS Topics subscriptions
   private SubscriptionCounter: number
   private Subscriptions: Array<Subscription>;
-  
+
   // Tab
   private TabCounter: number;
   private Tabs: Array<Tab>;
@@ -34,15 +34,15 @@ class Db {
     return tab;
   }
   public getTab(id: number): Tab {
-    for(let tab of this.Tabs) {
-      if(tab.id == id) return tab;
+    for (let tab of this.Tabs) {
+      if (tab.id == id) return tab;
     }
     return null;
   }
   public removeTab(tab_id: number): boolean {
     let index: number = 0;
-    for(let tab of this.Tabs) {
-      if(tab.id == tab_id) {
+    for (let tab of this.Tabs) {
+      if (tab.id == tab_id) {
         this.Tabs.splice(index, 1);
         return true;
       }
@@ -50,7 +50,7 @@ class Db {
     }
     return false;
   }
-  
+
   // Widget
   private WidgetCounter: number;
   public Widgets: Array<Widget>;
@@ -60,12 +60,12 @@ class Db {
     this.Widgets.push(widget);
     return widget;
   }
-  public setWidget(widget: Widget) : void {
+  public setWidget(widget: Widget): void {
     return;
   }
   public getWidget(id: number): Widget {
-    for(let widget of this.Widgets) {
-      if(widget.id == id) return widget;
+    for (let widget of this.Widgets) {
+      if (widget.id == id) return widget;
     }
     return null;
   }
@@ -82,8 +82,8 @@ class Db {
   }
   public removeWidget(widget_id: number): boolean {
     let index: number = 0;
-    for(let widget of this.Widgets) {
-      if(widget.id == widget_id) {
+    for (let widget of this.Widgets) {
+      if (widget.id == widget_id) {
         this.Widgets.splice(index, 1);
         return true;
       }
@@ -102,15 +102,15 @@ class Db {
     return widgetInstance;
   }
   public getWidgetInstance(id: number): WidgetInstance {
-    for(let widgetInstance of this.WidgetInstances) {
-      if(widgetInstance.id == id) return widgetInstance;
+    for (let widgetInstance of this.WidgetInstances) {
+      if (widgetInstance.id == id) return widgetInstance;
     }
     return null;
   }
   public removeWidgetInstance(widgetInstance_id: number): boolean {
     let index: number = 0;
-    for(let widgetInstance of this.WidgetInstances) {
-      if(widgetInstance.id == widgetInstance_id) {
+    for (let widgetInstance of this.WidgetInstances) {
+      if (widgetInstance.id == widgetInstance_id) {
         this.WidgetInstances.splice(index, 1);
         return true;
       }
@@ -118,7 +118,7 @@ class Db {
     }
     return false;
   }
-  
+
 }
 
 export var db: Db = new Db();

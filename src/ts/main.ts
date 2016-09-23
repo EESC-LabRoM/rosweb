@@ -10,6 +10,7 @@ import {WorkspaceEvents} from "./events/workspace.ts";
 // Super
 import {db} from "./super/db.ts";
 import {lightbox} from "./super/lightbox.ts";
+import {storage} from "./super/storage.ts";
 import {Frontend} from "./super/frontend.ts";
 
 // Models
@@ -24,6 +25,7 @@ function init() {
   $(document).ready(function () {
     lightbox.CreateLightbox();
   });
+  storage.Init(); 
 }
 
 function events(ros: ROSLIB.Ros): void {

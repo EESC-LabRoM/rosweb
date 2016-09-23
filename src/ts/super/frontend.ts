@@ -170,6 +170,7 @@ export class Frontend {
     $(".jsToggleMovable").removeClass("active");
   }
 
+  // Update Selector Methods
   public UpdateRosTopicSelectors(response: { topics: string[], types: string[], details: TypeDef[] }): void {
     $(".jsRosTopicSelector").html("");
     var html = '';
@@ -221,6 +222,11 @@ export class Frontend {
       });
       $(element).append(html);
     });
+  }
+
+  // Update Workspace Methods
+  public UpdateWorkspace(db: any) {
+
   }
 
 }

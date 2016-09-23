@@ -21,8 +21,8 @@ export class EventsParent {
     $(document).delegate(selector, event, method);
   }
 
-  public DelegateElementCreated(insertedSelector: string, method: () => void) {
-    $('body').on('DOMNodeInserted', insertedSelector, method);
+  public DelegateElementCreated(selector: string, method: () => void) {
+    $('body').on('DOMNodeInserted', selector, method);
   }
 
   public HideLightbox = (e?: MouseEvent) => {

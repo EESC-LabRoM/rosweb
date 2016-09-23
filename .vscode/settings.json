@@ -1,7 +1,26 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-	"editor.fontSize": 12,
-	"editor.tabSize": 2,
-	"editor.detectIndentation": false,
-  "files.associations": {"*.tpl": "html"}
+  "editor.fontSize": 12,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "files.associations": {
+    "*.tpl": "html"
+  },
+  "beautify.CSSfiles": [
+    "css",
+    "scss"
+  ],
+  "beautify.JSFiles": [
+    "js",
+    "ts",
+    "json"
+  ],
+  "beautify.HTMLfiles": [
+    "htm",
+    "html",
+    "hbs"
+  ],
+  //"beautify.onSave": [],
+  "beautify.onSave": true
+    //"beautify.onSaveIgnore": ["json],
 }
