@@ -1,19 +1,15 @@
-<div class="ros-widget" 
-data-widget-name="param-viewer" 
-data-min-height="80" data-min-width="140" 
-data-max-height="1000" data-max-width="1000" 
-data-height="80" data-width="140">
+<div class="ros-widget" data-widget-name="param-viewer" data-min-height="80" data-min-width="140" data-max-height="1000"
+  data-max-width="1000" data-height="80" data-width="140">
 
   <!--  META Tags to describe topics subscription -->
-  <meta data-ros-param="1"
-  data-ros-param-id="1"
-  data-ros-param-desc="Param selector 1"
-  data-ros-param-chng="param1Changed"
-  data-ros-param-sltcd="" />
+  <meta data-ros-param="1" data-ros-param-id="1" data-ros-param-desc="Param selector 1" data-ros-param-chng="param1Changed"
+    data-ros-param-sltcd="" />
 
   <!-- The content which could be manipulated by widget class -->
+  <div class="header">
+    <p class="name">-- param name --</p>
+  </div>
   <div class="datatopic1">
-    <label>-- param name --</label>
     <input type="text" name="doesnotmatter" value="-- param value --" />
     <button type="button" class="jsWidgetParamViewerRefresh">Get</button>
     <button type="button" class="jsWidgetParamViewerSave">Set</button>

@@ -37,6 +37,9 @@ export class Db {
     this.TabCounter = workspace.db.TabCounter;
     this.Tabs = workspace.db.Tabs;
 
+    this.WidgetInstanceCounter = 0;
+    this.WidgetInstances = new Array<WidgetInstance>();
+
     this._ClearWorkspace();
     this._GenerateWorkspace(workspace.db.WidgetInstances);
   }
@@ -144,16 +147,12 @@ export class Db {
     }
     return null;
   }
-  public removeWidgetInstance(widgetInstance_id: number): boolean {
+  public removeWidgetInstance(widgetInstance_id: number): void {
     let index: number = 0;
-    for (let widgetInstance of this.WidgetInstances) {
-      if (widgetInstance.id == widgetInstance_id) {
-        this.WidgetInstances.splice(index, 1);
-        return true;
-      }
-      index++;
+    function removeId(widgetInstance: WidgetInstance) {
+      return widgetInstance.id != widgetInstance_id;
     }
-    return false;
+    this.WidgetInstances = this.WidgetInstances.filter(removeId);
   }
 
 }
