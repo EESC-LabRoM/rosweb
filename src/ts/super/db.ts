@@ -1,12 +1,19 @@
 // Models
+import {Workspace} from "../model/workspace.ts";
 import {Subscription} from "../model/subscription.ts";
 import {Tab} from "../model/tab.ts";
 import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
 
-class Db {
+import {Frontend} from "../super/frontend.ts";
+
+export class Db {
+
+  private Frontend: Frontend;
 
   constructor() {
+    this.Frontend = new Frontend();
+
     this.TabCounter = 0;
     this.Tabs = new Array<Tab>();
 
@@ -23,6 +30,35 @@ class Db {
   // ROS Topics subscriptions
   private SubscriptionCounter: number
   private Subscriptions: Array<Subscription>;
+
+  // Loading workspace
+  public loadWorkspace(workspace: Workspace): void {
+    this.TabCounter = workspace.db.TabCounter;
+    this.Tabs = workspace.db.Tabs;
+
+    this.WidgetCounter = workspace.db.WidgetCounter;
+    this.Widgets = workspace.db.Widgets;
+
+    this.WidgetInstanceCounter = workspace.db.WidgetInstanceCounter;
+    this.WidgetInstances = workspace.db.WidgetInstances;
+
+    this._ClearWorkspace();
+    this._GenerateWorkspace();
+  }
+  private _ClearWorkspace(): void {
+    $(".jsTab, .jsTabContent").remove();
+  }
+  private _GenerateWorkspace(): void {
+    this.Tabs.forEach((tab: Tab, index: number) => {
+      this.Frontend.newTab(tab);
+      this.Frontend.selectTab(tab);
+      this.WidgetInstances.forEach((widgetInstance: WidgetInstance, index: number) => {
+        let widget: Widget = db.getWidgetByAlias(widgetInstance.Widget.alias);
+        widgetInstance = db.newWidgetInstance(widget);
+        this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.clbkCreated);
+      });
+    });
+  }
 
   // Tab
   private TabCounter: number;

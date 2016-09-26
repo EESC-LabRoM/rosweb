@@ -99,6 +99,10 @@ export class Frontend {
     var html = MyApp.templates.widgetList(list);
     $("." + this.Names.classWidgetsList).html(html);
   }
+
+  public LoadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
+    this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
+  }
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;

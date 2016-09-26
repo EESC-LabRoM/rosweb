@@ -28,7 +28,11 @@ export class WorkspaceEvents extends EventsParent {
   }
 
   public SaveWorkspace = (e?: MouseEvent) => {
-    this._SaveWorkspace();
+    if (window.confirm("Save a new workspace?")) {
+      this._SaveWorkspace();
+    } else {
+
+    }
     e.preventDefault();
   }
   private _SaveWorkspace(): void {
@@ -43,7 +47,8 @@ export class WorkspaceEvents extends EventsParent {
     e.preventDefault();
   }
   private _LoadWorkspace(workspace_id: number): void {
-
+    let workspace: Workspace = storage.GetWorkspace(workspace_id);
+    db.loadWorkspace(workspace);
   }
 
   public RemoveWorkspace = (e?: MouseEvent) => {
@@ -54,7 +59,8 @@ export class WorkspaceEvents extends EventsParent {
   }
   private _RemoveWorkspace(workspace: Workspace): void {
     if (window.confirm("Are you sure you want to remove workspace #" + workspace.id + " (" + workspace.id + ") ?")) {
-      storage.RemoveWorkspace(workspace.id);
+      let html = MyApp.templates.workspaceList(storage.RemoveWorkspace(workspace.id));
+      lightbox.UpdateLightbox(html);
     } else {
       // do nothing
     }

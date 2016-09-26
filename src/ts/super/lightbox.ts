@@ -12,14 +12,16 @@ class Lightbox {
     $(lightboxHtml).insertAfter("#footer");
   }
 
-  public ShowLightbox(content: string): void {
+  public ShowLightbox(content?: string): void {
     $("#lightbox").html("");
 
     let wHeight: number = $(window).height();
     let wWidth: number = $(window).width();
     $("#lightboxBackground").css({ height: wHeight, width: wWidth }).fadeIn(500);
 
-    this.UpdateLightbox(content);
+    if (content != undefined) {
+      this.UpdateLightbox(content);
+    }
   }
 
   public CloseLightbox(): void {

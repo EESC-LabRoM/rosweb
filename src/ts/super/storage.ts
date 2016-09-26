@@ -71,7 +71,6 @@ class Storage {
   public LoadWorkspace(id: number): void {
     try {
       let workspaces: Array<Workspace> = JSON.parse(localStorage["ROSWeb"]["workspaces"]);
-      console.log(workspaces);
     }
     catch (e) {
       alert(e);
@@ -79,20 +78,18 @@ class Storage {
   }
 
   // Remove
-  public RemoveWorkspace(id: number): void {
+  public RemoveWorkspace(id: number): Workspace[] {
     let rosweb: ROSWeb;
     let updatedRosweb: ROSWeb = new ROSWeb();
     try {
       rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
       updatedRosweb.Workspaces = new Array<Workspace>();
       function filterById(workspace: Workspace) {
-        console.log(id);
-        console.log(workspace.id);
         return workspace.id != id;
       }
       updatedRosweb.Workspaces = rosweb.Workspaces.filter(filterById);
-      console.log(updatedRosweb);
       localStorage.setItem("ROSWeb", JSON.stringify(updatedRosweb));
+      return updatedRosweb.Workspaces;
     } catch (e) {
       throw new Error(e);
     }
