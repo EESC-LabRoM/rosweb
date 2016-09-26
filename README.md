@@ -15,17 +15,16 @@ As ROSWeb is a tool for [ROS (Robot Operation System)][ros], it depends on a mac
 It is a web application and it depends on websockets provided by [rosbridge server][rosbridge].
 Until now, it is being developed and tested using Google Chrome browser.
 
-1. Clone this rosbridge fork into your ROS workspace (usually catkin_ws directory)
+1. Install RosbridgeSuite package
 
     ```sh
-    $ git clone https://github.com/marcoarruda/rosbridge_suite.git
+    $ sudo apt-get instal ros-indigo-rosbridge-suite
     ```
 
-2. Install dependencies and compile workspace
+2. Install dependencies
     ```sh
     $ rosdep update
     $ rosdep install rosbridge_server
-    $ catkin_make
     ```
 
 3. Launch rosbridge websocket server

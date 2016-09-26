@@ -36,7 +36,7 @@ export class WidgetEvents extends EventsParent {
   
   public widgetItem = (e?: MouseEvent) => {
     let widgetAlias = $(e.toElement).attr("data-widget-alias");
-    this._widgetItem(widgetAlias);''
+    this._widgetItem(widgetAlias);
     this._widgetMenu();
     e.preventDefault();
   }

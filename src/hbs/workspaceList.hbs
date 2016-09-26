@@ -1,0 +1,20 @@
+<div id="workspaceList">
+  <h1>Select a workspace to load</h1>
+  <div class="list">
+    {{#if this}}
+    <ul>
+      {{#each this}}
+      <li>#{{id}} - {{name}}
+        <a href="#" class="jsRemoveWorkspace" data-workspace-id="{{id}}">Remove</a>
+        <a href="#" class="jsLoadWorkspace" data-workspace-id="{{id}}">Load</a>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p>No workspace to load</p>
+    {{/if}}
+  </div>
+  <div class="footer">
+  </div>
+  <div class="clearfix"></div>
+</div>

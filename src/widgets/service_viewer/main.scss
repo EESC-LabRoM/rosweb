@@ -1,0 +1,49 @@
+.cssWidgetContainer[data-widget-conf='0'] {
+  div[data-widget-name='service-viewer'] {
+    border: 1px solid #333;
+  }
+}
+
+div[data-widget-name='service-viewer'] {
+  float: left;
+  height: 100%;
+  width: 100%;
+  div.header {
+    background-color: #aac;
+    border-bottom: 1px solid #333;
+    p {
+      text-align: center;
+      padding: 0 10px;
+    }
+    p.name {
+      font-weight: bold;
+    }
+    p.type {
+      font-style: italic;
+    }
+  }
+  div.details {
+    div.service {
+      margin: 3px;
+      border: 1px solid #333;
+      padding: 3px;
+      font-size: 14px;
+      p {
+        padding: 0px;
+        height: 20px;
+      }
+    }
+    div.serviceRequest {
+      input {
+        margin-left: 3px;
+        height: 18px;
+        max-width: 150px;
+      }
+    }
+    div.serviceResponse {
+    }
+    button {
+      margin: 3px;
+    }
+  }
+}
