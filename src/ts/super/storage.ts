@@ -22,7 +22,6 @@ class Storage {
     let rosweb: ROSWeb;
     try {
       rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
-      console.log(rosweb);
     } catch (e) {
       alert(e);
     }
@@ -37,6 +36,27 @@ class Storage {
       }
     });
     return toReturn;
+  }
+
+  // New
+  public NewWorkspace(name: string): Workspace {
+    let id: number;
+    let workspaces: Array<Workspace> = this.GetWorkspaces();
+    if (workspaces.length == 0) {
+      id = 1;
+    } else {
+      function sortByIdDesc(obj1: Workspace, obj2: Workspace) {
+        if (obj1.id > obj2.id) return -1;
+        if (obj1.id < obj2.id) return 1;
+      }
+      let lastWorkspace: Workspace = workspaces.sort(sortByIdDesc)[0];
+      id = lastWorkspace.id + 1;
+    }
+
+    let workspace = new Workspace();
+    workspace.id = id;
+    workspace.name = name;
+    return workspace;
   }
 
   // Save
@@ -59,8 +79,23 @@ class Storage {
   }
 
   // Remove
-  public RemoveWorkspace(): void {
-
+  public RemoveWorkspace(id: number): void {
+    let rosweb: ROSWeb;
+    let updatedRosweb: ROSWeb = new ROSWeb();
+    try {
+      rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
+      updatedRosweb.Workspaces = new Array<Workspace>();
+      function filterById(workspace: Workspace) {
+        console.log(id);
+        console.log(workspace.id);
+        return workspace.id != id;
+      }
+      updatedRosweb.Workspaces = rosweb.Workspaces.filter(filterById);
+      console.log(updatedRosweb);
+      localStorage.setItem("ROSWeb", JSON.stringify(updatedRosweb));
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
 }

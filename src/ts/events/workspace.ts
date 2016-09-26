@@ -33,8 +33,7 @@ export class WorkspaceEvents extends EventsParent {
   }
   private _SaveWorkspace(): void {
     let workspace = new Workspace();
-    workspace.id = 1;
-    workspace.name = "Workspace teste";
+    workspace = storage.NewWorkspace($("#jsWorkspaceName").val());
     storage.SaveWorkspace(workspace);
   }
 
@@ -55,9 +54,9 @@ export class WorkspaceEvents extends EventsParent {
   }
   private _RemoveWorkspace(workspace: Workspace): void {
     if (window.confirm("Are you sure you want to remove workspace #" + workspace.id + " (" + workspace.id + ") ?")) {
-
+      storage.RemoveWorkspace(workspace.id);
     } else {
-
+      // do nothing
     }
   }
 
