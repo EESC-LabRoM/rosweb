@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" type="text/css" href="main.css" />
+  <link rel="stylesheet" type="text/css" href="widgets.css" />
   <title>ROSWeb</title>
 </head>
 
@@ -11,16 +12,26 @@
   <div id="container">
     <div id="header1" class="header">
       <a href="#" class="jsRosweb">ROSWeb</a>
-      <p class="cssRosUrlPrefix">
-        ws://<input type="text" class="cssRosUrl jsRosUrl" value="localhost:9090" />
-      </p>
-      <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
 
-      <a href="#" class="jsEventWidgetsMenu">Widgets</a>
-      <a href="#" class="jsToggleMovable cssToggleMovable">&nbsp;</a>
+      <div class="cssConnection">
+        <p>Connection</p>
+        <p class="cssRosUrlPrefix">
+          ws://<input type="text" class="cssRosUrl jsRosUrl" value="localhost:9090" />
+        </p>
+        <a href="#" class="jsRosConnect cssRosConnect">&nbsp;</a>
+      </div>
+
+      <a href="#" style="display:none;" class="jsToggleMovable cssToggleMovable">&nbsp;</a>
+      <div class="cssWorkspace">
+        <p>Current Workspace</p>
+        <input type="text" id="jsWorkspaceName" class="" value="blank workspace" />
+        <a href="#" class="jsOpenWorkspace cssOpenWorkspace">&nbsp;</a>
+        <a href="#" class="jsSaveWorkspace cssSaveWorkspace">&nbsp;</a>
+      </div>
     </div>
     <div id="header2" class="header">
-      <a href="#" class="jsEventNewTab cssNewTab">New tab</a>
+      <a href="#" class="jsEventWidgetsMenu cssHeader2Link">Widgets</a>
+      <a href="#" class="jsEventNewTab cssHeader2Link">New tab</a>
       <div class="clearfix"></div>
     </div>
 
@@ -68,7 +79,7 @@
   <script src="http://cdn.robotwebtools.org/threejs/current/ColladaLoader.min.js"></script>
   <script src="http://cdn.robotwebtools.org/ColladaAnimationCompress/current/ColladaLoader2.min.js"></script>
   <script src="http://cdn.robotwebtools.org/threejs/current/STLLoader.min.js"></script>
-<script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+  <script src="http://cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGir7uuIvdEOH24VRmNcDCUCHSwmWS6No" async defer></script>
 </body>

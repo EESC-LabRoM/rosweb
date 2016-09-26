@@ -5,33 +5,61 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.clbkCreated = function () {
-  }
-  this.clbkResized = function() {
-  }
-  this.clbkMoved = function() {
-  }
+  self.clbkCreated = function () {};
+  self.clbkResized = function () {};
+  self.clbkMoved = function () {};
 
   // Subscriptions Callbacks
-  this.callback1 = function (topic_name, topic_type, message) {
-    var elem = $(".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]").find(".datatopic1");
+  this.topic1 = new ROSLIB.Topic({
+    ros: ros,
+    name: "",
+    messageType: ""
+  });
+  self.onchange1 = function (selectedTopic) {
+    self.topic1.unsubscribe();
+    self.topic1.name = selectedTopic;
+    var elem = $(self.selector).find(".datatopic1");
     $(elem).html("");
-    self.debugObjectInsideElement(elem, message);
-  }
+
+    if (selectedTopic == "") return;
+    ros.getTopicType(selectedTopic, function (type) {
+      self.topic1.messageType = type;
+      $(self.selector).find("p.name").html(selectedTopic);
+      $(self.selector).find("p.type").html(type);
+      self.topic1.subscribe(self.callback1);
+    }, function (e) {
+      throw new Error(e);
+    });
+  };
+  self.callback1 = function (message) {
+      var elem = $(self.selector).find(".datatopic1");
+      $(elem).html("");
+      self.debugObjectInsideElement(elem, message);
+    }
+    // Adjustable params
+  this.arrayShowLimit = 5;
+  this.valueShowLimit = 10;
 
   // helper methods
-  this.debugObjectInsideElement = function (elem, obj, level = 0) {
+  self.debugObjectInsideElement = function (elem, obj, level = 0) {
     for (var k in obj) {
       if (Array.isArray(obj[k])) {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k));
+        $(elem).append($("<p>").css({
+          "padding-left": level * 10 + "px"
+        }).html(k + " []"));
+        var arr = obj[k].slice(0, self.arrayShowLimit);
+        if (obj[k].length > self.arrayShowLimit) arr.push("-- more --");
+        self.debugObjectInsideElement(elem, arr, level + 1);
+      } else if (typeof obj[k] == "object") {
+        $(elem).append($("<p>").css({
+          "padding-left": level * 10 + "px"
+        }).html(k + " { }"));
         self.debugObjectInsideElement(elem, obj[k], level + 1);
-      }
-      else if (typeof obj[k] == "object") {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k));
-        self.debugObjectInsideElement(elem, obj[k], level + 1);
-      }
-      else {
-        $(elem).append($("<p>").css({ "padding-left": level * 10 + "px" }).html(k + ": " + obj[k]));
+      } else {
+        var val = obj[k].toString().length > self.valueShowLimit ? obj[k].toString().slice(0, self.valueShowLimit) + "..." : obj[k].toString();
+        $(elem).append($("<p>").css({
+          "padding-left": level * 10 + "px"
+        }).html(k + ": " + val));
       }
     }
   }
