@@ -10,7 +10,7 @@ export class Workspace {
 
   public id: number;
   public name: string;
-  public db: Db;
+  public db: { Tabs: Tab[], TabCounter: number, WidgetInstances: WidgetInstance[], WidgetInstanceCounter: number };
   public created: Date;
   public modified: Date;
 

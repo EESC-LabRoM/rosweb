@@ -6,6 +6,7 @@ import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
 
 import {Frontend} from "../super/frontend.ts";
+import {instance_loader} from "../super/instance_loader.ts";
 
 export class Db {
 
@@ -28,41 +29,41 @@ export class Db {
   }
 
   // ROS Topics subscriptions
-  private SubscriptionCounter: number
-  private Subscriptions: Array<Subscription>;
+  public SubscriptionCounter: number
+  public Subscriptions: Array<Subscription>;
 
   // Loading workspace
   public loadWorkspace(workspace: Workspace): void {
     this.TabCounter = workspace.db.TabCounter;
     this.Tabs = workspace.db.Tabs;
 
-    this.WidgetCounter = workspace.db.WidgetCounter;
-    this.Widgets = workspace.db.Widgets;
-
-    this.WidgetInstanceCounter = workspace.db.WidgetInstanceCounter;
-    this.WidgetInstances = workspace.db.WidgetInstances;
-
     this._ClearWorkspace();
-    this._GenerateWorkspace();
+    this._GenerateWorkspace(workspace.db.WidgetInstances);
   }
   private _ClearWorkspace(): void {
     $(".jsTab, .jsTabContent").remove();
   }
-  private _GenerateWorkspace(): void {
+  private _GenerateWorkspace(widgetInstances: WidgetInstance[]): void {
     this.Tabs.forEach((tab: Tab, index: number) => {
       this.Frontend.newTab(tab);
       this.Frontend.selectTab(tab);
-      this.WidgetInstances.forEach((widgetInstance: WidgetInstance, index: number) => {
-        let widget: Widget = db.getWidgetByAlias(widgetInstance.Widget.alias);
-        widgetInstance = db.newWidgetInstance(widget);
-        this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.clbkCreated);
+      widgetInstances.forEach((widgetInstance: WidgetInstance, index: number) => {
+        if (widgetInstance.Tab.id == tab.id) {
+          let widget: Widget = db.getWidgetByAlias(widgetInstance.Widget.alias);
+          let newWidgetInstance = db.newWidgetInstance(widget);
+          this.Frontend.insertWidgetInstance(newWidgetInstance, () => {
+            newWidgetInstance.WidgetCallbackClass.clbkCreated();
+            this.Frontend.setWidgetInstancePosition(newWidgetInstance, widgetInstance.position);
+            this.Frontend.setWidgetInstanceSize(newWidgetInstance, widgetInstance.size);
+          });
+        }
       });
     });
   }
 
   // Tab
-  private TabCounter: number;
-  private Tabs: Array<Tab>;
+  public TabCounter: number;
+  public Tabs: Array<Tab>;
   public newTab(): Tab {
     let tab = new Tab();
     tab.id = ++this.TabCounter;
@@ -88,7 +89,7 @@ export class Db {
   }
 
   // Widget
-  private WidgetCounter: number;
+  public WidgetCounter: number;
   public Widgets: Array<Widget>;
   public newWidget(): Widget {
     let widget = new Widget();
@@ -129,8 +130,8 @@ export class Db {
   }
 
   // Widget Instance
-  private WidgetInstanceCounter: number;
-  private WidgetInstances: Array<WidgetInstance>;
+  public WidgetInstanceCounter: number;
+  public WidgetInstances: Array<WidgetInstance>;
   public newWidgetInstance(widget: Widget): WidgetInstance {
     let id: number = ++this.WidgetInstanceCounter;
     let widgetInstance = new WidgetInstance(id, widget);

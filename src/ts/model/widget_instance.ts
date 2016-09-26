@@ -13,12 +13,14 @@ export class WidgetInstance {
   public WidgetCallbackClass: any;
   public Tab: Tab;
   public position: Geometry.Point2D;
+  public size: Geometry.Point2D;
 
   constructor(id: number, widget: Widget) {
     this.id = id;
     this.Widget = widget;
     this.Subscriptions = new Array<Subscription>();
     this.position = { x: 0, y: 0 };
+    this.size = { x: 0, y: 0 };
     this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + this.Widget.alias.charAt(0).toUpperCase() + this.Widget.alias.slice(1), this.id);
   }
 

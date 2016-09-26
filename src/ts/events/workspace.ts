@@ -49,6 +49,7 @@ export class WorkspaceEvents extends EventsParent {
   private _LoadWorkspace(workspace_id: number): void {
     let workspace: Workspace = storage.GetWorkspace(workspace_id);
     db.loadWorkspace(workspace);
+    lightbox.CloseLightbox();
   }
 
   public RemoveWorkspace = (e?: MouseEvent) => {

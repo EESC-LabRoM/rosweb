@@ -10,6 +10,9 @@ import {Names} from "./names.ts";
 import {Trigger} from "./trigger.ts";
 import {db} from "./db.ts";
 
+// types
+import {Geometry} from "../types/Geometry.ts";
+
 declare var MyApp: any;
 
 interface TypeDef {
@@ -144,10 +147,21 @@ export class Frontend {
     widgetInstance.Tab = db.getTab(currentTabId);
     html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
+    widgetInstance.size.x = parseInt($(html).find(".ros-widget").attr("data-width"));
+    widgetInstance.size.y = parseInt($(html).find(".ros-widget").attr("data-height"));
     let trigger = new Trigger();
     trigger.widgetSettings(widgetInstance.id);
-    afterContentCallback();
+    if (afterContentCallback != undefined) {
+      afterContentCallback();
+    }
   }
+
+  public setWidgetInstancePosition(widgetInstance: WidgetInstance, position: Geometry.Point2D): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]").css({ top: position.y, left: position.x });
+  };
+  public setWidgetInstanceSize(widgetInstance: WidgetInstance, size: Geometry.Point2D): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]").css({ height: size.y, width: size.x });
+  };
 
   private _getForcedCurrentTabId(): number {
     let currentTabId: number = this._getCurrentTabId();

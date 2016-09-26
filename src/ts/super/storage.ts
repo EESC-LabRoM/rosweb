@@ -62,7 +62,12 @@ class Storage {
   // Save
   public SaveWorkspace(workspace: Workspace): void {
     let rosweb: any = JSON.parse(localStorage.getItem("ROSWeb"));
-    workspace.db = db;
+    workspace.db = {
+      Tabs: db.Tabs,
+      TabCounter: db.TabCounter,
+      WidgetInstances: db.WidgetInstances,
+      WidgetInstanceCounter: db.WidgetInstanceCounter
+    };
     rosweb.Workspaces.push(workspace);
     localStorage.setItem("ROSWeb", JSON.stringify(rosweb));
   }

@@ -324,7 +324,11 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
 
     let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
-    widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
+    if (widgetInstance.WidgetCallbackClass.clbkResized != undefined) {
+      widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
+    }
+    widgetInstance.size.x = size.x;
+    widgetInstance.size.y = size.y;
   };
   private _ApplySizeBoundaries(size: Geometry.Point2D): Geometry.Point2D {
     let widthMin: number = parseInt($(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "'] .ros-widget").attr("data-min-width"));
@@ -358,7 +362,9 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
 
     let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
-    widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
+    if (widgetInstance.WidgetCallbackClass.clbkMoved != undefined) {
+      widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
+    }
     widgetInstance.position.x = pos.x;
     widgetInstance.position.y = pos.y;
   };
