@@ -32,7 +32,7 @@ Until now, it is being developed and tested using Google Chrome browser.
 3. Launch rosbridge websocket server and web video server
     ```sh
     $ roslaunch rosbridge_server rosbridge_websocket.launch
-    $ roslaunch web_video_server web_video_server
+    $ rosrun web_video_server web_video_server
     ```
 
 4. Open the [working demo page][demo] (or download it to your computer) and connect to your ROS server (usually ws://localhost:9090)
