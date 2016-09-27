@@ -1,0 +1,32 @@
+.cssWidgetContainer[data-widget-conf='0'] div[data-widget-name='param-viewer'] {
+  border: 1px solid #333;
+}
+
+div[data-widget-name='param-viewer'] {
+  div.header {
+    background-color: #cca;
+    border-bottom: 1px solid #333;
+    p {
+      text-align: center;
+      padding: 0 10px;
+    }
+    p.name {
+      font-weight: bold;
+    }
+  }
+  label {
+    display: inline-block;
+    margin: 3px 4%;
+    width: 90%;
+    text-align: center;
+  }
+  input[type="text"] {
+    display: inline-block;
+    margin: 3px 4%;
+    width: 90%;
+  }
+  button {
+    margin: 3px 4%;
+    width: 40%;
+  }
+}

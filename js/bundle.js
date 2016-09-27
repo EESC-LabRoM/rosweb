@@ -236,6 +236,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         };
         this.WidgetSettingsRemove = (e) => {
             let widgetInstanceId = parseInt($("#widgetSettings").val());
+            db_ts_1.db.removeWidgetInstance(widgetInstanceId);
             $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
             this.Frontend.HideWidgetSettings();
             e.preventDefault();
@@ -670,12 +671,6 @@ function insertWidgets() {
     count++;
     widget = db_ts_1.db.newWidget();
     widget.id = count;
-    widget.name = "URDF Viewer";
-    widget.alias = "UrdfViewer";
-    widget.url = "./widgets/urdf_viewer";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
     widget.name = "LaserScan Viewer";
     widget.alias = "LaserScanViewer";
     widget.url = "./widgets/laser_scan_viewer";
@@ -761,6 +756,8 @@ class Db {
     loadWorkspace(workspace) {
         this.TabCounter = workspace.db.TabCounter;
         this.Tabs = workspace.db.Tabs;
+        this.WidgetInstanceCounter = 0;
+        this.WidgetInstances = new Array();
         this._ClearWorkspace();
         this._GenerateWorkspace(workspace.db.WidgetInstances);
     }
@@ -862,14 +859,10 @@ class Db {
     }
     removeWidgetInstance(widgetInstance_id) {
         let index = 0;
-        for (let widgetInstance of this.WidgetInstances) {
-            if (widgetInstance.id == widgetInstance_id) {
-                this.WidgetInstances.splice(index, 1);
-                return true;
-            }
-            index++;
+        function removeId(widgetInstance) {
+            return widgetInstance.id != widgetInstance_id;
         }
-        return false;
+        this.WidgetInstances = this.WidgetInstances.filter(removeId);
     }
 }
 exports.Db = Db;

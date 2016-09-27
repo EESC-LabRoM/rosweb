@@ -6,13 +6,40 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
+    self.topic = new ROSLIB.Topic({
+      ros: ros,
+      name: "",
+      messageType: ""
+    });
+
     self.callback1Worker = new Worker("widgets/laser_scan_viewer/worker.js");
 
     self.svg = $(self.selector + " svg")[0];
-    var center = self.createElement("circle", null, { cx: 150, cy: 150, r: 5, fill: "red" });
-    var min = self.circle({ cx: 150, cy: 150, r: 10, stroke: "red", "stroke-width": 1, fill: "transparent" });
-    var max = self.circle({ cx: 150, cy: 150, r: 150, stroke: "red", "stroke-width": 1, fill: "transparent" });
-    self.pointsGroup = self.g({ "class": "points" });
+    var center = self.createElement("circle", null, {
+      cx: 150,
+      cy: 150,
+      r: 5,
+      fill: "red"
+    });
+    var min = self.circle({
+      cx: 150,
+      cy: 150,
+      r: 10,
+      stroke: "red",
+      "stroke-width": 1,
+      fill: "transparent"
+    });
+    var max = self.circle({
+      cx: 150,
+      cy: 150,
+      r: 150,
+      stroke: "red",
+      "stroke-width": 1,
+      fill: "transparent"
+    });
+    self.pointsGroup = self.g({
+      "class": "points"
+    });
 
     self.svg.appendChild(center);
     self.svg.appendChild(min);
@@ -22,14 +49,39 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   this.clbkResized = function (width, height) {
     self.resizeSVG(width, height);
   };
-  this.clbkMoved = function (x, y) { }
+  this.clbkMoved = function (x, y) {}
+
+  // Topic methods
+  this.onchange = function (selectedTopic) {
+    self.topic.unsubscribe();
+    self.topic.name = selectedTopic;
+
+    if (selectedTopic == "") return;
+    ros.getTopicType(selectedTopic, function (type) {
+      self.topic.messageType = type;
+      self.topic.subscribe(self.callback);
+    }, function (e) {
+      throw new Error(e);
+    });
+  }
 
   // Subscriptions Callbacks
+  this.topic = null;
   self.callback1Worker = null;
   self.maxRange = 0;
-  this.callback1 = function (topic_name, topic_type, message) {
+  this.divideHz = 0;
+  this.sumDivideHz = 0;
+  this.callback = function (message) {
+    if (self.sumDivideHz != self.divideHz) {
+      self.sumDivideHz++;
+      return;
+    }
+    self.sumDivideHz = 0;
     message.range_max = self.maxRange;
-    self.callback1Worker.postMessage({ widgetInstanceId: self.widgetInstanceId, topic_name: topic_name, topic_type: topic_type, msg: message });
+    self.callback1Worker.postMessage({
+      widgetInstanceId: self.widgetInstanceId,
+      msg: message
+    });
     self.callback1Worker.onmessage = function (msgEvnt) {
       var point;
       var length = self.points.length;
@@ -51,7 +103,10 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   this.points = [];
   this.radius = 150;
   this.resizeSVG = function (width, height) {
-    $(self.selector + " svg").attr({ width: width, height: height });
+    $(self.selector + " svg").attr({
+      width: width,
+      height: height
+    });
   };
 
   // SVG elements methods
