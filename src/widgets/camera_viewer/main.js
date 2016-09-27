@@ -11,8 +11,10 @@ var WidgetCameraViewer = function (widgetInstanceId) {
   this.clbkResized = function (width, height) {
     self.width = width;
     self.height = height;
-    self.viewer.width = width;
-    self.viewer.height = height;
+    if (self.viewer != null) {
+      self.viewer.width = width;
+      self.viewer.height = height;
+    }
     $("." + self.viewerElement + " canvas").attr({
       width: width,
       height: height
