@@ -45,6 +45,8 @@ ROSWeb is under MIT license. See the [LICENSE](LICENSE) file for details.
 
 See [AUTHORS](AUTHORS.md) file.
 
+A previous version of this work was described in [this paper][paper]
+
 ## How to contribute
 
 For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.md).
@@ -55,3 +57,4 @@ For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.
 [doc]: <http://www.labrom.eesc.usp.br/rosweb/typedoc>
 [demo]: <https://eesc-labrom.github.io/rosweb/>
 [rosbridge]: <http://www.github.com/RobotWebTools/rosbridge_suite>
+[paper]: <https://www.researchgate.net/publication/308519873_DEVELOPMENT_OF_A_MOBILE_ROBOTS_SUPERVISORY_SYSTEM> 
