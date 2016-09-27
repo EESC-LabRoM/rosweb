@@ -249,6 +249,7 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettingsRemove = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($("#widgetSettings").val());
+    db.removeWidgetInstance(widgetInstanceId);
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
     this.Frontend.HideWidgetSettings();
     e.preventDefault();

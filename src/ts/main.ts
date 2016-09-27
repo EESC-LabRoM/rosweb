@@ -76,13 +76,6 @@ function insertWidgets(): void {
 
   widget = db.newWidget();
   widget.id = count;
-  widget.name = "URDF Viewer";
-  widget.alias = "UrdfViewer";
-  widget.url = "./widgets/urdf_viewer";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
   widget.name = "LaserScan Viewer";
   widget.alias = "LaserScanViewer";
   widget.url = "./widgets/laser_scan_viewer";

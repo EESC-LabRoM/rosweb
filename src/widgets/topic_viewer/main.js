@@ -5,9 +5,9 @@ var WidgetTopicViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  self.clbkCreated = function () {};
-  self.clbkResized = function () {};
-  self.clbkMoved = function () {};
+  this.clbkCreated = function () {};
+  this.clbkResized = function () {};
+  this.clbkMoved = function () {};
 
   // Subscriptions Callbacks
   this.topic1 = new ROSLIB.Topic({
@@ -15,7 +15,7 @@ var WidgetTopicViewer = function (widgetInstanceId) {
     name: "",
     messageType: ""
   });
-  self.onchange1 = function (selectedTopic) {
+  this.onchange1 = function (selectedTopic) {
     self.topic1.unsubscribe();
     self.topic1.name = selectedTopic;
     var elem = $(self.selector).find(".datatopic1");
@@ -31,7 +31,7 @@ var WidgetTopicViewer = function (widgetInstanceId) {
       throw new Error(e);
     });
   };
-  self.callback1 = function (message) {
+  this.callback1 = function (message) {
       var elem = $(self.selector).find(".datatopic1");
       $(elem).html("");
       self.debugObjectInsideElement(elem, message);
