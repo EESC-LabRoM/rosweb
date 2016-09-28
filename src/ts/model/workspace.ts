@@ -66,23 +66,6 @@ export class Workspace {
     }
 
     object.id = ++counter[0].counter;
-    /*
-    switch (object.constructor.name) {
-      case "Tab":
-        object.id = ++this._TabCounter;
-        let obj: Tab = object;
-        this.Tabs.push(obj);
-        break;
-      case "Widget":
-        object.id = ++this._WidgetCounter;
-        this.Widgets.push(object);
-        break;
-      case "WidgetInstance":
-        object.id = ++this._WidgetInstanceCounter;
-        this.WidgetInstances.push(object);
-        break;
-    }
-    */
   }
 
   public save<T>(object: T): void {
