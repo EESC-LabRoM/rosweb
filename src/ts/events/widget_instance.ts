@@ -2,7 +2,6 @@
 
 // Types
 import {Geometry} from "../types/Geometry.ts";
-import {Subscription} from "../model/subscription.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super

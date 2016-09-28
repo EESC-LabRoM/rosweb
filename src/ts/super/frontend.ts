@@ -109,13 +109,14 @@ export class Frontend {
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;
+    let widget = db.getWidget(widgetInstance.widget_id);
     $.ajax({
-      url: widgetInstance.Widget.url.slice(2) + "/index.hbs",
+      url: widget.url.slice(2) + "/index.hbs",
       beforeSend: function () {
 
       },
       success: function (data: string) {
-        MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
+        MyApp.templates._widgetsTemplates[widget.alias] = Handlebars.compile(data);
         fn(widgetInstance, currentTabId, afterContentCallback);
       },
       error: function (e1: any, e2: any) {
@@ -125,10 +126,11 @@ export class Frontend {
   }
 
   public insertWidgetInstance(widgetInstance: WidgetInstance, afterContentCallback: any): void {
+    let widget = db.getWidget(widgetInstance.widget_id);
     if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }
-    if (MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
+    if (MyApp.templates._widgetsTemplates[widget.alias] === undefined) {
       this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
     } else {
       let currentTabId: number = this._getForcedCurrentTabId();
@@ -137,14 +139,14 @@ export class Frontend {
   }
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
-    content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
+    let widget = db.getWidget(widgetInstance.widget_id);
+    content = MyApp.templates._widgetsTemplates[widget.alias]();
     let width: string = $(content).attr("data-width") + "px";
     let height: string = $(content).attr("data-height") + "px";
     let left: string, top: string;
     left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
     top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
     widgetInstance.position = { x: parseInt(left), y: parseInt(top) };
-    widgetInstance.Tab = db.getTab(currentTabId);
     html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
     widgetInstance.size.x = parseInt($(html).find(".ros-widget").attr("data-width"));
@@ -247,4 +249,12 @@ export class Frontend {
 
   }
 
+  // Model frontend
+  public newWidget(widget: Widget) {
+    let html = MyApp.templates.widgetItem(widget);
+    $(".jsWidgetsList").append(html);
+  }
+
 }
+
+export var frontend: Frontend = new Frontend();

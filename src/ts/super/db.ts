@@ -1,6 +1,5 @@
 // Models
 import {Workspace} from "../model/workspace.ts";
-import {Subscription} from "../model/subscription.ts";
 import {Tab} from "../model/tab.ts";
 import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
@@ -28,12 +27,9 @@ export class Db {
 
   }
 
-  // ROS Topics subscriptions
-  public SubscriptionCounter: number
-  public Subscriptions: Array<Subscription>;
-
   // Loading workspace
   public loadWorkspace(workspace: Workspace): void {
+    /*
     this.TabCounter = workspace.db.TabCounter;
     this.Tabs = workspace.db.Tabs;
 
@@ -42,17 +38,19 @@ export class Db {
 
     this._ClearWorkspace();
     this._GenerateWorkspace(workspace.db.WidgetInstances);
+    */
   }
   private _ClearWorkspace(): void {
     $(".jsTab, .jsTabContent").remove();
   }
   private _GenerateWorkspace(widgetInstances: WidgetInstance[]): void {
+    /*
     this.Tabs.forEach((tab: Tab, index: number) => {
       this.Frontend.newTab(tab);
       this.Frontend.selectTab(tab);
       widgetInstances.forEach((widgetInstance: WidgetInstance, index: number) => {
-        if (widgetInstance.Tab.id == tab.id) {
-          let widget: Widget = db.getWidgetByAlias(widgetInstance.Widget.alias);
+        if (widgetInstance.tab_id == tab.id) {
+          let widget: Widget = db.getWidget(widgetInstance.widget_id);
           let newWidgetInstance = db.newWidgetInstance(widget);
           this.Frontend.insertWidgetInstance(newWidgetInstance, () => {
             newWidgetInstance.WidgetCallbackClass.clbkCreated();
@@ -62,6 +60,7 @@ export class Db {
         }
       });
     });
+    */
   }
 
   // Tab
@@ -94,8 +93,8 @@ export class Db {
   // Widget
   public WidgetCounter: number;
   public Widgets: Array<Widget>;
-  public newWidget(): Widget {
-    let widget = new Widget();
+  public newWidget(name: string, url: string, alias: string): Widget {
+    let widget = new Widget(name, url, alias);
     widget.id = ++this.WidgetCounter;
     this.Widgets.push(widget);
     return widget;
@@ -110,8 +109,7 @@ export class Db {
     return null;
   }
   public getWidgetByAlias(widgetAlias: string): Widget {
-    let widget = new Widget();
-    let toReturn: Widget = null;
+    let toReturn: Widget;
     this.Widgets.forEach(widget => {
       if (widget.alias === widgetAlias) {
         toReturn = widget;

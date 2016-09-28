@@ -8,24 +8,25 @@ import {RosEvents} from "./events/ros.ts";
 import {WorkspaceEvents} from "./events/workspace.ts";
 
 // Super
-import {db} from "./super/db.ts";
+import {db} from "./super/db";
 import {lightbox} from "./super/lightbox.ts";
 import {storage} from "./super/storage.ts";
 import {Frontend} from "./super/frontend.ts";
 
 // Models
-import {Widget} from "./model/widget.ts";
-
-export var ros: ROSLIB.Ros = new ROSLIB.Ros("");
+import {Widget} from "./model/widget";
+import {Workspace} from "./model/workspace";
+import {currentWorkspace} from "./model/workspace";
 
 function init() {
-  window["ros"] = ros;
-  insertWidgets();
-  events(ros);
   $(document).ready(function () {
+    var ros: ROSLIB.Ros = new ROSLIB.Ros("");
+    window["ros"] = ros;
+    events(ros);
     lightbox.CreateLightbox();
+    storage.Init();
+    insertWidgets();
   });
-  storage.Init(); 
 }
 
 function events(ros: ROSLIB.Ros): void {
@@ -38,52 +39,13 @@ function events(ros: ROSLIB.Ros): void {
 
 function insertWidgets(): void {
   // load list of available widgets
-  let count: number = 1;
-  let widget = db.newWidget();
-  widget.id = count;
-  widget.name = "Topic Viewer";
-  widget.alias = "TopicViewer";
-  widget.url = "./widgets/topic_viewer";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
-  widget.name = "Param Viewer";
-  widget.alias = "ParamViewer";
-  widget.url = "./widgets/param_viewer";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
-  widget.name = "Service Viewer";
-  widget.alias = "ServiceViewer";
-  widget.url = "./widgets/service_viewer";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
-  widget.name = "Google Maps GPS Viewer";
-  widget.alias = "GoogleMapsGpsViewer";
-  widget.url = "./widgets/gmaps_gps";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
-  widget.name = "Camera Viewer";
-  widget.alias = "CameraViewer";
-  widget.url = "./widgets/camera_viewer";
-  count++;
-
-  widget = db.newWidget();
-  widget.id = count;
-  widget.name = "LaserScan Viewer";
-  widget.alias = "LaserScanViewer";
-  widget.url = "./widgets/laser_scan_viewer";
-  count++;
-
-  // insert Widgets JS and CSS tags
-  let frontend = new Frontend();
-  frontend.InsertWidgetsTags();
+  db.newWidget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
+  db.newWidget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
+  db.newWidget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+  db.newWidget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
+  db.newWidget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
+  db.newWidget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
 }
 
 init();
+

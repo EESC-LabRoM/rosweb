@@ -1,15 +1,16 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Parent Class
-import {EventsParent} from "./events.ts";
+import {EventsParent} from "./events";
 
 // Models
-import {Tab} from "../model/tab.ts";
+import {Tab} from "../model/tab";
+import {currentWorkspace} from "../model/workspace";
 
 // Super classes
-import {db} from "../super/db.ts";
-import {Design} from "../super/design.ts";
-import {Frontend} from "../super/frontend.ts";
+import {db} from "../super/db"
+import {Design} from "../super/design"
+import {Frontend} from "../super/frontend"
 
 export class TabEvents extends EventsParent {
   
@@ -35,7 +36,7 @@ export class TabEvents extends EventsParent {
     this.DelegateEvent(".jsEventCloseTab", "click", this.closeTab);
     
     this.DelegateEvent(".jsRosweb", "click", (e?: MouseEvent) => {
-      console.log(db);
+      console.log(currentWorkspace);
       e.preventDefault();
     });
   }
