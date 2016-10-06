@@ -23,9 +23,6 @@ export class TabEvents extends EventsParent {
     this.Frontend = new Frontend();
     this.Design = new Design();
 
-    // render list
-    this.Frontend.widgetsList(db.Widgets);
-
     // Resize Events
     this.DelegateEvent(window, "resize", this._windowResized);
     

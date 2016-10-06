@@ -1,19 +1,22 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Super
-import {Frontend} from "../super/frontend.ts";
-import {db} from "../super/db.ts";
+import {Frontend} from "../super/frontend.ts"
+// import {db} from "../super/db.ts"
 
 // Model
-import {Widget} from "../model/widget.ts";
+import {Tab} from "../model/tab.ts"
+import {Widget} from "../model/widget.ts"
+import {WidgetInstance} from "../model/widget_instance.ts"
+import {currentWorkspace} from "../model/workspace"
 
 // Parent Class
 import {EventsParent} from "./events.ts";
 
 export class WidgetEvents extends EventsParent {
 
-  public Frontend : Frontend = new Frontend();
-  public Ros : ROSLIB.Ros;
+  public Frontend: Frontend = new Frontend();
+  public Ros: ROSLIB.Ros;
 
   constructor(ros: ROSLIB.Ros) {
     super();
@@ -25,7 +28,7 @@ export class WidgetEvents extends EventsParent {
 
     this.DelegateEvent(".jsWidgetContainer a", "click", this.nothing);
   }
-  
+
   public widgetMenu = (e?: MouseEvent) => {
     this._widgetMenu();
     e.preventDefault();
@@ -33,17 +36,17 @@ export class WidgetEvents extends EventsParent {
   private _widgetMenu() {
     this.Frontend.showWidgetsMenu();
   }
-  
+
   public widgetItem = (e?: MouseEvent) => {
-    let widgetAlias = $(e.toElement).attr("data-widget-alias");
-    this._widgetItem(widgetAlias);
+    let widgetId: number = parseInt($(e.toElement).attr("data-widget-id"));
+    let widget: Widget = currentWorkspace.get<Widget>(widgetId, "Widget");
+    let tab: Tab = currentWorkspace.getCurrentTab();
+    this._widgetItem(widget, tab);
     this._widgetMenu();
     e.preventDefault();
   }
-  private _widgetItem(widgetAlias: string): void {
-    let widget: Widget = db.getWidgetByAlias(widgetAlias);
-    let widgetInstance = db.newWidgetInstance(widget);
-    this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.clbkCreated);
+  private _widgetItem(widget: Widget, tab: Tab): void {
+    new WidgetInstance(widget, tab);
   }
 
 }

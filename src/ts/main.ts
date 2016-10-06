@@ -8,7 +8,7 @@ import {RosEvents} from "./events/ros.ts";
 import {WorkspaceEvents} from "./events/workspace.ts";
 
 // Super
-import {db} from "./super/db";
+// import {db} from "./super/db";
 import {lightbox} from "./super/lightbox.ts";
 import {storage} from "./super/storage.ts";
 import {Frontend} from "./super/frontend.ts";
@@ -24,7 +24,7 @@ function init() {
     window["ros"] = ros;
     events(ros);
     lightbox.CreateLightbox();
-    storage.Init();
+    // storage.Init();
     insertWidgets();
   });
 }
@@ -39,12 +39,12 @@ function events(ros: ROSLIB.Ros): void {
 
 function insertWidgets(): void {
   // load list of available widgets
-  db.newWidget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
-  db.newWidget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
-  db.newWidget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
-  db.newWidget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
-  db.newWidget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
-  db.newWidget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+  new Widget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
+  new Widget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
+  new Widget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+  new Widget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
+  new Widget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
+  new Widget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
 }
 
 init();

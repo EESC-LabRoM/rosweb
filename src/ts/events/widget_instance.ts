@@ -6,7 +6,7 @@ import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super
 import {Frontend} from "../super/frontend.ts";
-import {db} from "../super/db.ts";
+// import {db} from "../super/db.ts";
 
 // Parent Class
 import {EventsParent} from "./events.ts";

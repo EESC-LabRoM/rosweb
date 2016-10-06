@@ -95,12 +95,7 @@ export class Frontend {
   }
 
   public showWidgetsMenu(): void {
-    this.widgetsList(db.Widgets);
     $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
-  }
-  public widgetsList(list: Array<Widget>): void {
-    var html = MyApp.templates.widgetList(list);
-    $("." + this.Names.classWidgetsList).html(html);
   }
 
   public LoadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
