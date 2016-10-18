@@ -4,11 +4,12 @@
 import {Tab} from "../model/tab.ts";
 import {Widget} from "../model/widget.ts";
 import {WidgetInstance} from "../model/widget_instance.ts";
+import {currentWorkspace} from "../model/workspace";
 
 // Super classes
 import {Names} from "./names.ts";
 import {Trigger} from "./trigger.ts";
-import {db} from "./db.ts";
+// import {db} from "./db.ts";
 
 // types
 import {Geometry} from "../types/Geometry.ts";
@@ -42,7 +43,7 @@ export class Frontend {
   }
 
   public InsertWidgetsTags(): void {
-    db.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
+    currentWorkspace.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
       $("body").append("<script type='text/javascript' src='" + value.url.slice(2) + "/main.js" + "'></script>");
       // $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
     });
@@ -104,7 +105,7 @@ export class Frontend {
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     let currentTabId: number = this._getForcedCurrentTabId();
     let fn = this._insertWidget;
-    let widget = db.getWidget(widgetInstance.widget_id);
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     $.ajax({
       url: widget.url.slice(2) + "/index.hbs",
       beforeSend: function () {
@@ -121,7 +122,7 @@ export class Frontend {
   }
 
   public insertWidgetInstance(widgetInstance: WidgetInstance, afterContentCallback: any): void {
-    let widget = db.getWidget(widgetInstance.widget_id);
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }
@@ -134,7 +135,7 @@ export class Frontend {
   }
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
-    let widget = db.getWidget(widgetInstance.widget_id);
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     content = MyApp.templates._widgetsTemplates[widget.alias]();
     let width: string = $(content).attr("data-width") + "px";
     let height: string = $(content).attr("data-height") + "px";

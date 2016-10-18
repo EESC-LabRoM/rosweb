@@ -6,6 +6,7 @@ import {WidgetInstance} from "../model/widget_instance.ts";
 
 // Super
 import {Frontend} from "../super/frontend.ts";
+import {currentWorkspace} from "../model/workspace"
 // import {db} from "../super/db.ts";
 
 // Parent Class
@@ -184,7 +185,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
       let topic_name: string = $(elem).val();
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
 
       let topicChangeCallback: string = $(elem).attr("data-ros-topic-chng");
       widgetInstance.WidgetCallbackClass[topicChangeCallback](topic_name);
@@ -198,7 +199,7 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsConfirmRosParams(): void {
     $(".jsRosParamSelector").each((index: number, elem: Element) => {
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
 
       let paramChangeCallback: any = $(elem).attr("data-ros-param-chng");
       let paramSelected: string = $(elem).val();
@@ -213,7 +214,7 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsConfirmRosServices(): void {
     $(".jsRosServiceSelector").each((index: number, elem: Element) => {
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
 
       let serviceChangeCallback: any = $(elem).attr("data-ros-service-chng");
       let serviceSelected: string = $(elem).val();
@@ -228,7 +229,7 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsConfirmParams(): void {
     $(".jsWidgetParam").each((index: number, elem: Element) => {
       let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
 
       let varName = $(elem).attr("data-widget-param-var");
       let varValue = $(elem).val();
@@ -248,7 +249,8 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettingsRemove = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($("#widgetSettings").val());
-    db.removeWidgetInstance(widgetInstanceId);
+    currentWorkspace.remove<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
+
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
@@ -323,7 +325,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
 
-    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    let widgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
     if (widgetInstance.WidgetCallbackClass.clbkResized != undefined) {
       widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
     }
@@ -361,7 +363,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
 
-    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
     if (widgetInstance.WidgetCallbackClass.clbkMoved != undefined) {
       widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
     }

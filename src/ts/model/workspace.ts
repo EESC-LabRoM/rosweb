@@ -95,12 +95,28 @@ export class Workspace {
   public getCurrentTab(): Tab {
     className = "Tab";
     let list = this.Lists.filter(genericFilter);
-    if(list[0].list.length == 0) {
+    if (list[0].list.length == 0) {
       new Tab();
     }
     let tab: Tab = list[0].list[0];
 
     return tab;
+  }
+
+  public remove<T extends { id: number }>(id: number, aClassName: string) {
+    className = aClassName;
+    let list = this.Lists.filter(genericFilter);
+
+    function removeFilter(obj: { id: number }, index: number, array: Array<T>): boolean {
+      return obj.id != id;
+    };
+    list[0].list = list[0].list.filter(removeFilter);
+
+    /*.forEach((element: { id: number }) => {
+      if (element.id == id) return element;
+    });*/
+
+    throw new Error("Object of type T[" + className + "] and id=" + id + " was not found");
   }
 
 }

@@ -8,7 +8,7 @@ import {Tab} from "../model/tab";
 import {currentWorkspace} from "../model/workspace";
 
 // Super classes
-import {db} from "../super/db"
+// import {db} from "../super/db"
 import {Design} from "../super/design"
 import {Frontend} from "../super/frontend"
 
@@ -47,7 +47,7 @@ export class TabEvents extends EventsParent {
     e.preventDefault();
   }
   private _newTab() {
-    var tab: Tab = db.newTab();
+    var tab: Tab = new Tab();
     tab = this.Frontend.formTab(tab);
     this.Frontend.newTab(tab);
     this._selectTab(tab);
@@ -55,7 +55,7 @@ export class TabEvents extends EventsParent {
   
   public selectTab = (e?: MouseEvent) => {
     let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
-    let tab: Tab = db.getTab(tabId);
+    let tab: Tab = currentWorkspace.get<Tab>(tabId, "Tab");
     this._selectTab(tab);
     e.preventDefault();
   }
@@ -71,7 +71,7 @@ export class TabEvents extends EventsParent {
     e.preventDefault();
   }
   private _closeTab(tabId: number): void {
-    db.removeTab(tabId);
+    currentWorkspace.remove<Tab>(tabId, "Tab");
     this.Frontend.closeTab(tabId);
   }
   

@@ -1,5 +1,5 @@
 import {storage} from "../super/storage.ts";
-import {db} from "../super/db.ts";
+// import {db} from "../super/db.ts";
 import {lightbox} from "../super/lightbox.ts";
 import {EventsParent} from "./events.ts";
 import {Workspace} from "../model/workspace.ts";
@@ -48,7 +48,7 @@ export class WorkspaceEvents extends EventsParent {
   }
   private _LoadWorkspace(workspace_id: number): void {
     let workspace: Workspace = storage.GetWorkspace(workspace_id);
-    db.loadWorkspace(workspace);
+    // db.loadWorkspace(workspace);
     lightbox.CloseLightbox();
   }
 
