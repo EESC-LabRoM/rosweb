@@ -1,18 +1,17 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Models
-import {Tab} from "../model/tab.ts";
-import {Widget} from "../model/widget.ts";
-import {WidgetInstance} from "../model/widget_instance.ts";
+import {Tab} from "../model/tab";
+import {Widget} from "../model/widget";
+import {WidgetInstance} from "../model/widget_instance";
 import {currentWorkspace} from "../model/workspace";
 
 // Super classes
-import {Names} from "./names.ts";
-import {Trigger} from "./trigger.ts";
-// import {db} from "./db.ts";
+import {Names} from "./names";
+import {Trigger} from "./trigger";
 
 // types
-import {Geometry} from "../types/Geometry.ts";
+import {Geometry} from "../types/Geometry";
 
 declare var MyApp: any;
 
@@ -249,6 +248,7 @@ export class Frontend {
   public newWidget(widget: Widget) {
     let html = MyApp.templates.widgetItem(widget);
     $(".jsWidgetsList").append(html);
+    $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
   }
 
 }

@@ -1,17 +1,17 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Super
-import {Frontend} from "../super/frontend.ts"
+import {Frontend} from "../super/frontend"
 // import {db} from "../super/db.ts"
 
 // Model
-import {Tab} from "../model/tab.ts"
-import {Widget} from "../model/widget.ts"
-import {WidgetInstance} from "../model/widget_instance.ts"
+import {Tab} from "../model/tab"
+import {Widget} from "../model/widget"
+import {WidgetInstance} from "../model/widget_instance"
 import {currentWorkspace} from "../model/workspace"
 
 // Parent Class
-import {EventsParent} from "./events.ts";
+import {EventsParent} from "./events";
 
 export class WidgetEvents extends EventsParent {
 

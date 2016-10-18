@@ -12,7 +12,7 @@ export class Widget {
   public alias: string;
   public html: string;
 
-  constructor(name, url, alias) {
+  constructor(name, alias, url) {
     this.name = name;
     this.url = url;
     this.alias = alias;

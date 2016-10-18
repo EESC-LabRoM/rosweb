@@ -67,5 +67,4 @@ export class WorkspaceEvents extends EventsParent {
     }
   }
 
-
 }

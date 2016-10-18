@@ -1,17 +1,16 @@
 /// <reference path="./typings/tsd.d.ts" />
 
 // Events
-import {TabEvents} from "./events/tab.ts";
-import {WidgetEvents} from "./events/widget.ts";
-import {WidgetInstanceEvents} from "./events/widget_instance.ts";
-import {RosEvents} from "./events/ros.ts";
-import {WorkspaceEvents} from "./events/workspace.ts";
+import {TabEvents} from "./events/tab";
+import {WidgetEvents} from "./events/widget";
+import {WidgetInstanceEvents} from "./events/widget_instance";
+import {RosEvents} from "./events/ros";
+import {WorkspaceEvents} from "./events/workspace";
 
 // Super
-// import {db} from "./super/db";
-import {lightbox} from "./super/lightbox.ts";
-import {storage} from "./super/storage.ts";
-import {Frontend} from "./super/frontend.ts";
+import {lightbox} from "./super/lightbox";
+import {storage} from "./super/storage";
+import {Frontend} from "./super/frontend";
 
 // Models
 import {Widget} from "./model/widget";
@@ -24,7 +23,6 @@ function init() {
     window["ros"] = ros;
     events(ros);
     lightbox.CreateLightbox();
-    // storage.Init();
     insertWidgets();
   });
 }

@@ -22,8 +22,10 @@ export class WidgetInstance {
     this.size = { x: 0, y: 0 };
 
     currentWorkspace.create<WidgetInstance>(this);
+    
+    this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + widget.alias, this.id);
 
-    this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + widget.alias.charAt(0).toUpperCase() + widget.alias.slice(1), this.id);
+    frontend.insertWidgetInstance(this, this.WidgetCallbackClass["clbkCreated"]);
   }
 
 }
