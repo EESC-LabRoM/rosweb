@@ -48,9 +48,6 @@ export class TabEvents extends EventsParent {
   }
   private _newTab() {
     var tab: Tab = new Tab();
-    tab = this.Frontend.formTab(tab);
-    this.Frontend.newTab(tab);
-    this._selectTab(tab);
   }
   
   public selectTab = (e?: MouseEvent) => {

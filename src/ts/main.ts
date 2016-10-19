@@ -23,7 +23,7 @@ function init() {
     window["ros"] = ros;
     events(ros);
     lightbox.CreateLightbox();
-    insertWidgets();
+    currentWorkspace.initWorkspace();
   });
 }
 
@@ -33,16 +33,6 @@ function events(ros: ROSLIB.Ros): void {
   let widgetInstanceEvents: WidgetInstanceEvents = new WidgetInstanceEvents(ros);
   let rosEvents: RosEvents = new RosEvents(ros);
   let workspace: WorkspaceEvents = new WorkspaceEvents();
-}
-
-function insertWidgets(): void {
-  // load list of available widgets
-  new Widget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
-  new Widget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
-  new Widget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
-  new Widget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
-  new Widget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
-  new Widget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
 }
 
 init();

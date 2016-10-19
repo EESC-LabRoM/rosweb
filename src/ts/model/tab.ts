@@ -8,9 +8,9 @@ export class Tab {
   public active: boolean;
   
   constructor(name?: string) {
-    this.name = name;
-
     currentWorkspace.create<Tab>(this);
+    this.name = "Tab #" + this.id;
+    this.setActive();
 
     frontend.newTab(this);
   }

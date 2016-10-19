@@ -1,5 +1,6 @@
 import { Workspace } from "../model/workspace";
 import { ROSWeb } from "../model/rosweb";
+import {SerializedWorkspace} from "../model/serialized_workspace";
 
 class Storage {
 
@@ -17,7 +18,7 @@ class Storage {
   }
 
   // Get
-  public GetWorkspaces(): Array<Workspace> {
+  public GetWorkspaces(): Array<SerializedWorkspace> {
     let rosweb: ROSWeb;
     try {
       rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
@@ -27,9 +28,9 @@ class Storage {
     return rosweb.Workspaces;
   }
 
-  public GetWorkspace(workspace_id: number): Workspace {
-    let toReturn: Workspace;
-    this.GetWorkspaces().forEach((workspace: Workspace, index: number, array: Workspace[]) => {
+  public GetWorkspace(workspace_id: number): SerializedWorkspace {
+    let toReturn: SerializedWorkspace;
+    this.GetWorkspaces().forEach((workspace: SerializedWorkspace, index: number, array: SerializedWorkspace[]) => {
       if (workspace.id == workspace_id) {
         toReturn = workspace;
       }
@@ -38,45 +39,38 @@ class Storage {
   }
 
   // New
-  public NewWorkspace(name: string): Workspace {
+  public NewWorkspace(name: string): SerializedWorkspace {
     let id: number;
-    let workspaces: Array<Workspace> = this.GetWorkspaces();
-    function sortByIdDesc(obj1: Workspace, obj2: Workspace) {
+    let workspaces: Array<SerializedWorkspace> = this.GetWorkspaces();
+    function sortByIdDesc(obj1: SerializedWorkspace, obj2: SerializedWorkspace) {
       if (obj1.id > obj2.id) return -1;
       if (obj1.id < obj2.id) return 1;
     }
     if (workspaces.length == 0) {
       id = 1;
     } else {
-      let lastWorkspace: Workspace = workspaces.sort(sortByIdDesc)[0];
+      let lastWorkspace: SerializedWorkspace = workspaces.sort(sortByIdDesc)[0];
       id = lastWorkspace.id + 1;
     }
 
-    let workspace = new Workspace();
+    let workspace = new SerializedWorkspace();
     workspace.id = id;
     workspace.name = name;
     return workspace;
   }
 
   // Save
-  public SaveWorkspace(workspace: Workspace): void {
-    /*
+  public SaveWorkspace(workspace: SerializedWorkspace): void {
     let rosweb: any = JSON.parse(localStorage.getItem("ROSWeb"));
-    workspace.db = {
-      Tabs: db.Tabs,
-      TabCounter: db.TabCounter,
-      WidgetInstances: db.WidgetInstances,
-      WidgetInstanceCounter: db.WidgetInstanceCounter
-    };
+    console.log(workspace);
     rosweb.Workspaces.push(workspace);
     localStorage.setItem("ROSWeb", JSON.stringify(rosweb));
-    */
   }
 
   // Load
   public LoadWorkspace(id: number): void {
     try {
-      let workspaces: Array<Workspace> = JSON.parse(localStorage["ROSWeb"]["workspaces"]);
+      let workspaces: Array<SerializedWorkspace> = JSON.parse(localStorage["ROSWeb"]["workspaces"]);
     }
     catch (e) {
       alert(e);
@@ -84,15 +78,15 @@ class Storage {
   }
 
   // Remove
-  public RemoveWorkspace(id: number): Workspace[] {
+  public RemoveWorkspace(id: number): SerializedWorkspace[] {
     let rosweb: ROSWeb;
     let updatedRosweb: ROSWeb = new ROSWeb();
-    function filterById(workspace: Workspace) {
+    function filterById(workspace: SerializedWorkspace) {
       return workspace.id != id;
     }
     try {
       rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
-      updatedRosweb.Workspaces = new Array<Workspace>();
+      updatedRosweb.Workspaces = new Array<SerializedWorkspace>();
       updatedRosweb.Workspaces = rosweb.Workspaces.filter(filterById);
       localStorage.setItem("ROSWeb", JSON.stringify(updatedRosweb));
       return updatedRosweb.Workspaces;

@@ -1,17 +1,17 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Models
-import {Tab} from "../model/tab";
-import {Widget} from "../model/widget";
-import {WidgetInstance} from "../model/widget_instance";
-import {currentWorkspace} from "../model/workspace";
+import { Tab } from "../model/tab";
+import { Widget } from "../model/widget";
+import { WidgetInstance } from "../model/widget_instance";
+import { currentWorkspace } from "../model/workspace";
 
 // Super classes
-import {Names} from "./names";
-import {Trigger} from "./trigger";
+import { Names } from "./names";
+import { Trigger } from "./trigger";
 
 // types
-import {Geometry} from "../types/Geometry";
+import { Geometry } from "../types/Geometry";
 
 declare var MyApp: any;
 
@@ -42,7 +42,7 @@ export class Frontend {
   }
 
   public InsertWidgetsTags(): void {
-    currentWorkspace.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
+    currentWorkspace.getList<Widget>().forEach((value: Widget, index: number, array: Widget[]) => {
       $("body").append("<script type='text/javascript' src='" + value.url.slice(2) + "/main.js" + "'></script>");
       // $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
     });
@@ -64,16 +64,6 @@ export class Frontend {
       return tab;
     }
     return new Tab();
-  }
-
-  public newTab(tab: Tab): void {
-    var tabHtml = MyApp.templates.tab(tab);
-    var tabContentHtml = MyApp.templates.tabContent(tab);
-    // insert tab
-    $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
-    //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
-    // insert tab content
-    document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
   }
 
   public closeTab(tab_id: number): void {
@@ -240,15 +230,43 @@ export class Frontend {
   }
 
   // Update Workspace Methods
-  public UpdateWorkspace(db: any) {
+  public UpdateWorkspace() {
+    console.log(currentWorkspace);
+    let tabs: Tab[] = currentWorkspace.getList<Tab>("Tab");
+    console.log(tabs);
+    let widgetInstances: WidgetInstance[] = currentWorkspace.getList<WidgetInstance>("WidgetInstance");
+    console.log(widgetInstances);
 
+    tabs.forEach((tab: Tab, index: number, array: Tab[]) => {
+      let toInsert: Tab = tab;
+      this.newTab(toInsert);
+    });
+
+    widgetInstances.forEach((widgetInstance: WidgetInstance, index: number, array: WidgetInstance[]) => {
+      let toInsert: WidgetInstance = widgetInstance;
+      this.newWidgetInstance(toInsert);
+    });
   }
 
   // Model frontend
+  public newTab(tab: Tab): void {
+    var tabHtml = MyApp.templates.tab(tab);
+    var tabContentHtml = MyApp.templates.tabContent(tab);
+    // insert tab
+    $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
+    //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
+    // insert tab content
+    document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
+
+    this.selectTab(tab);
+  }
   public newWidget(widget: Widget) {
     let html = MyApp.templates.widgetItem(widget);
     $(".jsWidgetsList").append(html);
     $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
+  }
+  public newWidgetInstance(widgetInstance: WidgetInstance) {
+    this.insertWidgetInstance(widgetInstance, () => { });
   }
 
 }
