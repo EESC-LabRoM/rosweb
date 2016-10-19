@@ -1,14 +1,15 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
-const lightbox_ts_1 = require("../super/lightbox.ts");
+// import {db} from "../super/db.ts";
+const lightbox_1 = require("../super/lightbox");
 class EventsParent {
     constructor() {
         this.nothing = (e) => {
             e.preventDefault();
         };
         this.HideLightbox = (e) => {
-            lightbox_ts_1.lightbox.CloseLightbox();
+            lightbox_1.lightbox.CloseLightbox();
             e.preventDefault();
         };
         this.Lightbox = (e) => {
@@ -29,12 +30,12 @@ class EventsParent {
 }
 exports.EventsParent = EventsParent;
 
-},{"../super/lightbox.ts":17}],2:[function(require,module,exports){
+},{"../super/lightbox":17}],2:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Parent Class
-const events_ts_1 = require("./events.ts");
-class RosEvents extends events_ts_1.EventsParent {
+const events_1 = require("./events");
+class RosEvents extends events_1.EventsParent {
     constructor(ros) {
         super();
         this.connected = false;
@@ -78,16 +79,19 @@ class RosEvents extends events_ts_1.EventsParent {
 }
 exports.RosEvents = RosEvents;
 
-},{"./events.ts":1}],3:[function(require,module,exports){
+},{"./events":1}],3:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Parent Class
-const events_ts_1 = require("./events.ts");
+const events_1 = require("./events");
+// Models
+const tab_1 = require("../model/tab");
+const workspace_1 = require("../model/workspace");
 // Super classes
-const db_ts_1 = require("../super/db.ts");
-const design_ts_1 = require("../super/design.ts");
-const frontend_ts_1 = require("../super/frontend.ts");
-class TabEvents extends events_ts_1.EventsParent {
+// import {db} from "../super/db"
+const design_1 = require("../super/design");
+const frontend_1 = require("../super/frontend");
+class TabEvents extends events_1.EventsParent {
     constructor() {
         super();
         this._windowResized = (e) => {
@@ -99,7 +103,7 @@ class TabEvents extends events_ts_1.EventsParent {
         };
         this.selectTab = (e) => {
             let tabId = parseInt($(e.toElement).attr("data-tab-id"));
-            let tab = db_ts_1.db.getTab(tabId);
+            let tab = workspace_1.currentWorkspace.get(tabId, "Tab");
             this._selectTab(tab);
             e.preventDefault();
         };
@@ -110,10 +114,8 @@ class TabEvents extends events_ts_1.EventsParent {
             }
             e.preventDefault();
         };
-        this.Frontend = new frontend_ts_1.Frontend();
-        this.Design = new design_ts_1.Design();
-        // render list
-        this.Frontend.widgetsList(db_ts_1.db.Widgets);
+        this.Frontend = new frontend_1.Frontend();
+        this.Design = new design_1.Design();
         // Resize Events
         this.DelegateEvent(window, "resize", this._windowResized);
         // Left Click Events
@@ -122,45 +124,51 @@ class TabEvents extends events_ts_1.EventsParent {
         this.DelegateEvent(".jsEventTab", "click", this.selectTab);
         this.DelegateEvent(".jsEventCloseTab", "click", this.closeTab);
         this.DelegateEvent(".jsRosweb", "click", (e) => {
-            console.log(db_ts_1.db);
+            console.log(workspace_1.currentWorkspace);
             e.preventDefault();
         });
     }
     _newTab() {
-        var tab = db_ts_1.db.newTab();
-        tab = this.Frontend.formTab(tab);
-        this.Frontend.newTab(tab);
+        var tab = new tab_1.Tab();
         this._selectTab(tab);
     }
-    _selectTab(tab) {
-        this.Frontend.selectTab(tab);
+    _selectTab(selectedTab) {
+        let list = workspace_1.currentWorkspace.getList("Tab");
+        list.forEach((tab, index) => {
+            if (selectedTab.id != tab.id)
+                tab.active = false;
+        });
+        this.Frontend.selectTab(selectedTab);
     }
     _closeTab(tabId) {
-        db_ts_1.db.removeTab(tabId);
+        workspace_1.currentWorkspace.remove(tabId, "Tab");
         this.Frontend.closeTab(tabId);
     }
 }
 exports.TabEvents = TabEvents;
 
-},{"../super/db.ts":13,"../super/design.ts":14,"../super/frontend.ts":15,"./events.ts":1}],4:[function(require,module,exports){
+},{"../model/tab":10,"../model/workspace":13,"../super/design":14,"../super/frontend":15,"./events":1}],4:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Super
-const frontend_ts_1 = require("../super/frontend.ts");
-const db_ts_1 = require("../super/db.ts");
+const frontend_1 = require("../super/frontend");
+const widget_instance_1 = require("../model/widget_instance");
+const workspace_1 = require("../model/workspace");
 // Parent Class
-const events_ts_1 = require("./events.ts");
-class WidgetEvents extends events_ts_1.EventsParent {
+const events_1 = require("./events");
+class WidgetEvents extends events_1.EventsParent {
     constructor(ros) {
         super();
-        this.Frontend = new frontend_ts_1.Frontend();
+        this.Frontend = new frontend_1.Frontend();
         this.widgetMenu = (e) => {
             this._widgetMenu();
             e.preventDefault();
         };
         this.widgetItem = (e) => {
-            let widgetAlias = $(e.toElement).attr("data-widget-alias");
-            this._widgetItem(widgetAlias);
+            let widgetId = parseInt($(e.toElement).attr("data-widget-id"));
+            let widget = workspace_1.currentWorkspace.get(widgetId, "Widget");
+            let tab = workspace_1.currentWorkspace.getCurrentTab();
+            this._widgetItem(widget, tab);
             this._widgetMenu();
             e.preventDefault();
         };
@@ -172,23 +180,22 @@ class WidgetEvents extends events_ts_1.EventsParent {
     _widgetMenu() {
         this.Frontend.showWidgetsMenu();
     }
-    _widgetItem(widgetAlias) {
-        let widget = db_ts_1.db.getWidgetByAlias(widgetAlias);
-        let widgetInstance = db_ts_1.db.newWidgetInstance(widget);
-        this.Frontend.insertWidgetInstance(widgetInstance, widgetInstance.WidgetCallbackClass.clbkCreated);
+    _widgetItem(widget, tab) {
+        new widget_instance_1.WidgetInstance(widget, tab);
     }
 }
 exports.WidgetEvents = WidgetEvents;
 
-},{"../super/db.ts":13,"../super/frontend.ts":15,"./events.ts":1}],5:[function(require,module,exports){
+},{"../model/widget_instance":12,"../model/workspace":13,"../super/frontend":15,"./events":1}],5:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Super
-const frontend_ts_1 = require("../super/frontend.ts");
-const db_ts_1 = require("../super/db.ts");
+const frontend_1 = require("../super/frontend");
+const workspace_1 = require("../model/workspace");
+// import {db} from "../super/db.ts";
 // Parent Class
-const events_ts_1 = require("./events.ts");
-class WidgetInstanceEvents extends events_ts_1.EventsParent {
+const events_1 = require("./events");
+class WidgetInstanceEvents extends events_1.EventsParent {
     constructor(ros) {
         super();
         this.WidgetConfirm = (e) => {
@@ -220,12 +227,14 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
             e.preventDefault();
         };
         this.WidgetSettingsConfirm = (e) => {
+            // widget instance id
+            let widgetInstanceId = parseInt($("input#widgetSettings").val());
             // manage ros data
-            this._WidgetSettingsConfirmSubscriptions();
-            this._WidgetSettingsConfirmRosParams();
-            this._WidgetSettingsConfirmRosServices();
+            this._WidgetSettingsConfirmSubscriptions(widgetInstanceId);
+            this._WidgetSettingsConfirmRosParams(widgetInstanceId);
+            this._WidgetSettingsConfirmRosServices(widgetInstanceId);
             // manage params
-            this._WidgetSettingsConfirmParams();
+            this._WidgetSettingsConfirmParams(widgetInstanceId);
             // frontend action
             this.Frontend.HideWidgetSettings();
             e.preventDefault();
@@ -236,7 +245,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         };
         this.WidgetSettingsRemove = (e) => {
             let widgetInstanceId = parseInt($("#widgetSettings").val());
-            db_ts_1.db.removeWidgetInstance(widgetInstanceId);
+            workspace_1.currentWorkspace.remove(widgetInstanceId, "WidgetInstance");
             $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
             this.Frontend.HideWidgetSettings();
             e.preventDefault();
@@ -295,7 +304,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
             $(".jsWidgetContainer").css("z-index", "20");
         };
         this.Ros = ros;
-        this.Frontend = new frontend_ts_1.Frontend();
+        this.Frontend = new frontend_1.Frontend();
         // Settings
         this.DelegateEvent(".jsWidgetConfirm", "click", this.WidgetConfirm);
         this.DelegateEvent(".jsWidgetDelete", "click", this.WidgetDelete);
@@ -382,7 +391,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         this.Ros.getTopics((topicsResponse) => {
             this.Frontend.UpdateRosTopicSelectors(topicsResponse);
             this._WidgetSettingsRefreshParams();
-        }, () => function (topicsError) {
+        }, (topicsError) => {
             alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
             console.log(topicsError);
         });
@@ -392,7 +401,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         this.Ros.getParams((paramsResponse) => {
             this.Frontend.UpdateRosParamSelectors(paramsResponse);
             this._WidgetSettingsRefreshsServices();
-        }, () => function (paramsError) {
+        }, (paramsError) => {
             alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
             console.log(paramsError);
         });
@@ -402,17 +411,17 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         this.Ros.getServices((servicesResponse) => {
             this.Frontend.UpdateRosServiceSelectors(servicesResponse);
             this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
-        }, () => function (servicesError) {
+            $(".jsRosTopicSelector").removeAttr("disabled");
+        }, (servicesError) => {
             alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
             console.log(servicesError);
         });
     }
     ;
-    _WidgetSettingsConfirmSubscriptions() {
+    _WidgetSettingsConfirmSubscriptions(widgetInstanceId) {
         $(".jsRosTopicSelector").each((index, elem) => {
             let topic_name = $(elem).val();
-            let widgetInstanceId = parseInt($(elem).attr("data-widget-instance-id"));
-            let widgetInstance = db_ts_1.db.getWidgetInstance(widgetInstanceId);
+            let widgetInstance = workspace_1.currentWorkspace.get(widgetInstanceId, "WidgetInstance");
             let topicChangeCallback = $(elem).attr("data-ros-topic-chng");
             widgetInstance.WidgetCallbackClass[topicChangeCallback](topic_name);
             let rosTopicId = $(elem).attr("data-ros-topic-id");
@@ -422,10 +431,9 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         });
     }
     ;
-    _WidgetSettingsConfirmRosParams() {
+    _WidgetSettingsConfirmRosParams(widgetInstanceId) {
         $(".jsRosParamSelector").each((index, elem) => {
-            let widgetInstanceId = parseInt($(elem).attr("data-widget-instance-id"));
-            let widgetInstance = db_ts_1.db.getWidgetInstance(widgetInstanceId);
+            let widgetInstance = workspace_1.currentWorkspace.get(widgetInstanceId, "WidgetInstance");
             let paramChangeCallback = $(elem).attr("data-ros-param-chng");
             let paramSelected = $(elem).val();
             widgetInstance.WidgetCallbackClass[paramChangeCallback](paramSelected);
@@ -436,10 +444,9 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         });
     }
     ;
-    _WidgetSettingsConfirmRosServices() {
+    _WidgetSettingsConfirmRosServices(widgetInstanceId) {
         $(".jsRosServiceSelector").each((index, elem) => {
-            let widgetInstanceId = parseInt($(elem).attr("data-widget-instance-id"));
-            let widgetInstance = db_ts_1.db.getWidgetInstance(widgetInstanceId);
+            let widgetInstance = workspace_1.currentWorkspace.get(widgetInstanceId, "WidgetInstance");
             let serviceChangeCallback = $(elem).attr("data-ros-service-chng");
             let serviceSelected = $(elem).val();
             widgetInstance.WidgetCallbackClass[serviceChangeCallback](serviceSelected);
@@ -449,10 +456,9 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
             $(htmlMeta).attr("data-ros-service-slctd", serviceSelected);
         });
     }
-    _WidgetSettingsConfirmParams() {
+    _WidgetSettingsConfirmParams(widgetInstanceId) {
         $(".jsWidgetParam").each((index, elem) => {
-            let widgetInstanceId = parseInt($(elem).attr("data-widget-instance-id"));
-            let widgetInstance = db_ts_1.db.getWidgetInstance(widgetInstanceId);
+            let widgetInstance = workspace_1.currentWorkspace.get(widgetInstanceId, "WidgetInstance");
             let varName = $(elem).attr("data-widget-param-var");
             let varValue = $(elem).val();
             widgetInstance.WidgetCallbackClass[varName] = varValue;
@@ -470,7 +476,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         let size = this._ApplySizeBoundaries({ x: width + d.x, y: height + d.y });
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
-        let widgetInstance = db_ts_1.db.getWidgetInstance(this.widgetInstanceId);
+        let widgetInstance = workspace_1.currentWorkspace.get(this.widgetInstanceId, "WidgetInstance");
         if (widgetInstance.WidgetCallbackClass.clbkResized != undefined) {
             widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
         }
@@ -505,7 +511,7 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
         let pos = this._ApplyPositionBoundaries({ x: left + d.x, y: top + d.y });
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
         $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
-        let widgetInstance = db_ts_1.db.getWidgetInstance(this.widgetInstanceId);
+        let widgetInstance = workspace_1.currentWorkspace.get(this.widgetInstanceId, "WidgetInstance");
         if (widgetInstance.WidgetCallbackClass.clbkMoved != undefined) {
             widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
         }
@@ -541,14 +547,15 @@ class WidgetInstanceEvents extends events_ts_1.EventsParent {
 }
 exports.WidgetInstanceEvents = WidgetInstanceEvents;
 
-},{"../super/db.ts":13,"../super/frontend.ts":15,"./events.ts":1}],6:[function(require,module,exports){
+},{"../model/workspace":13,"../super/frontend":15,"./events":1}],6:[function(require,module,exports){
 "use strict";
-const storage_ts_1 = require("../super/storage.ts");
-const db_ts_1 = require("../super/db.ts");
-const lightbox_ts_1 = require("../super/lightbox.ts");
-const events_ts_1 = require("./events.ts");
-const workspace_ts_1 = require("../model/workspace.ts");
-class WorkspaceEvents extends events_ts_1.EventsParent {
+const storage_1 = require("../super/storage");
+// import {db} from "../super/db.ts";
+const lightbox_1 = require("../super/lightbox");
+const events_1 = require("./events");
+const serialized_workspace_1 = require("../model/serialized_workspace");
+const workspace_1 = require("../model/workspace");
+class WorkspaceEvents extends events_1.EventsParent {
     constructor() {
         super();
         this.OpenWorkspace = (e) => {
@@ -570,7 +577,7 @@ class WorkspaceEvents extends events_ts_1.EventsParent {
         };
         this.RemoveWorkspace = (e) => {
             let workspace_id = parseInt($(e.toElement).attr("data-workspace-id"));
-            let workspace = storage_ts_1.storage.GetWorkspace(workspace_id);
+            let workspace = storage_1.storage.GetWorkspace(workspace_id);
             this._RemoveWorkspace(workspace);
             e.preventDefault();
         };
@@ -580,24 +587,25 @@ class WorkspaceEvents extends events_ts_1.EventsParent {
         this.DelegateEvent(".jsRemoveWorkspace", "click", this.RemoveWorkspace);
     }
     _OpenWorkspace() {
-        let workspaces = storage_ts_1.storage.GetWorkspaces();
+        let workspaces = storage_1.storage.GetWorkspaces();
         let html = MyApp.templates.workspaceList(workspaces);
-        lightbox_ts_1.lightbox.ShowLightbox(html);
+        lightbox_1.lightbox.ShowLightbox(html);
     }
     _SaveWorkspace() {
-        let workspace = new workspace_ts_1.Workspace();
-        workspace = storage_ts_1.storage.NewWorkspace($("#jsWorkspaceName").val());
-        storage_ts_1.storage.SaveWorkspace(workspace);
+        let workspace = new serialized_workspace_1.SerializedWorkspace();
+        workspace = storage_1.storage.NewWorkspace($("#jsWorkspaceName").val());
+        workspace.data = workspace_1.currentWorkspace.extractData();
+        storage_1.storage.SaveWorkspace(workspace);
     }
     _LoadWorkspace(workspace_id) {
-        let workspace = storage_ts_1.storage.GetWorkspace(workspace_id);
-        db_ts_1.db.loadWorkspace(workspace);
-        lightbox_ts_1.lightbox.CloseLightbox();
+        let workspace = storage_1.storage.GetWorkspace(workspace_id);
+        workspace_1.currentWorkspace.loadWorkspace(workspace);
+        lightbox_1.lightbox.CloseLightbox();
     }
     _RemoveWorkspace(workspace) {
         if (window.confirm("Are you sure you want to remove workspace #" + workspace.id + " (" + workspace.id + ") ?")) {
-            let html = MyApp.templates.workspaceList(storage_ts_1.storage.RemoveWorkspace(workspace.id));
-            lightbox_ts_1.lightbox.UpdateLightbox(html);
+            let html = MyApp.templates.workspaceList(storage_1.storage.RemoveWorkspace(workspace.id));
+            lightbox_1.lightbox.UpdateLightbox(html);
         }
         else {
         }
@@ -605,83 +613,37 @@ class WorkspaceEvents extends events_ts_1.EventsParent {
 }
 exports.WorkspaceEvents = WorkspaceEvents;
 
-},{"../model/workspace.ts":12,"../super/db.ts":13,"../super/lightbox.ts":17,"../super/storage.ts":19,"./events.ts":1}],7:[function(require,module,exports){
+},{"../model/serialized_workspace":9,"../model/workspace":13,"../super/lightbox":17,"../super/storage":19,"./events":1}],7:[function(require,module,exports){
 /// <reference path="./typings/tsd.d.ts" />
 "use strict";
 // Events
-const tab_ts_1 = require("./events/tab.ts");
-const widget_ts_1 = require("./events/widget.ts");
-const widget_instance_ts_1 = require("./events/widget_instance.ts");
-const ros_ts_1 = require("./events/ros.ts");
-const workspace_ts_1 = require("./events/workspace.ts");
+const tab_1 = require("./events/tab");
+const widget_1 = require("./events/widget");
+const widget_instance_1 = require("./events/widget_instance");
+const ros_1 = require("./events/ros");
+const workspace_1 = require("./events/workspace");
 // Super
-const db_ts_1 = require("./super/db.ts");
-const lightbox_ts_1 = require("./super/lightbox.ts");
-const storage_ts_1 = require("./super/storage.ts");
-const frontend_ts_1 = require("./super/frontend.ts");
-exports.ros = new ROSLIB.Ros("");
+const lightbox_1 = require("./super/lightbox");
+const workspace_2 = require("./model/workspace");
 function init() {
-    window["ros"] = exports.ros;
-    insertWidgets();
-    events(exports.ros);
     $(document).ready(function () {
-        lightbox_ts_1.lightbox.CreateLightbox();
+        var ros = new ROSLIB.Ros("");
+        window["ros"] = ros;
+        events(ros);
+        lightbox_1.lightbox.CreateLightbox();
+        workspace_2.currentWorkspace.initWorkspace();
     });
-    storage_ts_1.storage.Init();
 }
 function events(ros) {
-    let tabEvents = new tab_ts_1.TabEvents();
-    let widgetEvents = new widget_ts_1.WidgetEvents(ros);
-    let widgetInstanceEvents = new widget_instance_ts_1.WidgetInstanceEvents(ros);
-    let rosEvents = new ros_ts_1.RosEvents(ros);
-    let workspace = new workspace_ts_1.WorkspaceEvents();
-}
-function insertWidgets() {
-    // load list of available widgets
-    let count = 1;
-    let widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "Topic Viewer";
-    widget.alias = "TopicViewer";
-    widget.url = "./widgets/topic_viewer";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "Param Viewer";
-    widget.alias = "ParamViewer";
-    widget.url = "./widgets/param_viewer";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "Service Viewer";
-    widget.alias = "ServiceViewer";
-    widget.url = "./widgets/service_viewer";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "Google Maps GPS Viewer";
-    widget.alias = "GoogleMapsGpsViewer";
-    widget.url = "./widgets/gmaps_gps";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "Camera Viewer";
-    widget.alias = "CameraViewer";
-    widget.url = "./widgets/camera_viewer";
-    count++;
-    widget = db_ts_1.db.newWidget();
-    widget.id = count;
-    widget.name = "LaserScan Viewer";
-    widget.alias = "LaserScanViewer";
-    widget.url = "./widgets/laser_scan_viewer";
-    count++;
-    // insert Widgets JS and CSS tags
-    let frontend = new frontend_ts_1.Frontend();
-    frontend.InsertWidgetsTags();
+    let tabEvents = new tab_1.TabEvents();
+    let widgetEvents = new widget_1.WidgetEvents(ros);
+    let widgetInstanceEvents = new widget_instance_1.WidgetInstanceEvents(ros);
+    let rosEvents = new ros_1.RosEvents(ros);
+    let workspace = new workspace_1.WorkspaceEvents();
 }
 init();
 
-},{"./events/ros.ts":2,"./events/tab.ts":3,"./events/widget.ts":4,"./events/widget_instance.ts":5,"./events/workspace.ts":6,"./super/db.ts":13,"./super/frontend.ts":15,"./super/lightbox.ts":17,"./super/storage.ts":19}],8:[function(require,module,exports){
+},{"./events/ros":2,"./events/tab":3,"./events/widget":4,"./events/widget_instance":5,"./events/workspace":6,"./model/workspace":13,"./super/lightbox":17}],8:[function(require,module,exports){
 "use strict";
 class ROSWeb {
     constructor() {
@@ -692,183 +654,212 @@ exports.ROSWeb = ROSWeb;
 
 },{}],9:[function(require,module,exports){
 "use strict";
+class SerializedWorkspace {
+}
+exports.SerializedWorkspace = SerializedWorkspace;
+
+},{}],10:[function(require,module,exports){
+"use strict";
+const workspace_1 = require("./workspace");
+const frontend_1 = require("../super/frontend");
 class Tab {
     constructor(name) {
-        if (name) {
-            this.name = name;
-        }
+        workspace_1.currentWorkspace.create(this);
+        this.name = "Tab #" + this.id;
+        frontend_1.frontend.newTab(this);
+        this.setActive();
+    }
+    setActive() {
+        this.active = true;
+        frontend_1.frontend.selectTab(this);
     }
 }
 exports.Tab = Tab;
 
-},{}],10:[function(require,module,exports){
+},{"../super/frontend":15,"./workspace":13}],11:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
+const frontend_1 = require("../super/frontend");
+const workspace_1 = require("./workspace");
 class Widget {
-    constructor() {
+    constructor(name, alias, url) {
+        this.name = name;
+        this.url = url;
+        this.alias = alias;
+        workspace_1.currentWorkspace.create(this);
+        frontend_1.frontend.newWidget(this);
     }
 }
 exports.Widget = Widget;
 
-},{}],11:[function(require,module,exports){
+},{"../super/frontend":15,"./workspace":13}],12:[function(require,module,exports){
 "use strict";
-const instance_loader_ts_1 = require("../super/instance_loader.ts");
+const frontend_1 = require("../super/frontend");
+const workspace_1 = require("./workspace");
+const instance_loader_1 = require("../super/instance_loader");
 class WidgetInstance {
-    constructor(id, widget) {
-        this.id = id;
-        this.Widget = widget;
-        this.Subscriptions = new Array();
-        this.position = { x: 0, y: 0 };
-        this.size = { x: 0, y: 0 };
-        this.WidgetCallbackClass = instance_loader_ts_1.instance_loader.getInstance(window, "Widget" + this.Widget.alias.charAt(0).toUpperCase() + this.Widget.alias.slice(1), this.id);
+    constructor(widget, tab, position = { x: 0, y: 0 }, size = { x: 0, y: 0 }) {
+        this.widget_id = widget.id;
+        this.tab_id = tab.id;
+        this.position = position;
+        this.size = size;
+        workspace_1.currentWorkspace.create(this);
+        this.WidgetCallbackClass = instance_loader_1.instance_loader.getInstance(window, "Widget" + widget.alias, this.id);
+        frontend_1.frontend.insertWidgetInstance(this, this.WidgetCallbackClass["clbkCreated"]);
     }
 }
 exports.WidgetInstance = WidgetInstance;
 
-},{"../super/instance_loader.ts":16}],12:[function(require,module,exports){
+},{"../super/frontend":15,"../super/instance_loader":16,"./workspace":13}],13:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
+// model
+const tab_1 = require("./tab");
+const widget_1 = require("./widget");
+const widget_instance_1 = require("./widget_instance");
+// super
+const frontend_1 = require("../super/frontend");
+var className = "";
+function genericFilter(list, index, array) {
+    return (list.object == className);
+}
 class Workspace {
     constructor() {
+        this._clearLists();
+        this._clearCounters();
+    }
+    initWorkspace() {
+        this._initWorkspace();
+    }
+    _initWorkspace() {
+        new widget_1.Widget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
+        new widget_1.Widget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
+        new widget_1.Widget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+        new widget_1.Widget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
+        new widget_1.Widget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
+        new widget_1.Widget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+    }
+    _clearWorkspace() {
+        frontend_1.frontend.ClearWorkspace();
+        this._clearLists();
+        this._clearCounters();
+        this._initWorkspace();
+    }
+    _clearLists() {
+        this.Lists = new Array({ object: "Tab", list: new Array() }, { object: "Widget", list: new Array() }, { object: "WidgetInstance", list: new Array() });
+    }
+    _clearCounters() {
+        this.Counters = new Array({ object: "Tab", counter: 0 }, { object: "Widget", counter: 0 }, { object: "WidgetInstance", counter: 0 });
+    }
+    loadWorkspace(workspace) {
+        let data = JSON.parse(workspace.data);
+        this._clearWorkspace();
+        data.Lists.forEach((glist, i) => {
+            if (glist.object == "Tab") {
+                glist.list.forEach((tab, j) => {
+                    new tab_1.Tab(tab.name);
+                });
+            }
+        });
+        data.Lists.forEach((glist, i) => {
+            if (glist.object == "WidgetInstance") {
+                glist.list.forEach((widgetInstance, j) => {
+                    let widget = this.get(widgetInstance.widget_id, "Widget");
+                    let tab = this.get(widgetInstance.tab_id, "Tab");
+                    let createdWidgetInstance = new widget_instance_1.WidgetInstance(widget, tab, widgetInstance.position, widgetInstance.size);
+                });
+            }
+        });
+        this.Counters = data.Counters;
+    }
+    extractData() {
+        let data = { Lists: this.Lists, Counters: this.Counters };
+        data.Lists.forEach((list, index) => {
+            switch (list.object) {
+                case "WidgetInstance":
+                    list.list.forEach((widgetInstance, index) => {
+                        widgetInstance["WidgetCallbackClass"] = null;
+                    });
+                    break;
+            }
+        });
+        let dataString = JSON.stringify(data);
+        return dataString;
+    }
+    getCounter() {
+        let counter = this.Counters.filter(genericFilter);
+        if (counter.length != 1) {
+            throw new Error("Workspace list searching error");
+        }
+        return counter[0];
+    }
+    getList(aClassName) {
+        if (aClassName != undefined)
+            className = aClassName;
+        let list = this.Lists.filter(genericFilter);
+        if (list.length != 1) {
+            throw new Error("Workspace list searching error");
+        }
+        return list[0].list;
+    }
+    create(object) {
+        let aClassName = object.constructor["name"];
+        className = aClassName;
+        let counter = this.getCounter();
+        let list = this.getList();
+        object.id = ++counter.counter;
+        list.push(object);
+    }
+    get(id, aClassName) {
+        className = aClassName;
+        let list = this.Lists.filter(genericFilter)[0].list;
+        function getFilter(element, index, array) {
+            return element.id == id;
+        }
+        ;
+        let filteredList = list.filter(getFilter);
+        if (filteredList.length != 1) {
+            console.log(list);
+            throw new Error("No unique " + aClassName + " found with id equals to " + id + " on the list above");
+        }
+        return filteredList[0];
+    }
+    getCurrentTab() {
+        className = "Tab";
+        let list = this.Lists.filter(genericFilter)[0].list;
+        let tab;
+        if (list.length == 0) {
+            tab = new tab_1.Tab();
+        }
+        function activeTabFilter(tab, index, array) {
+            return tab.active == true;
+        }
+        let filteredList = list.filter(activeTabFilter);
+        tab = filteredList[0];
+        return tab;
+    }
+    remove(id, aClassName) {
+        className = aClassName;
+        let list = this.Lists.filter(genericFilter)[0].list;
+        let toRemove = null;
+        list.forEach((obj, index) => {
+            if (obj.id == id) {
+                toRemove = index;
+            }
+        });
+        if (toRemove == null) {
+            console.log(list);
+            throw new Error("No unique " + aClassName + " found with id equals to " + id + " on the list above");
+        }
+        else {
+            list.splice(toRemove, 1);
+        }
     }
 }
 exports.Workspace = Workspace;
+exports.currentWorkspace = new Workspace();
 
-},{}],13:[function(require,module,exports){
-"use strict";
-const tab_ts_1 = require("../model/tab.ts");
-const widget_ts_1 = require("../model/widget.ts");
-const widget_instance_ts_1 = require("../model/widget_instance.ts");
-const frontend_ts_1 = require("../super/frontend.ts");
-class Db {
-    constructor() {
-        this.Frontend = new frontend_ts_1.Frontend();
-        this.TabCounter = 0;
-        this.Tabs = new Array();
-        this.WidgetCounter = 0;
-        this.Widgets = new Array();
-        this.WidgetInstanceCounter = 0;
-        this.WidgetInstances = new Array();
-    }
-    saveAll() {
-    }
-    // Loading workspace
-    loadWorkspace(workspace) {
-        this.TabCounter = workspace.db.TabCounter;
-        this.Tabs = workspace.db.Tabs;
-        this.WidgetInstanceCounter = 0;
-        this.WidgetInstances = new Array();
-        this._ClearWorkspace();
-        this._GenerateWorkspace(workspace.db.WidgetInstances);
-    }
-    _ClearWorkspace() {
-        $(".jsTab, .jsTabContent").remove();
-    }
-    _GenerateWorkspace(widgetInstances) {
-        this.Tabs.forEach((tab, index) => {
-            this.Frontend.newTab(tab);
-            this.Frontend.selectTab(tab);
-            widgetInstances.forEach((widgetInstance, index) => {
-                if (widgetInstance.Tab.id == tab.id) {
-                    let widget = exports.db.getWidgetByAlias(widgetInstance.Widget.alias);
-                    let newWidgetInstance = exports.db.newWidgetInstance(widget);
-                    this.Frontend.insertWidgetInstance(newWidgetInstance, () => {
-                        newWidgetInstance.WidgetCallbackClass.clbkCreated();
-                        this.Frontend.setWidgetInstancePosition(newWidgetInstance, widgetInstance.position);
-                        this.Frontend.setWidgetInstanceSize(newWidgetInstance, widgetInstance.size);
-                    });
-                }
-            });
-        });
-    }
-    newTab() {
-        let tab = new tab_ts_1.Tab();
-        tab.id = ++this.TabCounter;
-        this.Tabs.push(tab);
-        return tab;
-    }
-    getTab(id) {
-        for (let tab of this.Tabs) {
-            if (tab.id == id)
-                return tab;
-        }
-        return null;
-    }
-    removeTab(tab_id) {
-        let index = 0;
-        for (let tab of this.Tabs) {
-            if (tab.id == tab_id) {
-                this.Tabs.splice(index, 1);
-                return true;
-            }
-            index++;
-        }
-        return false;
-    }
-    newWidget() {
-        let widget = new widget_ts_1.Widget();
-        widget.id = ++this.WidgetCounter;
-        this.Widgets.push(widget);
-        return widget;
-    }
-    setWidget(widget) {
-        return;
-    }
-    getWidget(id) {
-        for (let widget of this.Widgets) {
-            if (widget.id == id)
-                return widget;
-        }
-        return null;
-    }
-    getWidgetByAlias(widgetAlias) {
-        let widget = new widget_ts_1.Widget();
-        let toReturn = null;
-        this.Widgets.forEach(widget => {
-            if (widget.alias === widgetAlias) {
-                toReturn = widget;
-            }
-        });
-        if (toReturn === null)
-            throw "Error: Widget alias not found!";
-        return toReturn;
-    }
-    removeWidget(widget_id) {
-        let index = 0;
-        for (let widget of this.Widgets) {
-            if (widget.id == widget_id) {
-                this.Widgets.splice(index, 1);
-                return true;
-            }
-            index++;
-        }
-        return false;
-    }
-    newWidgetInstance(widget) {
-        let id = ++this.WidgetInstanceCounter;
-        let widgetInstance = new widget_instance_ts_1.WidgetInstance(id, widget);
-        this.WidgetInstances.push(widgetInstance);
-        return widgetInstance;
-    }
-    getWidgetInstance(id) {
-        for (let widgetInstance of this.WidgetInstances) {
-            if (widgetInstance.id == id)
-                return widgetInstance;
-        }
-        return null;
-    }
-    removeWidgetInstance(widgetInstance_id) {
-        let index = 0;
-        function removeId(widgetInstance) {
-            return widgetInstance.id != widgetInstance_id;
-        }
-        this.WidgetInstances = this.WidgetInstances.filter(removeId);
-    }
-}
-exports.Db = Db;
-exports.db = new Db();
-
-},{"../model/tab.ts":9,"../model/widget.ts":10,"../model/widget_instance.ts":11,"../super/frontend.ts":15}],14:[function(require,module,exports){
+},{"../super/frontend":15,"./tab":10,"./widget":11,"./widget_instance":12}],14:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 class Design {
@@ -909,20 +900,20 @@ exports.Design = Design;
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Models
-const tab_ts_1 = require("../model/tab.ts");
+const tab_1 = require("../model/tab");
+const workspace_1 = require("../model/workspace");
 // Super classes
-const names_ts_1 = require("./names.ts");
-const trigger_ts_1 = require("./trigger.ts");
-const db_ts_1 = require("./db.ts");
+const names_1 = require("./names");
+const trigger_1 = require("./trigger");
 class Frontend {
     constructor() {
         this.tabContainerId = "header2";
         this.tabContentContainerId = "tabs";
-        this.Names = new names_ts_1.Names();
-        this.Trigger = new trigger_ts_1.Trigger();
+        this.Names = new names_1.Names();
+        this.Trigger = new trigger_1.Trigger();
     }
     InsertWidgetsTags() {
-        db_ts_1.db.Widgets.forEach((value, index, array) => {
+        workspace_1.currentWorkspace.getList().forEach((value, index, array) => {
             $("body").append("<script type='text/javascript' src='" + value.url.slice(2) + "/main.js" + "'></script>");
             // $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
         });
@@ -943,16 +934,7 @@ class Frontend {
             tab.name = "tab #" + tab.id;
             return tab;
         }
-        return new tab_ts_1.Tab();
-    }
-    newTab(tab) {
-        var tabHtml = MyApp.templates.tab(tab);
-        var tabContentHtml = MyApp.templates.tabContent(tab);
-        // insert tab
-        $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
-        //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
-        // insert tab content
-        document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
+        return new tab_1.Tab();
     }
     closeTab(tab_id) {
         $(".jsTab[data-tab-id='" + tab_id + "']").remove();
@@ -971,26 +953,22 @@ class Frontend {
         this.ActiveTabId = tab.id;
     }
     showWidgetsMenu() {
-        this.widgetsList(db_ts_1.db.Widgets);
         $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
-    }
-    widgetsList(list) {
-        var html = MyApp.templates.widgetList(list);
-        $("." + this.Names.classWidgetsList).html(html);
     }
     LoadWidgetContentAndInsert(widgetInstance, afterContentCallback) {
         this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
     }
     _loadWidgetContentAndInsert(widgetInstance, afterContentCallback) {
-        let currentTabId = this._getForcedCurrentTabId();
+        let tabId = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
         let fn = this._insertWidget;
+        let widget = workspace_1.currentWorkspace.get(widgetInstance.widget_id, "Widget");
         $.ajax({
-            url: widgetInstance.Widget.url.slice(2) + "/index.hbs",
+            url: widget.url.slice(2) + "/index.hbs",
             beforeSend: function () {
             },
             success: function (data) {
-                MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
-                fn(widgetInstance, currentTabId, afterContentCallback);
+                MyApp.templates._widgetsTemplates[widget.alias] = Handlebars.compile(data);
+                fn(widgetInstance, tabId, afterContentCallback);
             },
             error: function (e1, e2) {
                 throw "Widget file not found!";
@@ -998,32 +976,35 @@ class Frontend {
         });
     }
     insertWidgetInstance(widgetInstance, afterContentCallback) {
+        let widget = workspace_1.currentWorkspace.get(widgetInstance.widget_id, "Widget");
         if (MyApp.templates._widgetsTemplates === undefined) {
             MyApp.templates._widgetsTemplates = [];
         }
-        if (MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
+        if (MyApp.templates._widgetsTemplates[widget.alias] === undefined) {
             this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
         }
         else {
-            let currentTabId = this._getForcedCurrentTabId();
-            this._insertWidget(widgetInstance, currentTabId, afterContentCallback);
+            let tabId = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
+            this._insertWidget(widgetInstance, tabId, afterContentCallback);
         }
     }
     _insertWidget(widgetInstance, currentTabId, afterContentCallback) {
         let content, html;
-        content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-        let width = $(content).attr("data-width") + "px";
-        let height = $(content).attr("data-height") + "px";
-        let left, top;
-        left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
-        top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
-        widgetInstance.position = { x: parseInt(left), y: parseInt(top) };
-        widgetInstance.Tab = db_ts_1.db.getTab(currentTabId);
-        html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
+        let widget = workspace_1.currentWorkspace.get(widgetInstance.widget_id, "Widget");
+        content = MyApp.templates._widgetsTemplates[widget.alias]();
+        let width = parseInt($(content).attr("data-width"));
+        let height = parseInt($(content).attr("data-height"));
+        let left = $(".jsTabContent.jsShow").width() / 2;
+        let top = $(".jsTabContent.jsShow").height() / 2;
+        if (widgetInstance.position.x == 0 && widgetInstance.position.y == 0) {
+            widgetInstance.position = { x: left, y: top };
+        }
+        if (widgetInstance.size.x == 0 && widgetInstance.size.y == 0) {
+            widgetInstance.size = { x: width, y: height };
+        }
+        html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: widgetInstance.position.x + "px", top: widgetInstance.position.y + "px", width: widgetInstance.size.x + "px", height: widgetInstance.size.y + "px" });
         $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
-        widgetInstance.size.x = parseInt($(html).find(".ros-widget").attr("data-width"));
-        widgetInstance.size.y = parseInt($(html).find(".ros-widget").attr("data-height"));
-        let trigger = new trigger_ts_1.Trigger();
+        let trigger = new trigger_1.Trigger();
         trigger.widgetSettings(widgetInstance.id);
         if (afterContentCallback != undefined) {
             afterContentCallback();
@@ -1066,8 +1047,8 @@ class Frontend {
         var html = '';
         $(".jsRosTopicSelector").each((i, element) => {
             let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
-            let elementMeta = $(elementWidgetInstance).find("meta[data-widget-topic-id='" + $(element).attr("data-widget-topic-id") + "']");
-            let subscribedTopic = $(elementMeta).attr("data-subscribed-topic");
+            let elementMeta = $(elementWidgetInstance).find("meta[data-ros-topic-id='" + $(element).attr("data-ros-topic-id") + "']");
+            let subscribedTopic = $(elementMeta).attr("data-ros-topic-slctd");
             html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe --', value: "" });
             let strTypes = $(element).attr("data-ros-topic-type");
             let types = (strTypes == "") ? [] : strTypes.split("|");
@@ -1111,12 +1092,34 @@ class Frontend {
         });
     }
     // Update Workspace Methods
-    UpdateWorkspace(db) {
+    ClearWorkspace() {
+        $(".jsWidgetsList").html("");
+        $(".jsTab").remove();
+        $("#tabs").html("");
+    }
+    // Model frontend
+    newTab(tab) {
+        var tabHtml = MyApp.templates.tab(tab);
+        var tabContentHtml = MyApp.templates.tabContent(tab);
+        // insert tab
+        $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
+        //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
+        // insert tab content
+        document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
+    }
+    newWidget(widget) {
+        let html = MyApp.templates.widgetItem(widget);
+        $(".jsWidgetsList").append(html);
+        $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
+    }
+    newWidgetInstance(widgetInstance) {
+        this.insertWidgetInstance(widgetInstance, () => { });
     }
 }
 exports.Frontend = Frontend;
+exports.frontend = new Frontend();
 
-},{"../model/tab.ts":9,"./db.ts":13,"./names.ts":18,"./trigger.ts":20}],16:[function(require,module,exports){
+},{"../model/tab":10,"../model/workspace":13,"./names":18,"./trigger":20}],16:[function(require,module,exports){
 "use strict";
 class InstanceLoader {
     getInstance(context, name, ...args) {
@@ -1179,14 +1182,13 @@ exports.Names = Names;
 
 },{}],19:[function(require,module,exports){
 "use strict";
-const workspace_ts_1 = require("../model/workspace.ts");
-const rosweb_ts_1 = require("../model/rosweb.ts");
-const db_ts_1 = require("./db.ts");
+const rosweb_1 = require("../model/rosweb");
+const serialized_workspace_1 = require("../model/serialized_workspace");
 class Storage {
     constructor() {
         this.count = 0;
         if (localStorage["ROSWeb"] == undefined) {
-            let rosweb = new rosweb_ts_1.ROSWeb();
+            let rosweb = new rosweb_1.ROSWeb();
             localStorage.setItem("ROSWeb", JSON.stringify(rosweb));
             console.log("creating rosweb localstorage");
         }
@@ -1217,20 +1219,20 @@ class Storage {
     NewWorkspace(name) {
         let id;
         let workspaces = this.GetWorkspaces();
+        function sortByIdDesc(obj1, obj2) {
+            if (obj1.id > obj2.id)
+                return -1;
+            if (obj1.id < obj2.id)
+                return 1;
+        }
         if (workspaces.length == 0) {
             id = 1;
         }
         else {
-            function sortByIdDesc(obj1, obj2) {
-                if (obj1.id > obj2.id)
-                    return -1;
-                if (obj1.id < obj2.id)
-                    return 1;
-            }
             let lastWorkspace = workspaces.sort(sortByIdDesc)[0];
             id = lastWorkspace.id + 1;
         }
-        let workspace = new workspace_ts_1.Workspace();
+        let workspace = new serialized_workspace_1.SerializedWorkspace();
         workspace.id = id;
         workspace.name = name;
         return workspace;
@@ -1238,12 +1240,6 @@ class Storage {
     // Save
     SaveWorkspace(workspace) {
         let rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
-        workspace.db = {
-            Tabs: db_ts_1.db.Tabs,
-            TabCounter: db_ts_1.db.TabCounter,
-            WidgetInstances: db_ts_1.db.WidgetInstances,
-            WidgetInstanceCounter: db_ts_1.db.WidgetInstanceCounter
-        };
         rosweb.Workspaces.push(workspace);
         localStorage.setItem("ROSWeb", JSON.stringify(rosweb));
     }
@@ -1259,13 +1255,13 @@ class Storage {
     // Remove
     RemoveWorkspace(id) {
         let rosweb;
-        let updatedRosweb = new rosweb_ts_1.ROSWeb();
+        let updatedRosweb = new rosweb_1.ROSWeb();
+        function filterById(workspace) {
+            return workspace.id != id;
+        }
         try {
             rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
             updatedRosweb.Workspaces = new Array();
-            function filterById(workspace) {
-                return workspace.id != id;
-            }
             updatedRosweb.Workspaces = rosweb.Workspaces.filter(filterById);
             localStorage.setItem("ROSWeb", JSON.stringify(updatedRosweb));
             return updatedRosweb.Workspaces;
@@ -1277,7 +1273,7 @@ class Storage {
 }
 exports.storage = new Storage();
 
-},{"../model/rosweb.ts":8,"../model/workspace.ts":12,"./db.ts":13}],20:[function(require,module,exports){
+},{"../model/rosweb":8,"../model/serialized_workspace":9}],20:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 class Trigger {

@@ -25,7 +25,7 @@ Work = function () {
         if (i == max) break;
         angle = 180 * (message.angle_min + message.angle_increment * i) / Math.PI;
         dist = 140 - (150 * (message.ranges[i] / message.range_max));
-        point_attr = { cx: 150, cy: dist, r: 2, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
+        point_attr = { cx: 150, cy: dist, r: 1, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
         points.push(point_attr);
       }
     } else {
