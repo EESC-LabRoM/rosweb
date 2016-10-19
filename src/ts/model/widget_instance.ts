@@ -16,7 +16,6 @@ export class WidgetInstance {
   public size: Geometry.Point2D;
 
   constructor(widget: Widget, tab: Tab, position: Geometry.Point2D = {x:0, y:0}, size: Geometry.Point2D = {x:0, y:0}) {
-    console.log(tab);
     this.widget_id = widget.id;
     this.tab_id = tab.id;
     this.position = position;
