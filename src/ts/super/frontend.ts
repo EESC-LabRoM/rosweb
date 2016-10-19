@@ -126,16 +126,24 @@ export class Frontend {
     let content: string, html: string;
     let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     content = MyApp.templates._widgetsTemplates[widget.alias]();
-    let width: string = $(content).attr("data-width") + "px";
-    let height: string = $(content).attr("data-height") + "px";
-    let left: string, top: string;
-    left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
-    top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
-    widgetInstance.position = { x: parseInt(left), y: parseInt(top) };
-    html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
+
+    let width: number = parseInt($(content).attr("data-width"));
+    let height: number = parseInt($(content).attr("data-height"));
+    let left: number = $(".jsTabContent.jsShow").width() / 2;
+    let top: number = $(".jsTabContent.jsShow").height() / 2;
+
+    if (widgetInstance.position.x == 0 && widgetInstance.position.y == 0) {
+      console.log("set default position");
+      widgetInstance.position = { x: left, y: top };
+    }
+    if (widgetInstance.size.x == 0 && widgetInstance.size.y == 0) {
+      console.log("set default size");
+      widgetInstance.size = { x: width, y: height };
+    }
+
+    html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: widgetInstance.position.x + "px", top: widgetInstance.position.y + "px", width: widgetInstance.size.x + "px", height: widgetInstance.size.y + "px" });
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
-    widgetInstance.size.x = parseInt($(html).find(".ros-widget").attr("data-width"));
-    widgetInstance.size.y = parseInt($(html).find(".ros-widget").attr("data-height"));
+
     let trigger = new Trigger();
     trigger.widgetSettings(widgetInstance.id);
     if (afterContentCallback != undefined) {

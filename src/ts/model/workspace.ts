@@ -90,7 +90,7 @@ export class Workspace {
         glist.list.forEach((widgetInstance: WidgetInstance, j: number) => {
           let widget: Widget = this.get<Widget>(widgetInstance.widget_id, "Widget");
           let tab: Tab = this.get<Tab>(widgetInstance.tab_id, "Tab");
-          new WidgetInstance(widget, tab);
+          let createdWidgetInstance = new WidgetInstance(widget, tab, widgetInstance.position, widgetInstance.size);
         });
       }
     });
