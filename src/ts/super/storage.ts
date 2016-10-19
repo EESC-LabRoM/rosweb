@@ -1,6 +1,5 @@
-import {Workspace} from "../model/workspace.ts";
-import {ROSWeb} from "../model/rosweb.ts";
-// import {db} from "./db.ts";
+import { Workspace } from "../model/workspace";
+import { ROSWeb } from "../model/rosweb";
 
 class Storage {
 
@@ -42,13 +41,13 @@ class Storage {
   public NewWorkspace(name: string): Workspace {
     let id: number;
     let workspaces: Array<Workspace> = this.GetWorkspaces();
+    function sortByIdDesc(obj1: Workspace, obj2: Workspace) {
+      if (obj1.id > obj2.id) return -1;
+      if (obj1.id < obj2.id) return 1;
+    }
     if (workspaces.length == 0) {
       id = 1;
     } else {
-      function sortByIdDesc(obj1: Workspace, obj2: Workspace) {
-        if (obj1.id > obj2.id) return -1;
-        if (obj1.id < obj2.id) return 1;
-      }
       let lastWorkspace: Workspace = workspaces.sort(sortByIdDesc)[0];
       id = lastWorkspace.id + 1;
     }
@@ -88,12 +87,12 @@ class Storage {
   public RemoveWorkspace(id: number): Workspace[] {
     let rosweb: ROSWeb;
     let updatedRosweb: ROSWeb = new ROSWeb();
+    function filterById(workspace: Workspace) {
+      return workspace.id != id;
+    }
     try {
       rosweb = JSON.parse(localStorage.getItem("ROSWeb"));
       updatedRosweb.Workspaces = new Array<Workspace>();
-      function filterById(workspace: Workspace) {
-        return workspace.id != id;
-      }
       updatedRosweb.Workspaces = rosweb.Workspaces.filter(filterById);
       localStorage.setItem("ROSWeb", JSON.stringify(updatedRosweb));
       return updatedRosweb.Workspaces;

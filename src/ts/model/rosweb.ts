@@ -1,4 +1,4 @@
-import {Workspace} from "./workspace.ts";
+import {Workspace} from "./workspace";
 
 export class ROSWeb {
 

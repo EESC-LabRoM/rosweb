@@ -3,6 +3,7 @@ import {storage} from "../super/storage";
 import {lightbox} from "../super/lightbox";
 import {EventsParent} from "./events";
 import {Workspace} from "../model/workspace";
+import {currentWorkspace} from "../model/workspace";
 
 declare var MyApp: any;
 
