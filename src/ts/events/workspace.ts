@@ -1,8 +1,8 @@
-import {storage} from "../super/storage.ts";
+import {storage} from "../super/storage";
 // import {db} from "../super/db.ts";
-import {lightbox} from "../super/lightbox.ts";
-import {EventsParent} from "./events.ts";
-import {Workspace} from "../model/workspace.ts";
+import {lightbox} from "../super/lightbox";
+import {EventsParent} from "./events";
+import {Workspace} from "../model/workspace";
 
 declare var MyApp: any;
 

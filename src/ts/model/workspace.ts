@@ -42,23 +42,15 @@ export class Workspace {
   public WidgetInstances: WidgetInstance[];
 
   constructor() {
-    this._TabCounter = 0;
-    this._WidgetCounter = 0;
-    this._WidgetInstanceCounter = 0;
-
-    this.Tabs = new Array<Tab>();
-    this.Widgets = new Array<Widget>();
-    this.WidgetInstances = new Array<WidgetInstance>();
-
     this.Lists = new Array<genericList>(
-      { object: "Tab", list: this.Tabs },
-      { object: "Widget", list: this.Widgets },
-      { object: "WidgetInstance", list: this.WidgetInstances }
+      { object: "Tab", list: new Array<Tab>() },
+      { object: "Widget", list: new Array<Widget>() },
+      { object: "WidgetInstance", list: new Array<WidgetInstance>() }
     );
     this.Counters = new Array<genericCounter>(
-      { object: "Tab", counter: this._TabCounter },
-      { object: "Widget", counter: this._WidgetCounter },
-      { object: "WidgetInstance", counter: this._WidgetInstanceCounter }
+      { object: "Tab", counter: 0 },
+      { object: "Widget", counter: 0 },
+      { object: "WidgetInstance", counter: 0 }
     );
   }
 
@@ -84,10 +76,10 @@ export class Workspace {
     className = aClassName;
 
     let counter: genericCounter = this.getCounter<T>();
-    let list: genericList = this.getList<T>();
+    let list: any[] = this.getList<T>().list;
 
     object.id = ++counter.counter;
-    list.list.push(object);
+    list.push(object);
   }
 
   public get<T extends { id: number }>(id: number, aClassName: string): T {
@@ -96,11 +88,10 @@ export class Workspace {
 
     function getFilter(element: T, index: number, array: Array<T>): boolean {
       return element.id == id;
-    }
+    };
     let filteredList: any[] = list.filter(getFilter);
 
     if (filteredList.length != 1) {
-      console.log(filteredList);
       throw new Error("No unique " + aClassName + " found with id equals to " + id + " on the list above");
     }
 
@@ -129,9 +120,11 @@ export class Workspace {
     function removeFilter(obj: { id: number }, index: number, array: Array<T>): boolean {
       return obj.id != id;
     };
-    list = list.filter(removeFilter);
+    let filteredList: any[] = list.filter(removeFilter);
 
-    throw new Error("Object of type T[" + className + "] and id=" + id + " was not found");
+    if (filteredList.length != (list.length - 1)) {
+      throw new Error("No unique " + aClassName + " found with id equals to " + id + " on the list above");
+    }
   }
 
 }
