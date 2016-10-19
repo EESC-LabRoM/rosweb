@@ -163,28 +163,35 @@ export class Workspace {
     let list = this.Lists.filter(genericFilter)[0].list;
     let tab: Tab;
 
-    function activeTabFilter(tab: Tab, index: number, array: Array<Tab>): boolean {
-      return tab.active;
-    }
-
     if (list.length == 0) {
-      (new Tab("Tab #" + (list.length + 1))).setActive();
+      tab = new Tab();
     }
 
-    return list.filter(activeTabFilter)[0];
+    function activeTabFilter(tab: Tab, index: number, array: Array<Tab>): boolean {
+      return tab.active == true;
+    }
+    let filteredList: Tab[] = list.filter(activeTabFilter);
+    tab = filteredList[0];
+
+    return tab;
   }
 
   public remove<T extends { id: number }>(id: number, aClassName: string) {
     className = aClassName;
     let list = this.Lists.filter(genericFilter)[0].list;
 
-    function removeFilter(obj: { id: number }, index: number, array: Array<T>): boolean {
-      return obj.id != id;
-    };
-    let filteredList: any[] = list.filter(removeFilter);
+    let toRemove: number = null;
+    list.forEach((obj: { id: number }, index: number) => {
+      if (obj.id == id) {
+        toRemove = index;
+      }
+    });
 
-    if (filteredList.length != (list.length - 1)) {
+    if (toRemove == null) {
+      console.log(list);
       throw new Error("No unique " + aClassName + " found with id equals to " + id + " on the list above");
+    } else {
+      list.splice(toRemove, 1);
     }
   }
 

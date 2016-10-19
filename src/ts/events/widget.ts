@@ -41,6 +41,7 @@ export class WidgetEvents extends EventsParent {
     let widgetId: number = parseInt($(e.toElement).attr("data-widget-id"));
     let widget: Widget = currentWorkspace.get<Widget>(widgetId, "Widget");
     let tab: Tab = currentWorkspace.getCurrentTab();
+    console.log(tab);
     this._widgetItem(widget, tab);
     this._widgetMenu();
     e.preventDefault();

@@ -10,9 +10,10 @@ export class Tab {
   constructor(name?: string) {
     currentWorkspace.create<Tab>(this);
     this.name = "Tab #" + this.id;
-    this.setActive();
 
     frontend.newTab(this);
+
+    this.setActive();
   }
 
   public setActive() {

@@ -92,7 +92,7 @@ export class Frontend {
     this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
   }
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
-    let currentTabId: number = this._getForcedCurrentTabId();
+    let tabId: number = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
     let fn = this._insertWidget;
     let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     $.ajax({
@@ -102,7 +102,7 @@ export class Frontend {
       },
       success: function (data: string) {
         MyApp.templates._widgetsTemplates[widget.alias] = Handlebars.compile(data);
-        fn(widgetInstance, currentTabId, afterContentCallback);
+        fn(widgetInstance, tabId, afterContentCallback);
       },
       error: function (e1: any, e2: any) {
         throw "Widget file not found!";
@@ -118,8 +118,8 @@ export class Frontend {
     if (MyApp.templates._widgetsTemplates[widget.alias] === undefined) {
       this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
     } else {
-      let currentTabId: number = this._getForcedCurrentTabId();
-      this._insertWidget(widgetInstance, currentTabId, afterContentCallback);
+      let tabId: number = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
+      this._insertWidget(widgetInstance, tabId, afterContentCallback);
     }
   }
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
@@ -238,6 +238,8 @@ export class Frontend {
   // Update Workspace Methods
   public ClearWorkspace() {
     $(".jsWidgetsList").html("");
+    $(".jsTab").remove();
+    $("#tabs").html("");
   }
 
   // Model frontend
@@ -249,8 +251,6 @@ export class Frontend {
     //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
     // insert tab content
     document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
-
-    this.selectTab(tab);
   }
   public newWidget(widget: Widget) {
     let html = MyApp.templates.widgetItem(widget);
