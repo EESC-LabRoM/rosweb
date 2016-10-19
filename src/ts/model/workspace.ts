@@ -30,8 +30,8 @@ export class Workspace {
   public created: Date;
   public modified: Date;
 
-  private Lists: { object: string, list: Array<any> }[];
-  private Counters: { object: string, counter: number }[];
+  private Lists: genericList[];
+  private Counters: genericCounter[];
 
   constructor() {
     this._clearLists();
@@ -51,8 +51,11 @@ export class Workspace {
   }
 
   private _clearWorkspace() {
+    frontend.ClearWorkspace();
+
     this._clearLists();
     this._clearCounters();
+
     this._initWorkspace();
   }
   private _clearLists() {
@@ -71,14 +74,12 @@ export class Workspace {
   }
 
   public loadWorkspace(workspace: SerializedWorkspace): void {
-    let data: {Lists: genericList[], Counters: genericCounter[]} = JSON.parse(workspace.data);
-    
-    console.log(data);
+    let data: { Lists: genericList[], Counters: genericCounter[] } = JSON.parse(workspace.data);
 
     this._clearWorkspace();
 
     data.Lists.forEach((glist: genericList, i: number) => {
-      if(glist.object == "Tab") {
+      if (glist.object == "Tab") {
         glist.list.forEach((tab: Tab, j: number) => {
           new Tab(tab.name);
         });
@@ -86,7 +87,7 @@ export class Workspace {
     });
 
     data.Lists.forEach((glist: genericList, i: number) => {
-      if(glist.object == "WidgetInstance") {
+      if (glist.object == "WidgetInstance") {
         glist.list.forEach((widgetInstance: WidgetInstance, j: number) => {
           let widget: Widget = this.get<Widget>(widgetInstance.widget_id, "Widget");
           let tab: Tab = this.get<Tab>(widgetInstance.tab_id, "Tab");
@@ -99,7 +100,15 @@ export class Workspace {
   }
   public extractData(): string {
     let data: any = { Lists: this.Lists, Counters: this.Counters };
-    console.log(data);
+    data.Lists.forEach((list: genericList, index: number) => {
+      switch (list.object) {
+        case "WidgetInstance":
+          list.list.forEach((widgetInstance: any, index: number) => {
+            widgetInstance["WidgetCallbackClass"] = null;
+          });
+          break;
+      }
+    });
     let dataString: string = JSON.stringify(data);
     return dataString;
   }
@@ -112,7 +121,7 @@ export class Workspace {
     return counter[0];
   }
   public getList<T>(aClassName?: string): any[] {
-    if(aClassName != undefined) className = aClassName;
+    if (aClassName != undefined) className = aClassName;
 
     let list = this.Lists.filter(genericFilter);
 

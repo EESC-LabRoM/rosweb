@@ -133,11 +133,9 @@ export class Frontend {
     let top: number = $(".jsTabContent.jsShow").height() / 2;
 
     if (widgetInstance.position.x == 0 && widgetInstance.position.y == 0) {
-      console.log("set default position");
       widgetInstance.position = { x: left, y: top };
     }
     if (widgetInstance.size.x == 0 && widgetInstance.size.y == 0) {
-      console.log("set default size");
       widgetInstance.size = { x: width, y: height };
     }
 
@@ -238,22 +236,8 @@ export class Frontend {
   }
 
   // Update Workspace Methods
-  public UpdateWorkspace() {
-    console.log(currentWorkspace);
-    let tabs: Tab[] = currentWorkspace.getList<Tab>("Tab");
-    console.log(tabs);
-    let widgetInstances: WidgetInstance[] = currentWorkspace.getList<WidgetInstance>("WidgetInstance");
-    console.log(widgetInstances);
-
-    tabs.forEach((tab: Tab, index: number, array: Tab[]) => {
-      let toInsert: Tab = tab;
-      this.newTab(toInsert);
-    });
-
-    widgetInstances.forEach((widgetInstance: WidgetInstance, index: number, array: WidgetInstance[]) => {
-      let toInsert: WidgetInstance = widgetInstance;
-      this.newWidgetInstance(toInsert);
-    });
+  public ClearWorkspace() {
+    $(".jsWidgetsList").html("");
   }
 
   // Model frontend
