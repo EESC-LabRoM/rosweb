@@ -1,17 +1,17 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Models
-import {Tab} from "../model/tab.ts";
-import {Widget} from "../model/widget.ts";
-import {WidgetInstance} from "../model/widget_instance.ts";
+import { Tab } from "../model/tab";
+import { Widget } from "../model/widget";
+import { WidgetInstance } from "../model/widget_instance";
+import { currentWorkspace } from "../model/workspace";
 
 // Super classes
-import {Names} from "./names.ts";
-import {Trigger} from "./trigger.ts";
-import {db} from "./db.ts";
+import { Names } from "./names";
+import { Trigger } from "./trigger";
 
 // types
-import {Geometry} from "../types/Geometry.ts";
+import { Geometry } from "../types/Geometry";
 
 declare var MyApp: any;
 
@@ -42,7 +42,7 @@ export class Frontend {
   }
 
   public InsertWidgetsTags(): void {
-    db.Widgets.forEach((value: Widget, index: number, array: Widget[]) => {
+    currentWorkspace.getList<Widget>().forEach((value: Widget, index: number, array: Widget[]) => {
       $("body").append("<script type='text/javascript' src='" + value.url.slice(2) + "/main.js" + "'></script>");
       // $("body").append("<link rel='stylesheet' type='text/css' href='" + value.url.slice(2) + "/main.css" + "' />");
     });
@@ -66,16 +66,6 @@ export class Frontend {
     return new Tab();
   }
 
-  public newTab(tab: Tab): void {
-    var tabHtml = MyApp.templates.tab(tab);
-    var tabContentHtml = MyApp.templates.tabContent(tab);
-    // insert tab
-    $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
-    //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
-    // insert tab content
-    document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
-  }
-
   public closeTab(tab_id: number): void {
     $(".jsTab[data-tab-id='" + tab_id + "']").remove();
     $(".jsTabContent[data-tab-id='" + tab_id + "']").remove();
@@ -95,28 +85,24 @@ export class Frontend {
   }
 
   public showWidgetsMenu(): void {
-    this.widgetsList(db.Widgets);
     $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
-  }
-  public widgetsList(list: Array<Widget>): void {
-    var html = MyApp.templates.widgetList(list);
-    $("." + this.Names.classWidgetsList).html(html);
   }
 
   public LoadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
   }
   private _loadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
-    let currentTabId: number = this._getForcedCurrentTabId();
+    let tabId: number = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
     let fn = this._insertWidget;
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     $.ajax({
-      url: widgetInstance.Widget.url.slice(2) + "/index.hbs",
+      url: widget.url.slice(2) + "/index.hbs",
       beforeSend: function () {
 
       },
       success: function (data: string) {
-        MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] = Handlebars.compile(data);
-        fn(widgetInstance, currentTabId, afterContentCallback);
+        MyApp.templates._widgetsTemplates[widget.alias] = Handlebars.compile(data);
+        fn(widgetInstance, tabId, afterContentCallback);
       },
       error: function (e1: any, e2: any) {
         throw "Widget file not found!";
@@ -125,30 +111,37 @@ export class Frontend {
   }
 
   public insertWidgetInstance(widgetInstance: WidgetInstance, afterContentCallback: any): void {
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
     if (MyApp.templates._widgetsTemplates === undefined) {
       MyApp.templates._widgetsTemplates = [];
     }
-    if (MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias] === undefined) {
+    if (MyApp.templates._widgetsTemplates[widget.alias] === undefined) {
       this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
     } else {
-      let currentTabId: number = this._getForcedCurrentTabId();
-      this._insertWidget(widgetInstance, currentTabId, afterContentCallback);
+      let tabId: number = widgetInstance.tab_id != undefined ? widgetInstance.tab_id : this._getForcedCurrentTabId();
+      this._insertWidget(widgetInstance, tabId, afterContentCallback);
     }
   }
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
-    content = MyApp.templates._widgetsTemplates[widgetInstance.Widget.alias]();
-    let width: string = $(content).attr("data-width") + "px";
-    let height: string = $(content).attr("data-height") + "px";
-    let left: string, top: string;
-    left = ($(".jsTabContent.jsShow").width() / 2).toString() + "px";
-    top = ($(".jsTabContent.jsShow").height() / 2).toString() + "px";
-    widgetInstance.position = { x: parseInt(left), y: parseInt(top) };
-    widgetInstance.Tab = db.getTab(currentTabId);
-    html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: left, top: top, width: width, height: height });
+    let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
+    content = MyApp.templates._widgetsTemplates[widget.alias]();
+
+    let width: number = parseInt($(content).attr("data-width"));
+    let height: number = parseInt($(content).attr("data-height"));
+    let left: number = $(".jsTabContent.jsShow").width() / 2;
+    let top: number = $(".jsTabContent.jsShow").height() / 2;
+
+    if (widgetInstance.position.x == 0 && widgetInstance.position.y == 0) {
+      widgetInstance.position = { x: left, y: top };
+    }
+    if (widgetInstance.size.x == 0 && widgetInstance.size.y == 0) {
+      widgetInstance.size = { x: width, y: height };
+    }
+
+    html = MyApp.templates.widget({ WidgetInstance: widgetInstance, content: content, left: widgetInstance.position.x + "px", top: widgetInstance.position.y + "px", width: widgetInstance.size.x + "px", height: widgetInstance.size.y + "px" });
     $("div.jsTabContent[data-tab-id=" + currentTabId + "]").append(html);
-    widgetInstance.size.x = parseInt($(html).find(".ros-widget").attr("data-width"));
-    widgetInstance.size.y = parseInt($(html).find(".ros-widget").attr("data-height"));
+
     let trigger = new Trigger();
     trigger.widgetSettings(widgetInstance.id);
     if (afterContentCallback != undefined) {
@@ -194,8 +187,8 @@ export class Frontend {
     var html = '';
     $(".jsRosTopicSelector").each((i: number, element: Element) => {
       let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
-      let elementMeta = $(elementWidgetInstance).find("meta[data-widget-topic-id='" + $(element).attr("data-widget-topic-id") + "']");
-      let subscribedTopic: string = $(elementMeta).attr("data-subscribed-topic");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-ros-topic-id='" + $(element).attr("data-ros-topic-id") + "']");
+      let subscribedTopic: string = $(elementMeta).attr("data-ros-topic-slctd");
 
       html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe --', value: "" });
       let strTypes: string = $(element).attr("data-ros-topic-type");
@@ -243,8 +236,31 @@ export class Frontend {
   }
 
   // Update Workspace Methods
-  public UpdateWorkspace(db: any) {
+  public ClearWorkspace() {
+    $(".jsWidgetsList").html("");
+    $(".jsTab").remove();
+    $("#tabs").html("");
+  }
 
+  // Model frontend
+  public newTab(tab: Tab): void {
+    var tabHtml = MyApp.templates.tab(tab);
+    var tabContentHtml = MyApp.templates.tabContent(tab);
+    // insert tab
+    $(tabHtml).insertBefore("#" + this.tabContainerId + " > .clearfix");
+    //document.getElementById(this.tabContainerId).innerHTML += tabHtml;
+    // insert tab content
+    document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
+  }
+  public newWidget(widget: Widget) {
+    let html = MyApp.templates.widgetItem(widget);
+    $(".jsWidgetsList").append(html);
+    $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
+  }
+  public newWidgetInstance(widgetInstance: WidgetInstance) {
+    this.insertWidgetInstance(widgetInstance, () => { });
   }
 
 }
+
+export var frontend: Frontend = new Frontend();

@@ -1,7 +1,7 @@
 
 # ROSWeb
 
-ROSWeb is a web based supervisory system for Robot Operating System (ROS).
+ROSWeb is a web based supervisory system for Robot Operating System (ROS)
 
 It is a web application that manages robots data visualization widgets on a single web page.
 

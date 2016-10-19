@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
-import {db} from "../super/db.ts";
-import {lightbox} from "../super/lightbox.ts";
+// import {db} from "../super/db.ts";
+import {lightbox} from "../super/lightbox";
 
 export class EventsParent {
 
