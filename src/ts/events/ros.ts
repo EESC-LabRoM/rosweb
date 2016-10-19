@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Parent Class
-import {EventsParent} from "./events.ts";
+import {EventsParent} from "./events";
 
 export class RosEvents extends EventsParent {
 

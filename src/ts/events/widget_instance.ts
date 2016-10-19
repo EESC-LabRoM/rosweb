@@ -1,16 +1,16 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Types
-import {Geometry} from "../types/Geometry.ts";
-import {Subscription} from "../model/subscription.ts";
-import {WidgetInstance} from "../model/widget_instance.ts";
+import { Geometry } from "../types/Geometry";
+import { WidgetInstance } from "../model/widget_instance";
 
 // Super
-import {Frontend} from "../super/frontend.ts";
-import {db} from "../super/db.ts";
+import { Frontend } from "../super/frontend";
+import { currentWorkspace } from "../model/workspace"
+// import {db} from "../super/db.ts";
 
 // Parent Class
-import {EventsParent} from "./events.ts";
+import { EventsParent } from "./events";
 
 declare var MyApp: any;
 
@@ -73,7 +73,6 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Frontend.ShowWidgetSettings();
     this._WidgetSettingsRefresh();
   }
-
   private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
@@ -144,7 +143,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getTopics((topicsResponse: any) => {
       this.Frontend.UpdateRosTopicSelectors(topicsResponse);
       this._WidgetSettingsRefreshParams();
-    }, () => function (topicsError: any) {
+    }, (topicsError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(topicsError);
     });
@@ -153,7 +152,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getParams((paramsResponse: any) => {
       this.Frontend.UpdateRosParamSelectors(paramsResponse);
       this._WidgetSettingsRefreshsServices();
-    }, () => function (paramsError: any) {
+    }, (paramsError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(paramsError);
     });
@@ -162,30 +161,32 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getServices((servicesResponse: any) => {
       this.Frontend.UpdateRosServiceSelectors(servicesResponse);
       this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
-    }, () => function (servicesError: any) {
+      $(".jsRosTopicSelector").removeAttr("disabled");
+    }, (servicesError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(servicesError);
     });
   };
 
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
+    // widget instance id
+    let widgetInstanceId: number = parseInt($("input#widgetSettings").val());
     // manage ros data
-    this._WidgetSettingsConfirmSubscriptions();
-    this._WidgetSettingsConfirmRosParams();
-    this._WidgetSettingsConfirmRosServices();
+    this._WidgetSettingsConfirmSubscriptions(widgetInstanceId);
+    this._WidgetSettingsConfirmRosParams(widgetInstanceId);
+    this._WidgetSettingsConfirmRosServices(widgetInstanceId);
 
     // manage params
-    this._WidgetSettingsConfirmParams();
+    this._WidgetSettingsConfirmParams(widgetInstanceId);
 
     // frontend action
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
   };
-  private _WidgetSettingsConfirmSubscriptions(): void {
+  private _WidgetSettingsConfirmSubscriptions(widgetInstanceId: number): void {
     $(".jsRosTopicSelector").each((index: number, elem: Element) => {
       let topic_name: string = $(elem).val();
-      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
 
       let topicChangeCallback: string = $(elem).attr("data-ros-topic-chng");
       widgetInstance.WidgetCallbackClass[topicChangeCallback](topic_name);
@@ -196,10 +197,9 @@ export class WidgetInstanceEvents extends EventsParent {
       $(htmlMeta).attr("data-ros-topic-slctd", topic_name);
     });
   };
-  private _WidgetSettingsConfirmRosParams(): void {
+  private _WidgetSettingsConfirmRosParams(widgetInstanceId: number): void {
     $(".jsRosParamSelector").each((index: number, elem: Element) => {
-      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
 
       let paramChangeCallback: any = $(elem).attr("data-ros-param-chng");
       let paramSelected: string = $(elem).val();
@@ -211,10 +211,9 @@ export class WidgetInstanceEvents extends EventsParent {
       $(htmlMeta).attr("data-ros-param-slctd", paramSelected);
     });
   };
-  private _WidgetSettingsConfirmRosServices(): void {
+  private _WidgetSettingsConfirmRosServices(widgetInstanceId: number): void {
     $(".jsRosServiceSelector").each((index: number, elem: Element) => {
-      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
 
       let serviceChangeCallback: any = $(elem).attr("data-ros-service-chng");
       let serviceSelected: string = $(elem).val();
@@ -226,10 +225,9 @@ export class WidgetInstanceEvents extends EventsParent {
       $(htmlMeta).attr("data-ros-service-slctd", serviceSelected);
     });
   }
-  private _WidgetSettingsConfirmParams(): void {
+  private _WidgetSettingsConfirmParams(widgetInstanceId: number): void {
     $(".jsWidgetParam").each((index: number, elem: Element) => {
-      let widgetInstanceId: number = parseInt($(elem).attr("data-widget-instance-id"));
-      let widgetInstance = db.getWidgetInstance(widgetInstanceId);
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
 
       let varName = $(elem).attr("data-widget-param-var");
       let varValue = $(elem).val();
@@ -249,7 +247,8 @@ export class WidgetInstanceEvents extends EventsParent {
 
   public WidgetSettingsRemove = (e?: MouseEvent) => {
     let widgetInstanceId: number = parseInt($("#widgetSettings").val());
-    db.removeWidgetInstance(widgetInstanceId);
+    currentWorkspace.remove<WidgetInstance>(widgetInstanceId, "WidgetInstance");
+
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").remove();
     this.Frontend.HideWidgetSettings();
     e.preventDefault();
@@ -324,7 +323,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").width(size.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").height(size.y);
 
-    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    let widgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
     if (widgetInstance.WidgetCallbackClass.clbkResized != undefined) {
       widgetInstance.WidgetCallbackClass.clbkResized(size.x, size.y);
     }
@@ -362,7 +361,7 @@ export class WidgetInstanceEvents extends EventsParent {
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("left", pos.x);
     $(".jsWidgetContainer[data-widget-instance-id='" + this.widgetInstanceId + "']").css("top", pos.y);
 
-    let widgetInstance: WidgetInstance = db.getWidgetInstance(this.widgetInstanceId);
+    let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(this.widgetInstanceId, "WidgetInstance");
     if (widgetInstance.WidgetCallbackClass.clbkMoved != undefined) {
       widgetInstance.WidgetCallbackClass.clbkMoved(pos.x, pos.y);
     }

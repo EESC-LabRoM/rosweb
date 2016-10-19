@@ -1,11 +1,12 @@
-import {Workspace} from "./workspace.ts";
+import {Workspace} from "./workspace";
+import {SerializedWorkspace} from "../model/serialized_workspace";
 
 export class ROSWeb {
 
   constructor() {
-    this.Workspaces = new Array<Workspace>();
+    this.Workspaces = new Array<SerializedWorkspace>();
   }
 
-  public Workspaces: Workspace[];
+  public Workspaces: SerializedWorkspace[];
 
 }
