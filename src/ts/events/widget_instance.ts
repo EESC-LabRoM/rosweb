@@ -73,7 +73,6 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Frontend.ShowWidgetSettings();
     this._WidgetSettingsRefresh();
   }
-
   private _WidgetSettingsSubscriptions(widgetInstanceId: number): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-topic=1]").each(function (k, v) {
       var html = MyApp.templates.rosTopicSelector({
@@ -144,7 +143,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getTopics((topicsResponse: any) => {
       this.Frontend.UpdateRosTopicSelectors(topicsResponse);
       this._WidgetSettingsRefreshParams();
-    }, () => function (topicsError: any) {
+    }, (topicsError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(topicsError);
     });
@@ -153,7 +152,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getParams((paramsResponse: any) => {
       this.Frontend.UpdateRosParamSelectors(paramsResponse);
       this._WidgetSettingsRefreshsServices();
-    }, () => function (paramsError: any) {
+    }, (paramsError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(paramsError);
     });
@@ -162,7 +161,8 @@ export class WidgetInstanceEvents extends EventsParent {
     this.Ros.getServices((servicesResponse: any) => {
       this.Frontend.UpdateRosServiceSelectors(servicesResponse);
       this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
-    }, () => function (servicesError: any) {
+      $(".jsRosTopicSelector").removeAttr("disabled");
+    }, (servicesError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(servicesError);
     });

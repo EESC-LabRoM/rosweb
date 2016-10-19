@@ -191,8 +191,8 @@ export class Frontend {
     var html = '';
     $(".jsRosTopicSelector").each((i: number, element: Element) => {
       let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
-      let elementMeta = $(elementWidgetInstance).find("meta[data-widget-topic-id='" + $(element).attr("data-widget-topic-id") + "']");
-      let subscribedTopic: string = $(elementMeta).attr("data-subscribed-topic");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-ros-topic-id='" + $(element).attr("data-ros-topic-id") + "']");
+      let subscribedTopic: string = $(elementMeta).attr("data-ros-topic-slctd");
 
       html = MyApp.templates.rosTopicSelectorOptions({ name: '-- Select a topic to subscribe --', value: "" });
       let strTypes: string = $(element).attr("data-ros-topic-type");
