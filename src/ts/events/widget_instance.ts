@@ -63,6 +63,9 @@ export class WidgetInstanceEvents extends EventsParent {
     $("#widgetSettings").val(widgetInstanceId);
     $(".jsSettingsSelection").html("");
 
+    $(".jsWidgetContainer").removeClass("jsSettingsActive");
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").addClass("jsSettingsActive");
+
     // generate fields
     this._WidgetSettingsSubscriptions(widgetInstanceId);
     this._WidgetSettingsRosParams(widgetInstanceId);
@@ -283,7 +286,8 @@ export class WidgetInstanceEvents extends EventsParent {
     }
     $(".jsWidgetContainer").css("z-index", "20");
     this.widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
-    $(e.toElement).closest(".jsWidgetContainer").css("z-index", "30");
+    this._WidgetSettings(this.widgetInstanceId);
+    $(e.toElement).closest(".jsWidgetContainer").addClass("jsMouseActive");
     this.lastX = e.pageX;
     this.lastY = e.pageY;
   };
@@ -310,7 +314,7 @@ export class WidgetInstanceEvents extends EventsParent {
   public MouseUp = (e?: MouseEvent) => {
     this.widgetInstanceId = 0;
     this.toMove = this.toResize = false;
-    $(".jsWidgetContainer").css("z-index", "20");
+    $(".jsWidgetContainer").removeClass("jsMouseActive");
   };
 
   private _WidgetResize(e: MouseEvent): void {

@@ -2,7 +2,14 @@ div.cssWidgetContainer {
   position: absolute;
   z-index: 20;
   display: inline-block;
-  /*overflow:hidden;*/
+  &.jsMouseActive {
+  }
+  &.jsSettingsActive {
+    z-index:30 !important;
+    div.cssWidgetContent {
+      opacity:1 !important;
+    }
+  }
   div.cssWidgetContent {
     float: left;
     width: 100%;
