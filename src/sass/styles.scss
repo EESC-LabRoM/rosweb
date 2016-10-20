@@ -34,6 +34,16 @@ a.disabled {
   }
 }
 
+div.balloon {
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #333;
+  h2 {
+    color:#fff;
+    text-align:center;
+    padding:5px 0;
+  }
+}
+
 .btn {
   background-color:#456b91;
   border: 1px solid #ccc;
@@ -77,6 +87,65 @@ a.btn {
   &:active {
     border-width:2px 1px 1px 2px;
   }
+}
+a.flat-btn {
+  $height: 26px;
+  display: inline-block;
+  margin: 0 10px;
+  height: $height;
+  line-height: $height;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  &.cssToggleMovable {
+    width: $height;
+    height: $height;
+    background-image: url(img/maintenance-white.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+    &.active {
+      background-color: #fff;
+      background-image: url(img/maintenance-active.png);
+    }
+  }
+  &.cssOpenWorkspace {
+    width: $height;
+    height: $height;
+    background-image: url(img/open-white.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+  }
+  &.cssSaveWorkspace {
+    width: $height;
+    height: $height;
+    background-image: url(img/save-white.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+  }
+  &.cssRosConnect {
+    width: 26px;
+    background-image: url(img/disconnected.png);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    &.active {
+      background-image: url(img/connected.png);
+    }
+    &.loading {
+      opacity: 0.5;
+    }
+  }
+  &.alert::after {
+    position:absolute;
+    margin-left:$height - 12px;
+    margin-top:$height - 16px;
+    content:url(img/alert-12.png);
+  }
+}
+input.alert[type=text] {
+  background-color:lighten(red, 30%);
 }
 
 .clearfix {

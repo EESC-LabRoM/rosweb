@@ -24,6 +24,7 @@ function init() {
     events(ros);
     lightbox.CreateLightbox();
     currentWorkspace.initWorkspace();
+    
   });
 }
 
@@ -33,6 +34,8 @@ function events(ros: ROSLIB.Ros): void {
   let widgetInstanceEvents: WidgetInstanceEvents = new WidgetInstanceEvents(ros);
   let rosEvents: RosEvents = new RosEvents(ros);
   let workspace: WorkspaceEvents = new WorkspaceEvents();
+
+  rosEvents.Connect();
 }
 
 init();

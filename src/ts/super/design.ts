@@ -27,7 +27,7 @@ export class Design {
   }
 
   private _adjustWidgetsHeight(): void {
-    $(".jsWidgetsContainer").height(this.tabHeight).css("top", this.tabTopOffset);
+    // $(".jsWidgetsContainer").height(this.tabHeight).css("top", this.tabTopOffset);
     $(".jsMenuWidgetsSettings").height(this.tabHeight).css("top", this.tabTopOffset);
   }
 
