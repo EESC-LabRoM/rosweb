@@ -2,6 +2,7 @@
 
 // Parent Class
 import {EventsParent} from "./events";
+import {frontend} from "../super/frontend"
 
 export class RosEvents extends EventsParent {
 
@@ -16,6 +17,7 @@ export class RosEvents extends EventsParent {
     this.Ros.on("close", this.OnRosClose);
     this.Ros.on("error", this.OnRosError);
     this.DelegateEvent(".jsRosConnect", "click", this.Connect);
+    this.DelegateEvent(".jsConfiguration", "click", this.Configuration);
   }
 
   public Connect = (e?: MouseEvent) => {
@@ -25,11 +27,15 @@ export class RosEvents extends EventsParent {
     $(".jsRosConnect").addClass("loading");
 
     if(!this.connected) {
-      let url : string = "ws://" + $(".jsRosUrl").val();
+      let url : string = $("#jsRosUrl").val();
       this.Ros.connect(url);
     } else {
       this.Ros.close();
     }
+    e.preventDefault();
+  }
+  public Configuration = (e?: MouseEvent) => {
+    frontend.ShowConfiguration();
     e.preventDefault();
   }
   private OnRosConnection = () => {

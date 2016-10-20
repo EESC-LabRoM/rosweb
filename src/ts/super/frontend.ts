@@ -84,10 +84,6 @@ export class Frontend {
     this.ActiveTabId = tab.id;
   }
 
-  public showWidgetsMenu(): void {
-    $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
-  }
-
   public LoadWidgetContentAndInsert(widgetInstance: WidgetInstance, afterContentCallback: any): void {
     this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
   }
@@ -172,6 +168,10 @@ export class Frontend {
     return tabId;
   }
 
+
+  public showWidgetsMenu(): void {
+    $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
+  }
   public ShowWidgetSettings(): void {
     $(".jsMenuWidgetsSettings").animate({ right: 0 });
   }
@@ -179,6 +179,9 @@ export class Frontend {
     $(".jsMenuWidgetsSettings").animate({ right: -300 });
     $(".jsWidgetContainer").attr("data-widget-conf", "0");
     $(".jsToggleMovable").removeClass("active");
+  }
+  public ShowConfiguration(): void {
+    $("." + this.Names.classConfiguration).animate({ height: 'toggle' });
   }
 
   // Update Selector Methods

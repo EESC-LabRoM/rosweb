@@ -9,6 +9,7 @@ export class Names {
   public classWidgetsSettings: string = "jsWidgetsSettings";
   public classWidgets: string = "jsWidgets";
   public classWidgetsList: string = "jsWidgetsList";
+  public classConfiguration: string = "jsConfigurationContainer";
   
   constructor() {
     
