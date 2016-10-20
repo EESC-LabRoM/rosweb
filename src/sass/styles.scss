@@ -34,9 +34,14 @@ a.disabled {
   }
 }
 
-div.balloon{
+div.balloon {
   border-radius: 5px;
   box-shadow: 1px 1px 3px #333;
+  h2 {
+    color:#fff;
+    text-align:center;
+    padding:5px 0;
+  }
 }
 
 .btn {

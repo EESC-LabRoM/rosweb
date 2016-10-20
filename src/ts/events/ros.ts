@@ -42,6 +42,8 @@ export class RosEvents extends EventsParent {
     this.connected = true;
     $(".jsRosConnect").addClass("active");
     $(".jsRosConnect").removeClass("loading");
+
+    $(".jsRosConnect, #jsRosUrl, .jsConfiguration").removeClass("alert");
   }
   private OnRosClose = () => {
     this.connected = false;

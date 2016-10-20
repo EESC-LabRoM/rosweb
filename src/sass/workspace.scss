@@ -16,7 +16,8 @@ div#workspaceList {
   div.list {
     float: left;
     width: 100%;
-    min-height: 250px;
+    height: 250px;
+    overflow:auto;
     ul {
       list-style: none;
       li {
