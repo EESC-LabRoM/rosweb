@@ -121,6 +121,7 @@ export class WidgetInstanceEvents extends EventsParent {
   };
 
   public WidgetContainerDblClick = (e?: MouseEvent) => {
+    console.log("dbl click");
     let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
     this.ToggleMovable();
     if ($(".jsToggleMovable").hasClass("active")) {

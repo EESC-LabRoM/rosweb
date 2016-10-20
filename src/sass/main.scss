@@ -50,6 +50,10 @@ body {
         >div.cssTab {
           float: left;
         }
+        a.flat-btn {
+          float:left;
+          margin: 10px 10px 0;
+        }
         a.cssHeader2Link, p {
           float: left;
           margin: 10px 10px 0;
@@ -107,7 +111,6 @@ body {
         position:absolute;
         z-index:50;
         width:400px;
-        border-radius: 5px;
         margin:10px;
         padding:10px 15px;
         background-color:darken($ros_color, 20%);
@@ -123,6 +126,9 @@ body {
         position: absolute;
         z-index: 50;
         width: 300px;
+        border-radius: 5px;
+        margin:10px;
+        padding:10px 15px;
         background-color: darken($ros_color, 20%);
         div.cssWidgets {
           width: 300px;

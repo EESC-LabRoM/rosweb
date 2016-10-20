@@ -1,8 +1,8 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 // Parent Class
-import {EventsParent} from "./events";
-import {frontend} from "../super/frontend"
+import { EventsParent } from "./events";
+import { frontend } from "../super/frontend"
 
 export class RosEvents extends EventsParent {
 
@@ -11,7 +11,7 @@ export class RosEvents extends EventsParent {
 
   constructor(ros: ROSLIB.Ros) {
     super();
-    
+
     this.Ros = ros;
     this.Ros.on("connection", this.OnRosConnection);
     this.Ros.on("close", this.OnRosClose);
@@ -21,18 +21,18 @@ export class RosEvents extends EventsParent {
   }
 
   public Connect = (e?: MouseEvent) => {
-    if($(".jsRosConnect").hasClass("loading")) {
+    if ($(".jsRosConnect").hasClass("loading")) {
       return;
     }
     $(".jsRosConnect").addClass("loading");
 
-    if(!this.connected) {
-      let url : string = $("#jsRosUrl").val();
+    if (!this.connected) {
+      let url: string = $("#jsRosUrl").val();
       this.Ros.connect(url);
     } else {
       this.Ros.close();
     }
-    e.preventDefault();
+    if (e != undefined) e.preventDefault();
   }
   public Configuration = (e?: MouseEvent) => {
     frontend.ShowConfiguration();
@@ -53,6 +53,8 @@ export class RosEvents extends EventsParent {
     this.connected = false;
     $(".jsRosConnect").removeClass("active");
     $(".jsRosConnect").removeClass("loading");
+
+    $(".jsRosConnect, #jsRosUrl, .jsConfiguration").addClass("alert");
     console.log(error);
   }
 

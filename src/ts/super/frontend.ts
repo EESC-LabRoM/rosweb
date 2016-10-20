@@ -168,9 +168,10 @@ export class Frontend {
     return tabId;
   }
 
-
+  // Show menu methods
   public showWidgetsMenu(): void {
-    $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
+    $(".balloon").not("." + this.Names.classWidgetsContainer).hide();
+    $("." + this.Names.classWidgetsContainer).animate({ height: 'toggle' });
   }
   public ShowWidgetSettings(): void {
     $(".jsMenuWidgetsSettings").animate({ right: 0 });
@@ -181,6 +182,7 @@ export class Frontend {
     $(".jsToggleMovable").removeClass("active");
   }
   public ShowConfiguration(): void {
+    $(".balloon").not("." + this.Names.classConfiguration).hide();
     $("." + this.Names.classConfiguration).animate({ height: 'toggle' });
   }
 
