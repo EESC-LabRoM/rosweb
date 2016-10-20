@@ -35,6 +35,7 @@ exports.EventsParent = EventsParent;
 "use strict";
 // Parent Class
 const events_1 = require("./events");
+const frontend_1 = require("../super/frontend");
 class RosEvents extends events_1.EventsParent {
     constructor(ros) {
         super();
@@ -45,18 +46,24 @@ class RosEvents extends events_1.EventsParent {
             }
             $(".jsRosConnect").addClass("loading");
             if (!this.connected) {
-                let url = "ws://" + $(".jsRosUrl").val();
+                let url = $("#jsRosUrl").val();
                 this.Ros.connect(url);
             }
             else {
                 this.Ros.close();
             }
+            if (e != undefined)
+                e.preventDefault();
+        };
+        this.Configuration = (e) => {
+            frontend_1.frontend.ShowConfiguration();
             e.preventDefault();
         };
         this.OnRosConnection = () => {
             this.connected = true;
             $(".jsRosConnect").addClass("active");
             $(".jsRosConnect").removeClass("loading");
+            $(".jsRosConnect, #jsRosUrl, .jsConfiguration").removeClass("alert");
         };
         this.OnRosClose = () => {
             this.connected = false;
@@ -68,6 +75,7 @@ class RosEvents extends events_1.EventsParent {
             this.connected = false;
             $(".jsRosConnect").removeClass("active");
             $(".jsRosConnect").removeClass("loading");
+            $(".jsRosConnect, #jsRosUrl, .jsConfiguration").addClass("alert");
             console.log(error);
         };
         this.Ros = ros;
@@ -75,11 +83,12 @@ class RosEvents extends events_1.EventsParent {
         this.Ros.on("close", this.OnRosClose);
         this.Ros.on("error", this.OnRosError);
         this.DelegateEvent(".jsRosConnect", "click", this.Connect);
+        this.DelegateEvent(".jsConfiguration", "click", this.Configuration);
     }
 }
 exports.RosEvents = RosEvents;
 
-},{"./events":1}],3:[function(require,module,exports){
+},{"../super/frontend":15,"./events":1}],3:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Parent Class
@@ -212,6 +221,7 @@ class WidgetInstanceEvents extends events_1.EventsParent {
             e.preventDefault();
         };
         this.WidgetContainerDblClick = (e) => {
+            console.log("dbl click");
             let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
             this.ToggleMovable();
             if ($(".jsToggleMovable").hasClass("active")) {
@@ -273,7 +283,8 @@ class WidgetInstanceEvents extends events_1.EventsParent {
             }
             $(".jsWidgetContainer").css("z-index", "20");
             this.widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
-            $(e.toElement).closest(".jsWidgetContainer").css("z-index", "30");
+            this._WidgetSettings(this.widgetInstanceId);
+            $(e.toElement).closest(".jsWidgetContainer").addClass("jsMouseActive");
             this.lastX = e.pageX;
             this.lastY = e.pageY;
         };
@@ -301,7 +312,7 @@ class WidgetInstanceEvents extends events_1.EventsParent {
         this.MouseUp = (e) => {
             this.widgetInstanceId = 0;
             this.toMove = this.toResize = false;
-            $(".jsWidgetContainer").css("z-index", "20");
+            $(".jsWidgetContainer").removeClass("jsMouseActive");
         };
         this.Ros = ros;
         this.Frontend = new frontend_1.Frontend();
@@ -324,6 +335,8 @@ class WidgetInstanceEvents extends events_1.EventsParent {
     _WidgetSettings(widgetInstanceId) {
         $("#widgetSettings").val(widgetInstanceId);
         $(".jsSettingsSelection").html("");
+        $(".jsWidgetContainer").removeClass("jsSettingsActive");
+        $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]").addClass("jsSettingsActive");
         // generate fields
         this._WidgetSettingsSubscriptions(widgetInstanceId);
         this._WidgetSettingsRosParams(widgetInstanceId);
@@ -640,6 +653,7 @@ function events(ros) {
     let widgetInstanceEvents = new widget_instance_1.WidgetInstanceEvents(ros);
     let rosEvents = new ros_1.RosEvents(ros);
     let workspace = new workspace_1.WorkspaceEvents();
+    rosEvents.Connect();
 }
 init();
 
@@ -883,7 +897,7 @@ class Design {
         $("#content").height(this.tabHeight);
     }
     _adjustWidgetsHeight() {
-        $(".jsWidgetsContainer").height(this.tabHeight).css("top", this.tabTopOffset);
+        // $(".jsWidgetsContainer").height(this.tabHeight).css("top", this.tabTopOffset);
         $(".jsMenuWidgetsSettings").height(this.tabHeight).css("top", this.tabTopOffset);
     }
     _getTotalHeight(selector) {
@@ -951,9 +965,6 @@ class Frontend {
         $("." + tabClassName).removeClass("jsShow").addClass("jsHide");
         $("." + tabClassName + "[data-tab-id=" + tab.id + "]").removeClass("jsHide").addClass("jsShow");
         this.ActiveTabId = tab.id;
-    }
-    showWidgetsMenu() {
-        $("." + this.Names.classWidgetsContainer).animate({ width: 'toggle' });
     }
     LoadWidgetContentAndInsert(widgetInstance, afterContentCallback) {
         this._loadWidgetContentAndInsert(widgetInstance, afterContentCallback);
@@ -1033,6 +1044,11 @@ class Frontend {
         let tabId = parseInt(tabIdStr);
         return tabId;
     }
+    // Show menu methods
+    showWidgetsMenu() {
+        $(".balloon").not("." + this.Names.classWidgetsContainer).hide();
+        $("." + this.Names.classWidgetsContainer).animate({ height: 'toggle' });
+    }
     ShowWidgetSettings() {
         $(".jsMenuWidgetsSettings").animate({ right: 0 });
     }
@@ -1040,6 +1056,10 @@ class Frontend {
         $(".jsMenuWidgetsSettings").animate({ right: -300 });
         $(".jsWidgetContainer").attr("data-widget-conf", "0");
         $(".jsToggleMovable").removeClass("active");
+    }
+    ShowConfiguration() {
+        $(".balloon").not("." + this.Names.classConfiguration).hide();
+        $("." + this.Names.classConfiguration).animate({ height: 'toggle' });
     }
     // Update Selector Methods
     UpdateRosTopicSelectors(response) {
@@ -1176,6 +1196,7 @@ class Names {
         this.classWidgetsSettings = "jsWidgetsSettings";
         this.classWidgets = "jsWidgets";
         this.classWidgetsList = "jsWidgetsList";
+        this.classConfiguration = "jsConfigurationContainer";
     }
 }
 exports.Names = Names;
