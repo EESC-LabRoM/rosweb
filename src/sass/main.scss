@@ -10,58 +10,9 @@ body {
   div#container {
     div.header {
       &#header1 {
-        padding: 10px 20px;
+        /* padding: 10px 20px; */
         background-color: $ros_color;
-        a {
-          $height: 26px;
-          display: inline-block;
-          margin: 0 10px;
-          height: $height;
-          line-height: $height;
-          color: #fff;
-          font-weight: bold;
-          text-decoration: none;
-          &.cssToggleMovable {
-            width: $height;
-            height: $height;
-            background-image: url(img/maintenance-white.png);
-            background-position: 50%;
-            background-repeat: no-repeat;
-            border-radius: 2px;
-            &.active {
-              background-color: #fff;
-              background-image: url(img/maintenance-active.png);
-            }
-          }
-          &.cssOpenWorkspace {
-            width: $height;
-            height: $height;
-            background-image: url(img/open-white.png);
-            background-position: 50%;
-            background-repeat: no-repeat;
-            border-radius: 2px;
-          }
-          &.cssSaveWorkspace {
-            width: $height;
-            height: $height;
-            background-image: url(img/save-white.png);
-            background-position: 50%;
-            background-repeat: no-repeat;
-            border-radius: 2px;
-          }
-          &.cssRosConnect {
-            width: 26px;
-            background-image: url(img/disconnected.png);
-            background-position: 50%;
-            background-repeat: no-repeat;
-            &.active {
-              background-image: url(img/connected.png);
-            }
-            &.loading {
-              opacity: 0.5;
-            }
-          }
-        }
+        /* border-bottom:1px solid darken($ros_color, 20%); */
         p {
           display: inline-block;
           /*height:26px;*/
@@ -99,14 +50,27 @@ body {
         >div.cssTab {
           float: left;
         }
-        a.cssHeader2Link {
+        a.flat-btn {
+          float:left;
+          margin: 10px 10px 0;
+        }
+        a.cssHeader2Link, p {
           float: left;
           margin: 10px 10px 0;
           padding: 5px;
+          color: #fff;
+        }
+        p {
+          font-weight:bold;
+        }
+        a.cssHeader2Link {
           border: 1px solid #fff;
           border-radius: 6px;
-          color: #fff;
           text-decoration: none;
+          &.alert::after {
+            padding:0 0 0 5px;
+            content:url(img/alert-12.png);
+          }
         }
         div.cssTab {
           display: inline-block;
@@ -142,11 +106,29 @@ body {
       }
     }
     div#content {
+      .cssConfigurationContainer {
+        display:none;
+        position:absolute;
+        z-index:50;
+        width:400px;
+        margin:10px;
+        padding:10px 15px;
+        background-color:darken($ros_color, 20%);
+        label {
+          color:#fff;
+        }
+        div {
+          padding:5px;
+        }
+      }
       div.cssWidgetsContainer {
         display: none;
         position: absolute;
         z-index: 50;
         width: 300px;
+        border-radius: 5px;
+        margin:10px;
+        padding:10px 15px;
         background-color: darken($ros_color, 20%);
         div.cssWidgets {
           width: 300px;
