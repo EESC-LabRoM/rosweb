@@ -2,6 +2,7 @@
 
 // model
 import { Tab } from "./tab"
+import { WidgetGroup } from "./widget_group"
 import { Widget } from "./widget"
 import { WidgetInstance } from "./widget_instance"
 import { SerializedWorkspace } from "../model/serialized_workspace";
@@ -42,12 +43,15 @@ export class Workspace {
     this._initWorkspace();
   }
   private _initWorkspace() {
-    new Widget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
-    new Widget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
-    new Widget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
-    new Widget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
-    new Widget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
-    new Widget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+    let wg: WidgetGroup = new WidgetGroup("ROS basics");
+    new Widget(wg.id, "Topic Subscriber", "TopicSubscriber", "./widgets/topic_subscriber");
+    new Widget(wg.id, "Param Viewer", "ParamViewer", "./widgets/param_viewer");
+    new Widget(wg.id, "Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+ 
+    wg = new WidgetGroup("Sensors");
+    new Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
+    new Widget(wg.id, "Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
+    new Widget(wg.id, "Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
   }
 
   private _clearWorkspace() {
@@ -61,6 +65,7 @@ export class Workspace {
   private _clearLists() {
     this.Lists = new Array<genericList>(
       { object: "Tab", list: new Array<Tab>() },
+      { object: "WidgetGroup", list: new Array<Tab>() },
       { object: "Widget", list: new Array<Widget>() },
       { object: "WidgetInstance", list: new Array<WidgetInstance>() }
     );
@@ -68,6 +73,7 @@ export class Workspace {
   private _clearCounters() {
     this.Counters = new Array<genericCounter>(
       { object: "Tab", counter: 0 },
+      { object: "WidgetGroup", counter: 0 },
       { object: "Widget", counter: 0 },
       { object: "WidgetInstance", counter: 0 }
     );

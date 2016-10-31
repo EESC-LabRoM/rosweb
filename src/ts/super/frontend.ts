@@ -2,6 +2,7 @@
 
 // Models
 import { Tab } from "../model/tab";
+import { WidgetGroup } from "../model/widget_group";
 import { Widget } from "../model/widget";
 import { WidgetInstance } from "../model/widget_instance";
 import { currentWorkspace } from "../model/workspace";
@@ -257,9 +258,13 @@ export class Frontend {
     // insert tab content
     document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
   }
+  public newWidgetGroup(widgetGroup: WidgetGroup) {
+    let html: string = MyApp.templates.widgetGroup(widgetGroup);
+    $(".jsWidgetGroups").append(html);
+  }
   public newWidget(widget: Widget) {
     let html = MyApp.templates.widgetItem(widget);
-    $(".jsWidgetsList").append(html);
+    $("#jsWidgetGroup" + widget.widget_group_id + " .jsWidgets").append(html);
     $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
   }
   public newWidgetInstance(widgetInstance: WidgetInstance) {
