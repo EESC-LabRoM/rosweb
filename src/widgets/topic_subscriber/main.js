@@ -1,4 +1,4 @@
-var WidgetTopicViewer = function (widgetInstanceId) {
+var WidgetTopicSubscriber = function (widgetInstanceId) {
   // Mandatory properties
   var self = this;
   this.widgetInstanceId = widgetInstanceId;
