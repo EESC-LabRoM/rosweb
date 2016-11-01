@@ -5,9 +5,10 @@ var WidgetTopicSubscriber = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.clbkCreated = function () {};
-  this.clbkResized = function () {};
-  this.clbkMoved = function () {};
+  this.clbkCreated = function () { };
+  this.clbkResized = function () { };
+  this.clbkMoved = function () { };
+  this.clbkTab = function (isMyTab) { };
 
   // Subscriptions Callbacks
   this.topic1 = new ROSLIB.Topic({
@@ -32,11 +33,11 @@ var WidgetTopicSubscriber = function (widgetInstanceId) {
     });
   };
   this.callback1 = function (message) {
-      var elem = $(self.selector).find(".datatopic1");
-      $(elem).html("");
-      self.debugObjectInsideElement(elem, message);
-    }
-    // Adjustable params
+    var elem = $(self.selector).find(".datatopic1");
+    $(elem).html("");
+    self.debugObjectInsideElement(elem, message);
+  }
+  // Adjustable params
   this.arrayShowLimit = 5;
   this.valueShowLimit = 10;
 

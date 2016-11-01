@@ -20,6 +20,7 @@ var WidgetServiceViewer = function (widgetInstanceId) {
   };
   this.clbkMoved = function () {
   };
+  this.clbkTab = function (isMyTab) { };
 
   // Param selector callback
   this.service1Changed = function (selectedService) {

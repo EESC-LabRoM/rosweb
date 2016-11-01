@@ -49,7 +49,8 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   this.clbkResized = function (width, height) {
     self.resizeSVG(width, height);
   };
-  this.clbkMoved = function (x, y) {}
+  this.clbkMoved = function (x, y) { };
+  this.clbkTab = function (isMyTab) { };
 
   // Topic methods
   this.onchange = function (selectedTopic) {

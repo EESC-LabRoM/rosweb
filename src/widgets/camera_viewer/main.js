@@ -20,7 +20,8 @@ var WidgetCameraViewer = function (widgetInstanceId) {
       height: height
     });
   };
-  this.clbkMoved = function (x, y) {};
+  this.clbkMoved = function (x, y) { };
+  this.clbkTab = function (isMyTab) { };
 
   this.onchange = function (selectedTopic) {
     $("." + self.viewerElement + " canvas").remove();

@@ -4,6 +4,7 @@
 import { EventsParent } from "./events";
 
 // Models
+import { WidgetInstance } from "../model/widget_instance";
 import { Tab } from "../model/tab";
 import { currentWorkspace } from "../model/workspace";
 
@@ -62,7 +63,12 @@ export class TabEvents extends EventsParent {
     list.forEach((tab: Tab, index: number) => {
       if (selectedTab.id != tab.id) tab.active = false;
     });
-    this.Frontend.selectTab(selectedTab);
+    selectedTab.setActive();
+
+    let widgetInstances = currentWorkspace.getList<WidgetInstance>("WidgetInstance");
+    widgetInstances.forEach((widgetInstance: WidgetInstance, index: number) => {
+      widgetInstance.WidgetCallbackClass["clbkTab"](selectedTab.id == widgetInstance.tab_id);
+    });
   }
 
   public closeTab = (e?: MouseEvent) => {

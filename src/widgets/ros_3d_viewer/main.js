@@ -27,6 +27,7 @@ var WidgetROS3DViewer = function (widgetInstanceId) {
     });
   };
   this.clbkMoved = function (x, y) { };
+  this.clbkTab = function (isMyTab) { };
 
   this.onchange = function (selectedTopic) {
     // Setup a client to listen to TFs.
