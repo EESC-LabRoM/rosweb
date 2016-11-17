@@ -4,7 +4,6 @@
 import { Tab } from "./tab"
 import { WidgetGroup } from "./widget_group"
 import { Widget } from "./widget"
-import { WidgetGroup } from "./widget_group"
 import { WidgetInstance } from "./widget_instance"
 import { SerializedWorkspace } from "../model/serialized_workspace";
 
@@ -48,22 +47,14 @@ export class Workspace {
     new Widget(wg.id, "Topic Subscriber", "TopicSubscriber", "./widgets/topic_subscriber");
     new Widget(wg.id, "Param Viewer", "ParamViewer", "./widgets/param_viewer");
     new Widget(wg.id, "Service Viewer", "ServiceViewer", "./widgets/service_viewer");
-<<<<<<< HEAD
-
-
-=======
- 
->>>>>>> master
+    
     wg = new WidgetGroup("Sensors");
     new Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
     new Widget(wg.id, "Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
     new Widget(wg.id, "Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
-<<<<<<< HEAD
-=======
  
     wg = new WidgetGroup("3D Viewer");
     new Widget(wg.id, "ROS 3D Viewer", "ROS3DViewer", "./widgets/ros_3d_viewer");
->>>>>>> master
   }
 
   private _clearWorkspace() {
