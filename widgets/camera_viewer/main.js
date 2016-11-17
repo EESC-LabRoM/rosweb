@@ -6,7 +6,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
-    self.host = $(".jsRosUrl").val().split(":")[0];
+    self.host = $("#jsRosUrl").val().split(":")[0];
   };
   this.clbkResized = function (width, height) {
     self.width = width;
@@ -20,7 +20,8 @@ var WidgetCameraViewer = function (widgetInstanceId) {
       height: height
     });
   };
-  this.clbkMoved = function (x, y) {};
+  this.clbkMoved = function (x, y) { };
+  this.clbkTab = function (isMyTab) { };
 
   this.onchange = function (selectedTopic) {
     $("." + self.viewerElement + " canvas").remove();

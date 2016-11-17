@@ -93,7 +93,6 @@ exports.RosEvents = RosEvents;
 "use strict";
 // Parent Class
 const events_1 = require("./events");
-// Models
 const tab_1 = require("../model/tab");
 const workspace_1 = require("../model/workspace");
 // Super classes
@@ -147,7 +146,11 @@ class TabEvents extends events_1.EventsParent {
             if (selectedTab.id != tab.id)
                 tab.active = false;
         });
-        this.Frontend.selectTab(selectedTab);
+        selectedTab.setActive();
+        let widgetInstances = workspace_1.currentWorkspace.getList("WidgetInstance");
+        widgetInstances.forEach((widgetInstance, index) => {
+            widgetInstance.WidgetCallbackClass["clbkTab"](selectedTab.id == widgetInstance.tab_id);
+        });
     }
     _closeTab(tabId) {
         workspace_1.currentWorkspace.remove(tabId, "Tab");
@@ -742,8 +745,8 @@ exports.WidgetInstance = WidgetInstance;
 "use strict";
 // model
 const tab_1 = require("./tab");
-const widget_1 = require("./widget");
 const widget_group_1 = require("./widget_group");
+const widget_1 = require("./widget");
 const widget_instance_1 = require("./widget_instance");
 // super
 const frontend_1 = require("../super/frontend");
@@ -768,6 +771,8 @@ class Workspace {
         new widget_1.Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
         new widget_1.Widget(wg.id, "Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
         new widget_1.Widget(wg.id, "Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+        wg = new widget_group_1.WidgetGroup("3D Viewer");
+        new widget_1.Widget(wg.id, "ROS 3D Viewer", "ROS3DViewer", "./widgets/ros_3d_viewer");
     }
     _clearWorkspace() {
         frontend_1.frontend.ClearWorkspace();
@@ -1018,7 +1023,7 @@ class Frontend {
     _insertWidget(widgetInstance, currentTabId, afterContentCallback) {
         let content, html;
         let widget = workspace_1.currentWorkspace.get(widgetInstance.widget_id, "Widget");
-        content = MyApp.templates._widgetsTemplates[widget.alias]();
+        content = MyApp.templates._widgetsTemplates[widget.alias](widgetInstance);
         let width = parseInt($(content).attr("data-width"));
         let height = parseInt($(content).attr("data-height"));
         let left = $(".jsTabContent.jsShow").width() / 2;

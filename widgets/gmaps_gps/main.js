@@ -13,7 +13,13 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
     google.maps.event.trigger(self.gpsVars.map, "resize");
     self.gpsVars.map.setCenter(self.latLng);
   };
-  this.clbkMoved = function () {};
+  this.clbkMoved = function () { };
+  this.clbkTab = function (isMyTab) {
+    self.generateGpsVisualizer();
+    google.maps.event.trigger(self.gpsVars.map, "resize");
+    self.gpsVars.marker.setPosition(self.latLng);
+    self.gpsVars.map.setCenter(self.latLng);
+  };
 
   // Subscriptions Callbacks
   this.topic1 = new ROSLIB.Topic({

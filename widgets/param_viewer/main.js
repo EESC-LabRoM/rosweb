@@ -19,8 +19,8 @@ var WidgetParamViewer = function (widgetInstanceId) {
       e.preventDefault();
     });
   };
-  this.clbkResized = function () {};
-  this.clbkMoved = function () {};
+  this.clbkResized = function () { };
+  this.clbkMoved = function () { };
 
   // Param selector callback
   this.param1Changed = function (selectedParam) {
@@ -28,12 +28,13 @@ var WidgetParamViewer = function (widgetInstanceId) {
     self.param1.name = selectedParam;
     self.refresh();
   };
+  this.clbkTab = function (isMyTab) { };
 
   // helper methods
   this.refresh = function () {
     $(self.selector).find("button, input").attr("disabled", "disabled");
     self.param1.get(function (a) {
-      if (typeof (a) == "object" || a == null) {} else {
+      if (typeof (a) == "object" || a == null) { } else {
         $(self.selector).find("input[type=text]").val(a);
         $(self.selector).find("button, input").removeAttr("disabled");
       }
