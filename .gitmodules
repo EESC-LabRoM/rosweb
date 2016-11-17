@@ -4,3 +4,6 @@
 [submodule "src/js/mjpegcanvasjs"]
 	path = src/js/mjpegcanvasjs
 	url = https://github.com/marcoarruda/mjpegcanvasjs.git
+[submodule "src/js/ros3djs"]
+	path = src/js/ros3djs
+	url = https://github.com/marcoarruda/ros3djs.git

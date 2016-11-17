@@ -1,0 +1,351 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install' ]
+2 info using npm@2.15.9
+3 info using node@v4.6.1
+4 verbose readDependencies loading dependencies from /home/marco/html_ws/rosweb/package.json
+5 warn package.json rosweb@1.0.0 No repository field.
+6 verbose install where, deps [ '/home/marco/html_ws/rosweb',
+6 verbose install   [ 'eventemitter2',
+6 verbose install     'handlebars',
+6 verbose install     'jquery',
+6 verbose install     'three',
+6 verbose install     'babelify',
+6 verbose install     'browserify',
+6 verbose install     'gulp',
+6 verbose install     'gulp-concat',
+6 verbose install     'gulp-declare',
+6 verbose install     'gulp-handlebars',
+6 verbose install     'gulp-sass',
+6 verbose install     'gulp-sourcemaps',
+6 verbose install     'gulp-tsd',
+6 verbose install     'gulp-typedoc',
+6 verbose install     'gulp-typescript',
+6 verbose install     'gulp-uglify',
+6 verbose install     'gulp-util',
+6 verbose install     'gulp-webserver',
+6 verbose install     'gulp-wrap',
+6 verbose install     'tsify',
+6 verbose install     'typedoc',
+6 verbose install     'vinyl-buffer',
+6 verbose install     'vinyl-source-stream',
+6 verbose install     'watchify' ] ]
+7 verbose install where, peers [ '/home/marco/html_ws/rosweb', [] ]
+8 verbose installManyTop reading for lifecycle /home/marco/html_ws/rosweb/package.json
+9 info preinstall rosweb@1.0.0
+10 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/babelify/package.json
+11 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/browserify/package.json
+12 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/eventemitter2/package.json
+13 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp/package.json
+14 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-concat/package.json
+15 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-declare/package.json
+16 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-handlebars/package.json
+17 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-sass/package.json
+18 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-sourcemaps/package.json
+19 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-tsd/package.json
+20 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-typedoc/package.json
+21 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-typescript/package.json
+22 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-uglify/package.json
+23 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-util/package.json
+24 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-webserver/package.json
+25 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/gulp-wrap/package.json
+26 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/handlebars/package.json
+27 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/jquery/package.json
+28 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/three/package.json
+29 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/tsify/package.json
+30 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/typedoc/package.json
+31 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/vinyl-buffer/package.json
+32 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/vinyl-source-stream/package.json
+33 verbose installManyTop reading scoped package data from /home/marco/html_ws/rosweb/node_modules/watchify/package.json
+34 info package.json gulp-wrap@0.13.0 No license field.
+35 info package.json three@0.82.1 No README data
+36 verbose readDependencies loading dependencies from /home/marco/html_ws/rosweb/package.json
+37 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/babelify/package.json
+38 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/browserify/package.json
+39 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/eventemitter2/package.json
+40 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp/package.json
+41 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-concat/package.json
+42 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-declare/package.json
+43 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-handlebars/package.json
+44 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-sass/package.json
+45 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-sourcemaps/package.json
+46 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-tsd/package.json
+47 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-typedoc/package.json
+48 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-typescript/package.json
+49 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-uglify/package.json
+50 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-util/package.json
+51 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-webserver/package.json
+52 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/gulp-wrap/package.json
+53 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/handlebars/package.json
+54 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/jquery/package.json
+55 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/three/package.json
+56 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/tsify/package.json
+57 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/typedoc/package.json
+58 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/vinyl-buffer/package.json
+59 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/vinyl-source-stream/package.json
+60 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/watchify/package.json
+61 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/.bin/browserify/package.json
+62 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/.bin/gulp/package.json
+63 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/.bin/handlebars/package.json
+64 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/.bin/typedoc/package.json
+65 verbose targetResolver reading package data from /home/marco/html_ws/rosweb/node_modules/.bin/watchify/package.json
+66 verbose already installed skipping gulp-sass@^2.3.2 /home/marco/html_ws/rosweb
+67 verbose already installed skipping gulp-sourcemaps@^1.6.0 /home/marco/html_ws/rosweb
+68 verbose already installed skipping gulp-tsd@^0.1.1 /home/marco/html_ws/rosweb
+69 verbose already installed skipping gulp-typedoc@^2.0.0 /home/marco/html_ws/rosweb
+70 verbose already installed skipping gulp-typescript@^2.13.6 /home/marco/html_ws/rosweb
+71 verbose already installed skipping gulp-uglify@^1.5.4 /home/marco/html_ws/rosweb
+72 verbose already installed skipping gulp-util@^3.0.7 /home/marco/html_ws/rosweb
+73 verbose already installed skipping gulp-webserver@^0.9.1 /home/marco/html_ws/rosweb
+74 verbose already installed skipping gulp-wrap@^0.13.0 /home/marco/html_ws/rosweb
+75 verbose already installed skipping tsify@^0.16.0 /home/marco/html_ws/rosweb
+76 verbose already installed skipping typedoc@^0.4.5 /home/marco/html_ws/rosweb
+77 verbose already installed skipping vinyl-buffer@^1.0.0 /home/marco/html_ws/rosweb
+78 verbose already installed skipping vinyl-source-stream@^1.1.0 /home/marco/html_ws/rosweb
+79 verbose already installed skipping watchify@^3.7.0 /home/marco/html_ws/rosweb
+80 verbose already installed skipping eventemitter2@^2.1.0 /home/marco/html_ws/rosweb
+81 verbose already installed skipping handlebars@^3.0.3 /home/marco/html_ws/rosweb
+82 verbose already installed skipping jquery@^2.0.0 /home/marco/html_ws/rosweb
+83 silly cache add args [ 'three@^0.61', null ]
+84 verbose cache add spec three@^0.61
+85 silly cache add parsed spec Result {
+85 silly cache add   raw: 'three@^0.61',
+85 silly cache add   scope: null,
+85 silly cache add   name: 'three',
+85 silly cache add   rawSpec: '^0.61',
+85 silly cache add   spec: '>=0.61.0 <0.62.0',
+85 silly cache add   type: 'range' }
+86 silly addNamed three@>=0.61.0 <0.62.0
+87 verbose addNamed ">=0.61.0 <0.62.0" is a valid semver range for three
+88 silly addNameRange { name: 'three', range: '>=0.61.0 <0.62.0', hasData: false }
+89 silly mapToRegistry name three
+90 silly mapToRegistry using default registry
+91 silly mapToRegistry registry https://registry.npmjs.org/
+92 silly mapToRegistry data Result {
+92 silly mapToRegistry   raw: 'three',
+92 silly mapToRegistry   scope: null,
+92 silly mapToRegistry   name: 'three',
+92 silly mapToRegistry   rawSpec: '',
+92 silly mapToRegistry   spec: 'latest',
+92 silly mapToRegistry   type: 'tag' }
+93 silly mapToRegistry uri https://registry.npmjs.org/three
+94 verbose addNameRange registry:https://registry.npmjs.org/three not in flight; fetching
+95 verbose already installed skipping babelify@^7.3.0 /home/marco/html_ws/rosweb
+96 verbose already installed skipping browserify@^13.0.1 /home/marco/html_ws/rosweb
+97 verbose already installed skipping gulp@^3.9.1 /home/marco/html_ws/rosweb
+98 verbose already installed skipping gulp-concat@^2.6.0 /home/marco/html_ws/rosweb
+99 verbose already installed skipping gulp-declare@^0.3.0 /home/marco/html_ws/rosweb
+100 verbose already installed skipping gulp-handlebars@^4.0.0 /home/marco/html_ws/rosweb
+101 verbose request uri https://registry.npmjs.org/three
+102 verbose request no auth needed
+103 info attempt registry request try #1 at 4:56:46 PM
+104 verbose request id e0b949ee56df25de
+105 verbose etag "2Q3XFK41D44JCD4TKCTVQD4HQ"
+106 http request GET https://registry.npmjs.org/three
+107 http 304 https://registry.npmjs.org/three
+108 verbose headers { date: 'Mon, 31 Oct 2016 18:56:26 GMT',
+108 verbose headers   via: '1.1 varnish',
+108 verbose headers   'cache-control': 'max-age=300',
+108 verbose headers   etag: '"2Q3XFK41D44JCD4TKCTVQD4HQ"',
+108 verbose headers   age: '0',
+108 verbose headers   connection: 'keep-alive',
+108 verbose headers   'x-served-by': 'cache-gru7120-GRU',
+108 verbose headers   'x-cache': 'MISS',
+108 verbose headers   'x-cache-hits': '0',
+108 verbose headers   'x-timer': 'S1477940186.581005,VS0,VE160',
+108 verbose headers   vary: 'Accept-Encoding' }
+109 silly get cb [ 304,
+109 silly get   { date: 'Mon, 31 Oct 2016 18:56:26 GMT',
+109 silly get     via: '1.1 varnish',
+109 silly get     'cache-control': 'max-age=300',
+109 silly get     etag: '"2Q3XFK41D44JCD4TKCTVQD4HQ"',
+109 silly get     age: '0',
+109 silly get     connection: 'keep-alive',
+109 silly get     'x-served-by': 'cache-gru7120-GRU',
+109 silly get     'x-cache': 'MISS',
+109 silly get     'x-cache-hits': '0',
+109 silly get     'x-timer': 'S1477940186.581005,VS0,VE160',
+109 silly get     vary: 'Accept-Encoding' } ]
+110 verbose etag https://registry.npmjs.org/three from cache
+111 verbose get saving three to /home/marco/.npm/registry.npmjs.org/three/.cache.json
+112 verbose correctMkdir /home/marco/.npm correctMkdir not in flight; initializing
+113 silly addNameRange number 2 { name: 'three', range: '>=0.61.0 <0.62.0', hasData: true }
+114 silly addNameRange versions [ 'three',
+114 silly addNameRange   [ '0.54.0-dev',
+114 silly addNameRange     '0.54.1-dev',
+114 silly addNameRange     '0.54.2-dev',
+114 silly addNameRange     '0.54.3-dev',
+114 silly addNameRange     '0.54.4-dev',
+114 silly addNameRange     '0.54.5-dev',
+114 silly addNameRange     '0.54.6-dev',
+114 silly addNameRange     '0.54.7-dev',
+114 silly addNameRange     '0.54.8-dev',
+114 silly addNameRange     '0.54.9-dev',
+114 silly addNameRange     '0.54.10-dev',
+114 silly addNameRange     '0.54.11-dev',
+114 silly addNameRange     '0.54.12-dev',
+114 silly addNameRange     '0.54.0',
+114 silly addNameRange     '0.55.0',
+114 silly addNameRange     '0.56.0',
+114 silly addNameRange     '0.56.1',
+114 silly addNameRange     '0.56.2',
+114 silly addNameRange     '0.56.3',
+114 silly addNameRange     '0.56.4',
+114 silly addNameRange     '0.58.1',
+114 silly addNameRange     '0.58.2',
+114 silly addNameRange     '0.58.3',
+114 silly addNameRange     '0.58.4',
+114 silly addNameRange     '0.58.5',
+114 silly addNameRange     '0.58.6',
+114 silly addNameRange     '0.56.7',
+114 silly addNameRange     '0.58.7',
+114 silly addNameRange     '0.58.8',
+114 silly addNameRange     '0.58.9',
+114 silly addNameRange     '0.58.10',
+114 silly addNameRange     '0.66.0',
+114 silly addNameRange     '0.66.1',
+114 silly addNameRange     '0.66.2',
+114 silly addNameRange     '0.67.0',
+114 silly addNameRange     '0.68.0',
+114 silly addNameRange     '0.66.6',
+114 silly addNameRange     '0.66.7',
+114 silly addNameRange     '0.66.8',
+114 silly addNameRange     '0.66.9',
+114 silly addNameRange     '0.66.10',
+114 silly addNameRange     '0.66.11',
+114 silly addNameRange     '0.66.12',
+114 silly addNameRange     '0.66.13',
+114 silly addNameRange     '0.66.14',
+114 silly addNameRange     '0.66.15',
+114 silly addNameRange     '0.66.16',
+114 silly addNameRange     '0.66.17',
+114 silly addNameRange     '0.66.18',
+114 silly addNameRange     '0.66.19',
+114 silly addNameRange     '0.69.0',
+114 silly addNameRange     '0.66.20',
+114 silly addNameRange     '0.66.21',
+114 silly addNameRange     '0.66.22',
+114 silly addNameRange     '0.66.23',
+114 silly addNameRange     '0.66.24',
+114 silly addNameRange     '0.66.25',
+114 silly addNameRange     '0.66.26',
+114 silly addNameRange     '0.66.27',
+114 silly addNameRange     '0.66.28',
+114 silly addNameRange     '0.66.29',
+114 silly addNameRange     '0.66.30',
+114 silly addNameRange     '0.66.31',
+114 silly addNameRange     '0.66.32-dev',
+114 silly addNameRange     '0.66.35',
+114 silly addNameRange     '0.66.36',
+114 silly addNameRange     '0.66.37',
+114 silly addNameRange     '0.66.38',
+114 silly addNameRange     '0.66.39',
+114 silly addNameRange     '0.66.40',
+114 silly addNameRange     '0.70.0',
+114 silly addNameRange     '0.66.41',
+114 silly addNameRange     '0.66.42',
+114 silly addNameRange     '0.66.43',
+114 silly addNameRange     '0.66.45',
+114 silly addNameRange     '0.66.46',
+114 silly addNameRange     '0.66.47',
+114 silly addNameRange     '0.66.48',
+114 silly addNameRange     '0.66.49',
+114 silly addNameRange     '0.66.50',
+114 silly addNameRange     '0.66.51',
+114 silly addNameRange     '0.66.52',
+114 silly addNameRange     '0.66.53',
+114 silly addNameRange     '0.66.54',
+114 silly addNameRange     '0.66.55',
+114 silly addNameRange     '0.66.56',
+114 silly addNameRange     '0.66.57',
+114 silly addNameRange     '0.66.58',
+114 silly addNameRange     '0.66.59',
+114 silly addNameRange     '0.66.60',
+114 silly addNameRange     '0.66.61',
+114 silly addNameRange     '0.66.62',
+114 silly addNameRange     '0.66.63',
+114 silly addNameRange     '0.71.0',
+114 silly addNameRange     '0.70.1',
+114 silly addNameRange     '0.66.64',
+114 silly addNameRange     '0.66.65',
+114 silly addNameRange     '0.66.66',
+114 silly addNameRange     '0.66.67',
+114 silly addNameRange     '0.66.68',
+114 silly addNameRange     '0.66.69',
+114 silly addNameRange     '0.66.70',
+114 silly addNameRange     '0.66.71',
+114 silly addNameRange     '0.66.72',
+114 silly addNameRange     '0.66.73',
+114 silly addNameRange     '0.66.74',
+114 silly addNameRange     '0.66.75',
+114 silly addNameRange     '0.66.76',
+114 silly addNameRange     '0.66.77',
+114 silly addNameRange     '0.66.78',
+114 silly addNameRange     '0.66.79',
+114 silly addNameRange     '0.66.80',
+114 silly addNameRange     '0.66.81',
+114 silly addNameRange     '0.66.83',
+114 silly addNameRange     '0.66.84',
+114 silly addNameRange     '0.66.85',
+114 silly addNameRange     '0.68.86',
+114 silly addNameRange     '0.66.86',
+114 silly addNameRange     '0.71.1',
+114 silly addNameRange     '0.72.0',
+114 silly addNameRange     '0.68.87',
+114 silly addNameRange     '0.66.87',
+114 silly addNameRange     '0.66.82',
+114 silly addNameRange     '0.73.0',
+114 silly addNameRange     '0.66.88',
+114 silly addNameRange     '0.66.89',
+114 silly addNameRange     '0.66.90',
+114 silly addNameRange     '0.66.91',
+114 silly addNameRange     '0.66.92',
+114 silly addNameRange     '0.66.93',
+114 silly addNameRange     '0.66.94',
+114 silly addNameRange     '0.66.95',
+114 silly addNameRange     '0.66.96',
+114 silly addNameRange     '0.66.97',
+114 silly addNameRange     '0.73.1',
+114 silly addNameRange     '0.73.2',
+114 silly addNameRange     '0.74.0',
+114 silly addNameRange     '0.75.0',
+114 silly addNameRange     '0.76.1',
+114 silly addNameRange     '0.77.0',
+114 silly addNameRange     '0.77.1',
+114 silly addNameRange     '0.78.0',
+114 silly addNameRange     '0.79.0',
+114 silly addNameRange     '0.80.0',
+114 silly addNameRange     '0.80.1',
+114 silly addNameRange     '0.81.0',
+114 silly addNameRange     '0.81.1',
+114 silly addNameRange     '0.81.2',
+114 silly addNameRange     '0.82.0',
+114 silly addNameRange     '0.82.1' ] ]
+115 verbose stack Error: No compatible version found: three@'>=0.61.0 <0.62.0'
+115 verbose stack Valid install targets:
+115 verbose stack ["0.54.0-dev","0.54.1-dev","0.54.2-dev","0.54.3-dev","0.54.4-dev","0.54.5-dev","0.54.6-dev","0.54.7-dev","0.54.8-dev","0.54.9-dev","0.54.10-dev","0.54.11-dev","0.54.12-dev","0.54.0","0.55.0","0.56.0","0.56.1","0.56.2","0.56.3","0.56.4","0.58.1","0.58.2","0.58.3","0.58.4","0.58.5","0.58.6","0.56.7","0.58.7","0.58.8","0.58.9","0.58.10","0.66.0","0.66.1","0.66.2","0.67.0","0.68.0","0.66.6","0.66.7","0.66.8","0.66.9","0.66.10","0.66.11","0.66.12","0.66.13","0.66.14","0.66.15","0.66.16","0.66.17","0.66.18","0.66.19","0.69.0","0.66.20","0.66.21","0.66.22","0.66.23","0.66.24","0.66.25","0.66.26","0.66.27","0.66.28","0.66.29","0.66.30","0.66.31","0.66.32-dev","0.66.35","0.66.36","0.66.37","0.66.38","0.66.39","0.66.40","0.70.0","0.66.41","0.66.42","0.66.43","0.66.45","0.66.46","0.66.47","0.66.48","0.66.49","0.66.50","0.66.51","0.66.52","0.66.53","0.66.54","0.66.55","0.66.56","0.66.57","0.66.58","0.66.59","0.66.60","0.66.61","0.66.62","0.66.63","0.71.0","0.70.1","0.66.64","0.66.65","0.66.66","0.66.67","0.66.68","0.66.69","0.66.70","0.66.71","0.66.72","0.66.73","0.66.74","0.66.75","0.66.76","0.66.77","0.66.78","0.66.79","0.66.80","0.66.81","0.66.83","0.66.84","0.66.85","0.68.86","0.66.86","0.71.1","0.72.0","0.68.87","0.66.87","0.66.82","0.73.0","0.66.88","0.66.89","0.66.90","0.66.91","0.66.92","0.66.93","0.66.94","0.66.95","0.66.96","0.66.97","0.73.1","0.73.2","0.74.0","0.75.0","0.76.1","0.77.0","0.77.1","0.78.0","0.79.0","0.80.0","0.80.1","0.81.0","0.81.1","0.81.2","0.82.0","0.82.1"]
+115 verbose stack
+115 verbose stack     at installTargetsError (/usr/lib/node_modules/npm/lib/cache/add-named.js:284:12)
+115 verbose stack     at next (/usr/lib/node_modules/npm/lib/cache/add-named.js:262:19)
+115 verbose stack     at setData (/usr/lib/node_modules/npm/lib/cache/add-named.js:236:5)
+115 verbose stack     at RES (/usr/lib/node_modules/npm/node_modules/inflight/inflight.js:23:14)
+115 verbose stack     at f (/usr/lib/node_modules/npm/node_modules/once/once.js:17:25)
+115 verbose stack     at fixName (/usr/lib/node_modules/npm/lib/cache/add-named.js:29:5)
+115 verbose stack     at saved (/usr/lib/node_modules/npm/lib/cache/caching-client.js:173:7)
+115 verbose stack     at /usr/lib/node_modules/npm/node_modules/graceful-fs/polyfills.js:210:7
+115 verbose stack     at FSReqWrap.oncomplete (fs.js:82:15)
+116 verbose cwd /home/marco/html_ws/rosweb
+117 error Linux 4.4.0-45-generic
+118 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install"
+119 error node v4.6.1
+120 error npm  v2.15.9
+121 error code ETARGET
+122 error notarget No compatible version found: three@'>=0.61.0 <0.62.0'
+122 error notarget Valid install targets:
+122 error notarget ["0.54.0-dev","0.54.1-dev","0.54.2-dev","0.54.3-dev","0.54.4-dev","0.54.5-dev","0.54.6-dev","0.54.7-dev","0.54.8-dev","0.54.9-dev","0.54.10-dev","0.54.11-dev","0.54.12-dev","0.54.0","0.55.0","0.56.0","0.56.1","0.56.2","0.56.3","0.56.4","0.58.1","0.58.2","0.58.3","0.58.4","0.58.5","0.58.6","0.56.7","0.58.7","0.58.8","0.58.9","0.58.10","0.66.0","0.66.1","0.66.2","0.67.0","0.68.0","0.66.6","0.66.7","0.66.8","0.66.9","0.66.10","0.66.11","0.66.12","0.66.13","0.66.14","0.66.15","0.66.16","0.66.17","0.66.18","0.66.19","0.69.0","0.66.20","0.66.21","0.66.22","0.66.23","0.66.24","0.66.25","0.66.26","0.66.27","0.66.28","0.66.29","0.66.30","0.66.31","0.66.32-dev","0.66.35","0.66.36","0.66.37","0.66.38","0.66.39","0.66.40","0.70.0","0.66.41","0.66.42","0.66.43","0.66.45","0.66.46","0.66.47","0.66.48","0.66.49","0.66.50","0.66.51","0.66.52","0.66.53","0.66.54","0.66.55","0.66.56","0.66.57","0.66.58","0.66.59","0.66.60","0.66.61","0.66.62","0.66.63","0.71.0","0.70.1","0.66.64","0.66.65","0.66.66","0.66.67","0.66.68","0.66.69","0.66.70","0.66.71","0.66.72","0.66.73","0.66.74","0.66.75","0.66.76","0.66.77","0.66.78","0.66.79","0.66.80","0.66.81","0.66.83","0.66.84","0.66.85","0.68.86","0.66.86","0.71.1","0.72.0","0.68.87","0.66.87","0.66.82","0.73.0","0.66.88","0.66.89","0.66.90","0.66.91","0.66.92","0.66.93","0.66.94","0.66.95","0.66.96","0.66.97","0.73.1","0.73.2","0.74.0","0.75.0","0.76.1","0.77.0","0.77.1","0.78.0","0.79.0","0.80.0","0.80.1","0.81.0","0.81.1","0.81.2","0.82.0","0.82.1"]
+122 error notarget
+122 error notarget This is most likely not a problem with npm itself.
+122 error notarget In most cases you or one of your dependencies are requesting
+122 error notarget a package version that doesn't exist.
+122 error notarget
+122 error notarget It was specified as a dependency of 'rosweb'
+123 verbose exit [ 1, true ]

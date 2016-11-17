@@ -122,7 +122,7 @@ export class Frontend {
   private _insertWidget(widgetInstance: WidgetInstance, currentTabId: number, afterContentCallback: any): void {
     let content: string, html: string;
     let widget: Widget = currentWorkspace.get<Widget>(widgetInstance.widget_id, "Widget");
-    content = MyApp.templates._widgetsTemplates[widget.alias]();
+    content = MyApp.templates._widgetsTemplates[widget.alias](widgetInstance);
 
     let width: number = parseInt($(content).attr("data-width"));
     let height: number = parseInt($(content).attr("data-height"));
