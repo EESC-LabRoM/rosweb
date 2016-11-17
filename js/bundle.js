@@ -30,7 +30,7 @@ class EventsParent {
 }
 exports.EventsParent = EventsParent;
 
-},{"../super/lightbox":17}],2:[function(require,module,exports){
+},{"../super/lightbox":18}],2:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Parent Class
@@ -88,7 +88,7 @@ class RosEvents extends events_1.EventsParent {
 }
 exports.RosEvents = RosEvents;
 
-},{"../super/frontend":15,"./events":1}],3:[function(require,module,exports){
+},{"../super/frontend":16,"./events":1}],3:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Parent Class
@@ -156,7 +156,7 @@ class TabEvents extends events_1.EventsParent {
 }
 exports.TabEvents = TabEvents;
 
-},{"../model/tab":10,"../model/workspace":13,"../super/design":14,"../super/frontend":15,"./events":1}],4:[function(require,module,exports){
+},{"../model/tab":10,"../model/workspace":14,"../super/design":15,"../super/frontend":16,"./events":1}],4:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Super
@@ -195,7 +195,7 @@ class WidgetEvents extends events_1.EventsParent {
 }
 exports.WidgetEvents = WidgetEvents;
 
-},{"../model/widget_instance":12,"../model/workspace":13,"../super/frontend":15,"./events":1}],5:[function(require,module,exports){
+},{"../model/widget_instance":13,"../model/workspace":14,"../super/frontend":16,"./events":1}],5:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Super
@@ -221,7 +221,6 @@ class WidgetInstanceEvents extends events_1.EventsParent {
             e.preventDefault();
         };
         this.WidgetContainerDblClick = (e) => {
-            console.log("dbl click");
             let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
             this.ToggleMovable();
             if ($(".jsToggleMovable").hasClass("active")) {
@@ -560,7 +559,7 @@ class WidgetInstanceEvents extends events_1.EventsParent {
 }
 exports.WidgetInstanceEvents = WidgetInstanceEvents;
 
-},{"../model/workspace":13,"../super/frontend":15,"./events":1}],6:[function(require,module,exports){
+},{"../model/workspace":14,"../super/frontend":16,"./events":1}],6:[function(require,module,exports){
 "use strict";
 const storage_1 = require("../super/storage");
 // import {db} from "../super/db.ts";
@@ -626,7 +625,7 @@ class WorkspaceEvents extends events_1.EventsParent {
 }
 exports.WorkspaceEvents = WorkspaceEvents;
 
-},{"../model/serialized_workspace":9,"../model/workspace":13,"../super/lightbox":17,"../super/storage":19,"./events":1}],7:[function(require,module,exports){
+},{"../model/serialized_workspace":9,"../model/workspace":14,"../super/lightbox":18,"../super/storage":20,"./events":1}],7:[function(require,module,exports){
 /// <reference path="./typings/tsd.d.ts" />
 "use strict";
 // Events
@@ -657,7 +656,7 @@ function events(ros) {
 }
 init();
 
-},{"./events/ros":2,"./events/tab":3,"./events/widget":4,"./events/widget_instance":5,"./events/workspace":6,"./model/workspace":13,"./super/lightbox":17}],8:[function(require,module,exports){
+},{"./events/ros":2,"./events/tab":3,"./events/widget":4,"./events/widget_instance":5,"./events/workspace":6,"./model/workspace":14,"./super/lightbox":18}],8:[function(require,module,exports){
 "use strict";
 class ROSWeb {
     constructor() {
@@ -690,13 +689,14 @@ class Tab {
 }
 exports.Tab = Tab;
 
-},{"../super/frontend":15,"./workspace":13}],11:[function(require,module,exports){
+},{"../super/frontend":16,"./workspace":14}],11:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 const frontend_1 = require("../super/frontend");
 const workspace_1 = require("./workspace");
 class Widget {
-    constructor(name, alias, url) {
+    constructor(widget_group_id, name, alias, url) {
+        this.widget_group_id = widget_group_id;
         this.name = name;
         this.url = url;
         this.alias = alias;
@@ -706,7 +706,20 @@ class Widget {
 }
 exports.Widget = Widget;
 
-},{"../super/frontend":15,"./workspace":13}],12:[function(require,module,exports){
+},{"../super/frontend":16,"./workspace":14}],12:[function(require,module,exports){
+"use strict";
+const frontend_1 = require("../super/frontend");
+const workspace_1 = require("./workspace");
+class WidgetGroup {
+    constructor(name) {
+        this.name = name;
+        workspace_1.currentWorkspace.create(this);
+        frontend_1.frontend.newWidgetGroup(this);
+    }
+}
+exports.WidgetGroup = WidgetGroup;
+
+},{"../super/frontend":16,"./workspace":14}],13:[function(require,module,exports){
 "use strict";
 const frontend_1 = require("../super/frontend");
 const workspace_1 = require("./workspace");
@@ -724,12 +737,13 @@ class WidgetInstance {
 }
 exports.WidgetInstance = WidgetInstance;
 
-},{"../super/frontend":15,"../super/instance_loader":16,"./workspace":13}],13:[function(require,module,exports){
+},{"../super/frontend":16,"../super/instance_loader":17,"./workspace":14}],14:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // model
 const tab_1 = require("./tab");
 const widget_1 = require("./widget");
+const widget_group_1 = require("./widget_group");
 const widget_instance_1 = require("./widget_instance");
 // super
 const frontend_1 = require("../super/frontend");
@@ -746,12 +760,14 @@ class Workspace {
         this._initWorkspace();
     }
     _initWorkspace() {
-        new widget_1.Widget("Topic Viewer", "TopicViewer", "./widgets/topic_viewer");
-        new widget_1.Widget("Param Viewer", "ParamViewer", "./widgets/param_viewer");
-        new widget_1.Widget("Service Viewer", "ServiceViewer", "./widgets/service_viewer");
-        new widget_1.Widget("Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
-        new widget_1.Widget("Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
-        new widget_1.Widget("Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+        let wg = new widget_group_1.WidgetGroup("ROS basics");
+        new widget_1.Widget(wg.id, "Topic Subscriber", "TopicSubscriber", "./widgets/topic_subscriber");
+        new widget_1.Widget(wg.id, "Param Viewer", "ParamViewer", "./widgets/param_viewer");
+        new widget_1.Widget(wg.id, "Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+        wg = new widget_group_1.WidgetGroup("Sensors");
+        new widget_1.Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
+        new widget_1.Widget(wg.id, "Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
+        new widget_1.Widget(wg.id, "Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
     }
     _clearWorkspace() {
         frontend_1.frontend.ClearWorkspace();
@@ -760,10 +776,10 @@ class Workspace {
         this._initWorkspace();
     }
     _clearLists() {
-        this.Lists = new Array({ object: "Tab", list: new Array() }, { object: "Widget", list: new Array() }, { object: "WidgetInstance", list: new Array() });
+        this.Lists = new Array({ object: "Tab", list: new Array() }, { object: "WidgetGroup", list: new Array() }, { object: "Widget", list: new Array() }, { object: "WidgetInstance", list: new Array() });
     }
     _clearCounters() {
-        this.Counters = new Array({ object: "Tab", counter: 0 }, { object: "Widget", counter: 0 }, { object: "WidgetInstance", counter: 0 });
+        this.Counters = new Array({ object: "Tab", counter: 0 }, { object: "WidgetGroup", counter: 0 }, { object: "Widget", counter: 0 }, { object: "WidgetInstance", counter: 0 });
     }
     loadWorkspace(workspace) {
         let data = JSON.parse(workspace.data);
@@ -873,7 +889,7 @@ class Workspace {
 exports.Workspace = Workspace;
 exports.currentWorkspace = new Workspace();
 
-},{"../super/frontend":15,"./tab":10,"./widget":11,"./widget_instance":12}],14:[function(require,module,exports){
+},{"../super/frontend":16,"./tab":10,"./widget":11,"./widget_group":12,"./widget_instance":13}],15:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 class Design {
@@ -910,7 +926,7 @@ class Design {
 }
 exports.Design = Design;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 // Models
@@ -1127,9 +1143,13 @@ class Frontend {
         // insert tab content
         document.getElementById(this.tabContentContainerId).innerHTML += tabContentHtml;
     }
+    newWidgetGroup(widgetGroup) {
+        let html = MyApp.templates.widgetGroup(widgetGroup);
+        $(".jsWidgetGroups").append(html);
+    }
     newWidget(widget) {
         let html = MyApp.templates.widgetItem(widget);
-        $(".jsWidgetsList").append(html);
+        $("#jsWidgetGroup" + widget.widget_group_id + " .jsWidgets").append(html);
         $("body").append("<script type='text/javascript' src='" + widget.url.slice(2) + "/main.js'></script>");
     }
     newWidgetInstance(widgetInstance) {
@@ -1139,7 +1159,7 @@ class Frontend {
 exports.Frontend = Frontend;
 exports.frontend = new Frontend();
 
-},{"../model/tab":10,"../model/workspace":13,"./names":18,"./trigger":20}],16:[function(require,module,exports){
+},{"../model/tab":10,"../model/workspace":14,"./names":19,"./trigger":21}],17:[function(require,module,exports){
 "use strict";
 class InstanceLoader {
     getInstance(context, name, ...args) {
@@ -1150,7 +1170,7 @@ class InstanceLoader {
 }
 exports.instance_loader = new InstanceLoader();
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 class Lightbox {
@@ -1185,7 +1205,7 @@ class Lightbox {
 }
 exports.lightbox = new Lightbox();
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 class Names {
     constructor() {
@@ -1201,7 +1221,7 @@ class Names {
 }
 exports.Names = Names;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 const rosweb_1 = require("../model/rosweb");
 const serialized_workspace_1 = require("../model/serialized_workspace");
@@ -1294,7 +1314,7 @@ class Storage {
 }
 exports.storage = new Storage();
 
-},{"../model/rosweb":8,"../model/serialized_workspace":9}],20:[function(require,module,exports){
+},{"../model/rosweb":8,"../model/serialized_workspace":9}],21:[function(require,module,exports){
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 class Trigger {
