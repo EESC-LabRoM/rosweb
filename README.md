@@ -55,6 +55,6 @@ For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.
 
 [ros]: <http://www.ros.org>
 [doc]: <http://www.labrom.eesc.usp.br/rosweb/typedoc>
-[demo]: <https://eesc-labrom.github.io/rosweb/>
+[demo]: <http://labrom.eesc.usp.br/rosweb/>
 [rosbridge]: <http://www.github.com/RobotWebTools/rosbridge_suite>
 [paper]: <https://www.researchgate.net/publication/308519873_DEVELOPMENT_OF_A_MOBILE_ROBOTS_SUPERVISORY_SYSTEM> 
