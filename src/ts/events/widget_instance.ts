@@ -200,6 +200,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this._WidgetSettingsConfirmSubscriptions(widgetInstanceId);
     this._WidgetSettingsConfirmRosParams(widgetInstanceId);
     this._WidgetSettingsConfirmRosServices(widgetInstanceId);
+    this._WidgetSettingsConfirmActionServers(widgetInstanceId);
 
     // manage params
     this._WidgetSettingsConfirmParams(widgetInstanceId);
@@ -262,6 +263,20 @@ export class WidgetInstanceEvents extends EventsParent {
       let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
       let htmlMeta = $(htmlWidgetInstance).find("meta[data-widget-param-id=" + widgetParamId + "]");
       $(htmlMeta).attr("data-widget-param-value", varValue);
+    });
+  };
+  private _WidgetSettingsConfirmActionServers(widgetInstanceId: number): void {
+    $(".jsRosActionServerSelector").each((index: number, elem: Element) => {
+      let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
+
+      let actionServerChangeCallback: any = $(elem).attr("data-ros-actionserver-chng");
+      let actionServerSelected: string = $(elem).val();
+      widgetInstance.WidgetCallbackClass[actionServerChangeCallback](actionServerSelected);
+
+      let rosActionServerId = $(elem).attr("data-ros-actionserver-id");
+      let htmlWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "]");
+      let htmlMeta = $(htmlWidgetInstance).find("meta[data-ros-actionserver-id=" + rosActionServerId + "]");
+      $(htmlMeta).attr("data-ros-actionserver-slctd", actionServerSelected);
     });
   };
 

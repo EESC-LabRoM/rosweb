@@ -8,9 +8,8 @@ div[data-widget-name='action-lib-tool'] {
   float: left;
   height: 100%;
   width: 100%;
-  overflow: hidden;
   div.header {
-    background-color: #aee;
+    background-color: #aac;
     border-bottom: 1px solid #333;
     p {
       text-align: center;
@@ -23,7 +22,26 @@ div[data-widget-name='action-lib-tool'] {
       font-style: italic;
     }
   }
-  div.datatopic1 {
-    padding: 10px;
+  div.details {
+    div.actionserver {
+      margin: 3px;
+      border: 1px solid #333;
+      padding: 3px;
+      font-size: 14px;
+      p {
+        padding: 0px;
+        height: 20px;
+      }
+    }
+    div.goal {
+      input {
+        margin-left: 3px;
+        height: 18px;
+        max-width: 150px;
+      }
+    }
+    button {
+      margin: 3px;
+    }
   }
 }
