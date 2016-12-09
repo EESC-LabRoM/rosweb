@@ -240,6 +240,26 @@ export class Frontend {
       $(element).append(html);
     });
   }
+  public UpdateActionServerSelectors(response: string[]): void {
+    $(".jsRosActionServerSelector").html("");
+    var html = '';
+    $(".jsRosActionServerSelector").each((i: number, element: Element) => {
+      let elementWidgetInstance = $(".jsWidgetContainer[data-widget-instance-id=" + $(element).attr("data-widget-instance-id") + "]");
+      let elementMeta = $(elementWidgetInstance).find("meta[data-ros-actionserver-id='" + $(element).attr("data-ros-actionserver-id") + "']");
+      let selectedActionServer: string = $(elementMeta).attr("data-ros-actionserver-slctd");
+
+      html = MyApp.templates.rosActionServerSelectorOptions({ name: '-- Select an action server to subscribe --', value: "" });
+      let strTypes: string = $(element).attr("data-ros-actionserver-type");
+      let types = (strTypes == "") ? [] : strTypes.split("|");
+      response.forEach((value: string, index: number) => {
+        let selected: boolean = (value == selectedActionServer) ? true : false;
+        if ((types.indexOf(response[index]) > -1) || types.length == 0) {
+          html += MyApp.templates.rosActionServerSelectorOptions({ name: value, value: value, selected: selected });
+        }
+      });
+      $(element).append(html);
+    });
+  }
 
   // Update Workspace Methods
   public ClearWorkspace() {

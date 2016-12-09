@@ -74,6 +74,8 @@ declare namespace ROSLIB {
 		 */
 		getTopics(callback:(topics:string[]) => void, failedCallback?:(error:any)=>void):void;
 
+    getActionServers(callback:(action_servers:string[]) => void, failedCallback?:(error:any)=>void):void;
+
 		/**
 		 * Retrieves Topics in ROS as an array as specific type
 		 *

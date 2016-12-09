@@ -47,6 +47,7 @@ export class Workspace {
     new Widget(wg.id, "Topic Subscriber", "TopicSubscriber", "./widgets/topic_subscriber");
     new Widget(wg.id, "Param Viewer", "ParamViewer", "./widgets/param_viewer");
     new Widget(wg.id, "Service Viewer", "ServiceViewer", "./widgets/service_viewer");
+    new Widget(wg.id, "ActionLib Tool", "ActionLibTool", "./widgets/action_lib_tool");
  
     wg = new WidgetGroup("Sensors");
     new Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");

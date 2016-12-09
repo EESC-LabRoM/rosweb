@@ -71,6 +71,7 @@ export class WidgetInstanceEvents extends EventsParent {
     this._WidgetSettingsRosParams(widgetInstanceId);
     this._WidgetSettingsRosServices(widgetInstanceId);
     this._WidgetSettingsParams(widgetInstanceId);
+    this._WidgetSettingsActionServers(widgetInstanceId);
 
     // frontend actions
     this.Frontend.ShowWidgetSettings();
@@ -122,6 +123,18 @@ export class WidgetInstanceEvents extends EventsParent {
       $(".jsSettingsSelection").append(html);
     });
   };
+  private _WidgetSettingsActionServers(widgetInstanceId: number): void {
+    $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstanceId + "] meta[data-ros-actionserver=1]").each(function (k, v) {
+      var html = MyApp.templates.rosActionServerSelector({
+        widget_instance_id: widgetInstanceId,
+        ros_actionserver_id: $(v).attr("data-ros-actionserver-id"),
+        ros_actionserver_chng: $(v).attr("data-ros-actionserver-chng"),
+        ros_actionserver_desc: $(v).attr("data-ros-actionserver-desc"),
+        ros_actionserver_type: $(v).attr("data-ros-actionserver-type")
+      });
+      $(".jsSettingsSelection").append(html);
+    });
+  }
 
   public WidgetContainerDblClick = (e?: MouseEvent) => {
     let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
@@ -163,11 +176,20 @@ export class WidgetInstanceEvents extends EventsParent {
   private _WidgetSettingsRefreshsServices() {
     this.Ros.getServices((servicesResponse: any) => {
       this.Frontend.UpdateRosServiceSelectors(servicesResponse);
-      this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
+      this._WidgetSettingsRefreshActionServers();
       $(".jsRosTopicSelector").removeAttr("disabled");
     }, (servicesError: any) => {
       alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
       console.log(servicesError);
+    });
+  };
+  private _WidgetSettingsRefreshActionServers() {
+    this.Ros.getActionServers((actionServersResponse: any) => {
+      this.Frontend.UpdateActionServerSelectors(actionServersResponse);
+      this.Frontend.LoadingLink($(".jsWidgetSettingsRefresh")[0], false);
+    }, (topicsError: any) => {
+      alert("Error: ROSWeb may not be connected to a RosBridge WebSocket server");
+      console.log(topicsError);
     });
   };
 
