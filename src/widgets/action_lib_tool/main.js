@@ -10,56 +10,73 @@ var WidgetActionLibTool = function (widgetInstanceId) {
       self.sendGoal();
       e.preventDefault();
     });
+    $(self.selector).find(".jsWidgetActionLibToolCancelGoal").click(function(e) {
+      self.cancelGoal();
+      e.preventDefault();
+    });
   };
   this.clbkResized = function () { };
   this.clbkMoved = function () { };
   this.clbkTab = function (isMyTab) { };
 
   // Subscriptions Callbacks
-  this.actionClient = new ROSLIB.ActionClient({ros:ros, serverName:'', actionName: ''});
-  this.goal = new ROSLIB.Goal({
-    actionClient : self.actionClient,
-    goalMessage : {}
-  });
+  this.actionClient = {};
+  this.goal = {};
   this.onchange1 = function (selectedActionServer) {
-    self.actionClient.serverName = "/" + selectedActionServer;
-    $(self.selector).find("p.name").html(selectedActionServer);
-
     if (selectedActionServer == "") return;
     
-    ros.getTopicType("/" + selectedActionServer + "/goal", function (goalType) {
-      ros.getMessageDetails(goalType, function(typeDefs) {
+    $(self.selector).find("p.name").html(selectedActionServer);
+    
+    ros.getTopicType("/" + selectedActionServer + "/goal", function (type) {
+      self.actionClient = new ROSLIB.ActionClient({
+        ros:ros,
+        serverName: "/" + selectedActionServer,
+        actionName: type.slice(0, -4)
+      });
+      ros.getMessageDetails(type, function(typeDefs) {
         var elem = $(self.selector).find(".actionserver.goal form");
         elem.html("");
-        self.updateGoalForm(selectedActionServer, "object", goalType, typeDefs);
+        self.updateGoalForm(selectedActionServer, "object", type, typeDefs);
       });
     }, function (goalError) {
       throw new Error(goalError);
     });
-    self.goal.on('feedback', function(feedback) {
-      var elem = $(self.selector).find(".actionserver.feedback");
-      $(elem).html("");
-      self.debugObjectInsideElement(elem, feedback);
-    });
-    self.goal.on('result', function(result) {
-      var elem = $(self.selector).find(".actionserver.result");
-      $(elem).html("");
-      self.debugObjectInsideElement(elem, result);
-    });
+  };
+  this.feedbackCallback = function(feedback) {
+    var elem = $(self.selector).find(".actionserver.feedback");
+    $(elem).html("");
+    self.debugObjectInsideElement(elem, feedback);
+  };
+  this.resultCallback = function(result) {
+    var elem = $(self.selector).find(".actionserver.result");
+    $(elem).html("");
+    self.debugObjectInsideElement(elem, result);
+  };
+  this.statusCallback = function(status) {
+    var elem = $(self.selector).find(".actionserver.status");
+    $(elem).html("");
+    self.debugObjectInsideElement(elem, status);
   };
 
   // elementsCallbacks
   this.sendGoal = function() {
-    console.log("send goal");
-    var form = $(self.selector + " .actionserver.goal form");
-    console.log(form);
-    var request = self.getObjectForm(self.selector + " .actionserver.goal form");
-    console.log(request);
-    /*
-    self.goal.goalMessage = request;
-    console.log(self.goal.goalMessage);
-    self.actionClient.send();
-    */
+    self.goal = new ROSLIB.Goal({
+      actionClient: self.actionClient,
+      goalMessage: self.getObjectForm(self.selector + " .actionserver.goal form").goal
+    });
+    self.goal.on('feedback', function(feedback) {
+      self.feedbackCallback(feedback);
+    });
+    self.goal.on('result', function(result) {
+      self.resultCallback(result);
+    });
+    self.goal.on('status', function(status) {
+      self.statusCallback(status);
+    });
+    self.goal.send();
+  };
+  this.cancelGoal = function() {
+    self.actionClient.cancel();
   };
 
   // helper methods
@@ -127,23 +144,19 @@ var WidgetActionLibTool = function (widgetInstanceId) {
       name = $(input).attr("name");
       type = $(input).attr("type");
       var nameSplit = name.split('.');
-      console.log(nameSplit);
-      for(j in nameSplit) {
-        console.log("j: " + j);
+      for(j = 0; j < nameSplit.length; j++) {
         var slice = nameSplit.slice(0, (j+1));
-        console.log(slice);
         prop = slice.join(".");
-        console.log("prop: " + prop);
-        eval("if(" + prop + " == undefined) object." + prop + " = {}");
-        console.log(object);
+        eval("if(" + prop + " == undefined) " + prop + " = {}");
       }
-      console.log(obj);
       switch (type) {
         case 'text':
           eval(name + " = '" + $(input).val() + "'");
           break;
         case 'number':
-          eval(name + " = " + parseFloat($(input).val()));
+          var val = parseFloat($(input).val());
+          val = isNaN(val) ? 0 : val;
+          eval(name + " = " + val);
           break;
         case 'checkbox':
           eval(name + " = " + $(input).is(":checked")) ? 1 : 0;
