@@ -29,14 +29,14 @@ var paths = {
   sass_wdgt: ["./src/widgets/**/*.scss"],
   hbs: ["./src/hbs/**/*.hbs"],
   js: ["./src/js/*.js"],
-  wdgt: ["./src/widgets/**/*.*"],
+  wdgt: ["./src/widgets/**/*.hbs", "./src/widgets/**/*.js"],
   img: ["./src/img/**/*.*"]
 };
 
 // Big Tasks
 gulp.task('default', ['install', 'build', 'start']);
 gulp.task('install', ['tsd']);
-gulp.task('build', ['html', 'ts', 'sass', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
+gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
 gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt']);
 gulp.task('start', function () {
   stream = gulp.src('./dist/')
