@@ -6,6 +6,8 @@ var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+// glob
+var glob = require('glob');
 // tsd
 var tsd = require('gulp-tsd');
 // hbs
@@ -212,6 +214,24 @@ gulp.task('start', function () {
   });
   gulp.task('watchwdgt', ['wdgt'], function () {
     gulp.watch(paths.wdgt, ['wdgt']);
+  });
+  gulp.task('wdgt_ts', function() {
+    var files = glob.sync('src/widgets/**/*.ts');
+    return browserify({
+      basedir: '.',
+      debug: true,
+      entries: files,
+      cache: {},
+      packageCache: {}
+    })
+    .plugin(tsify)
+    .transform("babelify")
+    .bundle()
+    .pipe(source('main.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('src/widgets/**/'));
   });
 }
 
