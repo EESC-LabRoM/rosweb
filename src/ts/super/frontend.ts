@@ -146,6 +146,7 @@ export class Frontend {
     }
   }
 
+  // Widget Instance properties
   public setWidgetInstancePosition(widgetInstance: WidgetInstance, position: Geometry.Point2D): void {
     $(".jsWidgetContainer[data-widget-instance-id=" + widgetInstance.id + "]").css({ top: position.y, left: position.x });
   };
@@ -263,7 +264,7 @@ export class Frontend {
 
   // Update Workspace Methods
   public ClearWorkspace() {
-    $(".jsWidgetsList").html("");
+    $(".jsWidgetGroups").html("");
     $(".jsTab").remove();
     $("#tabs").html("");
   }
