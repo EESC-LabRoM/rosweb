@@ -1,30 +1,37 @@
-import { WidgetInterface } from '../../ts/interface/widget';
+///<reference path="../../ts/typings/tsd.d.ts" />
 
-class WidgetTopicPublisher implements WidgetInterface {
-  public widgetInstanceId: number;
-  public selector: string;
+import { WidgetParent } from '../../ts/classmodel/widget'
+import {Helper} from '../../ts/helpers/html';
 
+declare var ros: ROSLIB.Ros;
+
+class WidgetTopicPublisher extends WidgetParent {
+  constructor(widgetInstanceId: number) {
+    super(widgetInstanceId);
+    this.topic = new ROSLIB.Topic({ros: ros, name: "", messageType: ""});
+  }
   public clbkCreated(): void {
-    console.log("olá");
-    // throw new Error('Not implemented yet.');
   }
-
   public clbkResized(): void {
-    // throw new Error('Not implemented yet.');
   }
-
   public clbkMoved(): void {
-    // throw new Error('Not implemented yet.');
   }
-
   public clbkTab(): void {
-    // throw new Error('Not implemented yet.');
+  }
+  public clbkConfirm(): void {
+    ros.getMessageDetails(this.topicType, (typeDefs) => {
+      var elem = $(this.selector + " .form form").html("");
+      let htmlHelper = new Helper.FormHelper();
+      htmlHelper.typeDefToHtmlForm(elem, "Object", "formName", this.topicType, typeDefs, 0);
+    }, (error: any) => {
+      console.log(error);
+    });
   }
 
-  // selector callbacks
-  public onChange(): void {
-
-  }
+  // ===== widget params =====
+  public topicName: string;
+  public topicType: string;
+  public topic: ROSLIB.Topic;
 }
 
 window["WidgetTopicPublisher"] = WidgetTopicPublisher;

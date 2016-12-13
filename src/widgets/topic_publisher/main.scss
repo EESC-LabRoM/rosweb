@@ -1,0 +1,34 @@
+.cssWidgetContainer[data-widget-conf='0'] {
+  div[data-widget-name='topic-publisher'] {
+    border: 1px solid #333;
+  }
+}
+
+div[data-widget-name='topic-publisher'] {
+  float: left;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  div.header {
+    background-color: #aee;
+    border-bottom: 1px solid #333;
+    p {
+      text-align: center;
+      padding: 0 10px;
+    }
+    p.name {
+      font-weight: bold;
+    }
+    p.type {
+      font-style: italic;
+    }
+  }
+  div.form {
+    padding: 10px;
+    input {
+      margin-left: 3px;
+      height: 18px;
+      max-width: 150px;
+    }
+  }
+}

@@ -32,6 +32,7 @@ var paths = {
   hbs: ["./src/hbs/**/*.hbs"],
   js: ["./src/js/*.js"],
   wdgt: ["./src/widgets/**/*.hbs", "./src/widgets/**/*.js"],
+  wdgt_ts: ["./src/widgets/**/main.ts"],
   img: ["./src/img/**/*.*"]
 };
 
@@ -39,7 +40,7 @@ var paths = {
 gulp.task('default', ['install', 'build', 'start']);
 gulp.task('install', ['tsd']);
 gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
-gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt']);
+gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt', 'watchwdgt_ts']);
 gulp.task('start', function () {
   stream = gulp.src('./dist/')
     .pipe(webserver({
@@ -227,11 +228,14 @@ gulp.task('start', function () {
     .plugin(tsify)
     .transform("babelify")
     .bundle()
-    .pipe(source('main.js'))
+    .pipe(source('widgets.bundle.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('src/widgets/**/'));
+    .pipe(gulp.dest('dist/js/'));
+  });
+  gulp.task('watchwdgt_ts', ['wdgt_ts'], function() {
+    gulp.watch(paths.wdgt_ts, ['wdgt_ts']);
   });
 }
 

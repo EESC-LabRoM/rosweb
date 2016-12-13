@@ -8,4 +8,6 @@ export interface WidgetInterface {
   clbkMoved():void;
   clbkTab():void;
 
+  setSelector(): void;
+
 }

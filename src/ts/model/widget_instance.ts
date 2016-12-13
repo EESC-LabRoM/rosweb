@@ -1,3 +1,4 @@
+import { WidgetGroup } from './widget_group';
 // Models
 import { Geometry } from "../types/Geometry"
 import { Widget } from "./widget"
@@ -23,7 +24,8 @@ export class WidgetInstance {
 
     currentWorkspace.create<WidgetInstance>(this);
 
-    this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + widget.alias, this.id);
+    // this.WidgetCallbackClass = instance_loader.getInstance<any>(window, "Widget" + widget.alias, this.id);
+    this.WidgetCallbackClass = new window["Widget" + widget.alias](this.id); 
 
     frontend.insertWidgetInstance(this, this.WidgetCallbackClass["clbkCreated"]);
   }
