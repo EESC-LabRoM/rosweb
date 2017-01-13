@@ -29,18 +29,17 @@ Until now, it is being developed and tested using Google Chrome browser.
     $ rosdep install web_video_server
     ```
 
-3. [Possibile to skip, but then ActionLib Widget is not working]
-    Install latest development version of rosbrige_server
+3. Install latest development version of rosbrige_server
    ```sh
     $ # go to your catkin workspace /src
     $ git clone -b develop https://github.com/RobotWebTools/rosbridge_suite.git
     $ cd ..
     $ source devel/setup.bash
     $ catkin_make
-    $ # edit src/rosbridge_suite/rosbridge_server/launch/rosbridge_websocket.launch
-      # replace each glob args line of  <arg name="topics_glob" default="[]" /> 
-      # with <arg name="topics_glob" default="[*]" /> 
-      # if you do not add the "*" no topic will be shown!
+    $  # edit src/rosbridge_suite/rosbridge_server/launch/rosbridge_websocket.launch
+    $  # replace each glob args line of  <arg name="topics_glob" default="[]" /> 
+    $  # with <arg name="topics_glob" default="[*]" /> 
+    $  # if you do not add the "*" no topic will be shown!
     $ roslaunch rosbridge_server rosbridge_websocket.launch
     $ rosrun web_video_server web_video_server
     ```
