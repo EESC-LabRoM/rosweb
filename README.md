@@ -29,8 +29,9 @@ Until now, it is being developed and tested using Google Chrome browser.
     $ rosdep install web_video_server
     ```
 
-3. Install latest development version of rosbrige_server
-   ```sh
+
+4. Install latest development version of rosbrige_server [you can skip this, but then the ActionLib Widget is not working]
+    ```sh
     $ # go to your catkin workspace /src
     $ git clone -b develop https://github.com/RobotWebTools/rosbridge_suite.git
     $ cd ..
