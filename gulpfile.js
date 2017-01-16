@@ -39,7 +39,7 @@ var paths = {
 // Big Tasks
 gulp.task('default', ['install', 'build', 'start']);
 gulp.task('install', ['tsd']);
-gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'js', 'wdgt', 'jsl']);
+gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'js', 'wdgt', 'wdgt_ts', 'jsl']);
 gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt', 'watchwdgt_ts']);
 gulp.task('start', function () {
   stream = gulp.src('./dist/')
