@@ -6,7 +6,10 @@ var WidgetCameraViewer = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () {
-    self.host = $("#jsRosUrl").val().split(":")[0];
+    self.host = $("#jsRosUrl").val().split("//")[1].split(":")[0];
+  };
+  this.clbkConfirm = function() {
+
   };
   this.clbkResized = function (width, height) {
     self.width = width;
@@ -35,7 +38,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
   };
 
   // helper properties and methods
-  this.host = '';
+  this.host = $("#jsRosUrl").val().split("//")[1].split(":")[0];
   this.viewer = null;
   this.viewerElement = 'jsMjpeg';
   this.width = 480;
