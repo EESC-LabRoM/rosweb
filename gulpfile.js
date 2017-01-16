@@ -47,7 +47,7 @@ gulp.task('start', function () {
       livereload: true,
       directoryListing: false,
       open: true,
-      host: "localhost",
+      host: "0.0.0.0",
       port: 8000
     }));
   stream.emit('kill');

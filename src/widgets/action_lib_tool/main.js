@@ -5,7 +5,7 @@ var WidgetActionLibTool = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
-  this.clbkCreated = function () {
+  this.clbkConfirm = function() {
     $(self.selector).find(".jsWidgetActionLibToolSendGoal").click(function(e) {
       self.sendGoal();
       e.preventDefault();
@@ -14,6 +14,8 @@ var WidgetActionLibTool = function (widgetInstanceId) {
       self.cancelGoal();
       e.preventDefault();
     });
+  };
+  this.clbkCreated = function () {
   };
   this.clbkResized = function () { };
   this.clbkMoved = function () { };
@@ -33,10 +35,12 @@ var WidgetActionLibTool = function (widgetInstanceId) {
         serverName: "/" + selectedActionServer,
         actionName: type.slice(0, -4)
       });
-      ros.getMessageDetails(type, function(typeDefs) {
+      ros.getMessageDetails(type, (typeDefs) => {
         var elem = $(self.selector).find(".actionserver.goal form");
         elem.html("");
         self.updateGoalForm(selectedActionServer, "object", type, typeDefs);
+      }, (error) => {
+        console.log(error);
       });
     }, function (goalError) {
       throw new Error(goalError);

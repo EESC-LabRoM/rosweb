@@ -6,6 +6,7 @@ var WidgetTopicSubscriber = function (widgetInstanceId) {
 
   // Mandatory callback methods
   this.clbkCreated = function () { };
+  this.clbkConfirm = function () { };
   this.clbkResized = function () { };
   this.clbkMoved = function () { };
   this.clbkTab = function (isMyTab) { };
