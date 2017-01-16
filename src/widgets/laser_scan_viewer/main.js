@@ -46,6 +46,9 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
     self.svg.appendChild(max);
     self.svg.appendChild(self.pointsGroup);
   };
+  this.clbkConfirm = function () {
+
+  };
   this.clbkResized = function (width, height) {
     self.resizeSVG(width, height);
   };

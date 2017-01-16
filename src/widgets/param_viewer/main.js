@@ -19,6 +19,7 @@ var WidgetParamViewer = function (widgetInstanceId) {
       e.preventDefault();
     });
   };
+  this.clbkConfirm = function () { };
   this.clbkResized = function () { };
   this.clbkMoved = function () { };
 
