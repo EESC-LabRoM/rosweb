@@ -9,6 +9,7 @@ var WidgetGoogleMapsGpsViewer = function (widgetInstanceId) {
     self.generateGpsVisualizer();
     $(document).delegate(self.selector + " .jsCenterMap", "click", self.centerMap);
   };
+  this.clbkConfirm = function() { };
   this.clbkResized = function () {
     google.maps.event.trigger(self.gpsVars.map, "resize");
     self.gpsVars.map.setCenter(self.latLng);
