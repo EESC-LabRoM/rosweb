@@ -54,6 +54,7 @@ export class Workspace {
     new Widget(wg.id, "Google Maps GPS Viewer", "GoogleMapsGpsViewer", "./widgets/gmaps_gps");
     new Widget(wg.id, "Camera Viewer", "CameraViewer", "./widgets/camera_viewer");
     new Widget(wg.id, "Laser Scan Viewer", "LaserScanViewer", "./widgets/laser_scan_viewer");
+    new Widget(wg.id, "IMU Viewer", "ImuViewer", "./widgets/imu_viewer");
  
     wg = new WidgetGroup("3D Viewer");
     new Widget(wg.id, "ROS 3D Viewer", "ROS3DViewer", "./widgets/ros_3d_viewer");

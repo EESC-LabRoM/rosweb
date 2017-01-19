@@ -1,0 +1,10 @@
+.cssWidgetContainer[data-widget-conf='0'] div[data-widget-name='imu-viewer'] {
+  border: 1px solid #333;
+}
+
+div[data-widget-name='imu-viewer'] {
+  float: left;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
