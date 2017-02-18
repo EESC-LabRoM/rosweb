@@ -8,8 +8,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 // glob
 var glob = require('glob');
-// tsd
-var tsd = require('gulp-tsd');
 // hbs
 var handlebars = require('gulp-handlebars');
 var wrap = require('gulp-wrap');
