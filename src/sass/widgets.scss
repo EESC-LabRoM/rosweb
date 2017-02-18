@@ -37,7 +37,7 @@ div.cssWidgetContainer {
     height: 32px;
     background-color: rgba(255, 255, 255, 0.5);
     opacity: 1;
-    a {
+    a, span {
       float: left;
       margin: 4px;
       $squareSize: 24px;
