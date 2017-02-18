@@ -37,31 +37,20 @@ var paths = {
 };
 
 // Big Tasks
-gulp.task('default', ['install', 'build', 'start']);
-gulp.task('install', ['tsd']);
-gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'js', 'wdgt', 'wdgt_ts', 'jsl']);
-gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjs', 'watchwdgt', 'watchwdgt_ts']);
+gulp.task('default', ['build', 'start']);
+gulp.task('build', ['html', 'ts', 'sass', 'sass_wdgt', 'img', 'hbs', 'jsl', 'wdgt', 'wdgt_ts']);
+gulp.task('watch', ['watchhtml', 'watchts', 'watchsass', 'watchimg', 'watchhbs', 'watchjsl', 'watchwdgt', 'watchwdgt_ts']);
 gulp.task('start', function () {
   stream = gulp.src('./dist/')
     .pipe(webserver({
       livereload: true,
       directoryListing: false,
-      open: true,
+      open: false,
       host: "0.0.0.0",
       port: 8000
     }));
   stream.emit('kill');
 });
-
-// Config
-{
-  gulp.task('tsd', function (callback) {
-    tsd({
-      command: 'reinstall',
-      config: './src/ts/tsd.json'
-    }, callback);
-  });
-}
 
 // Dist
 {
@@ -163,41 +152,13 @@ gulp.task('start', function () {
   });
 
   // JavaScript libraries
-  gulp.task('js', function () {
+  gulp.task('jsl', function () {
     return gulp.src(paths.js)
       .pipe(gulp.dest('dist/js/'));
   });
-  gulp.task('watchjs', ['js'], function () {
+  gulp.task('watchjsl', ['jsl'], function () {
     gulp.watch(paths.js, ['js']);
   });
-
-  // JavaScript libraries from submodules
-  gulp.task('jsl_roslibjs', function () {
-    return gulp.src('src/js/roslibjs/build/roslib.min.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  gulp.task('jsl_mjpegcanvasjs', function () {
-    return gulp.src('src/js/mjpegcanvasjs/build/mjpegcanvas.min.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  gulp.task('jsl_ros3djs', function () {
-    return gulp.src('src/js/ros3djs/build/ros3d.min.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  // JavaScript libraries from NodeModules
-  gulp.task('jsl_eventemitter', function () {
-    return gulp.src('node_modules/eventemitter2/lib/eventemitter2.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  gulp.task('jsl_handlebars', function () {
-    return gulp.src('node_modules/handlebars/dist/handlebars.min.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  gulp.task('jsl_jquery', function () {
-    return gulp.src('node_modules/jquery/dist/jquery.min.js')
-      .pipe(gulp.dest('dist/js/'));
-  });
-  gulp.task('jsl', ['jsl_roslibjs', 'jsl_mjpegcanvasjs', 'jsl_ros3djs', 'jsl_eventemitter', 'jsl_handlebars', 'jsl_jquery']);
 
   // Images
   gulp.task('img', function () {
@@ -236,12 +197,5 @@ gulp.task('start', function () {
   });
   gulp.task('watchwdgt_ts', ['wdgt_ts'], function() {
     gulp.watch(paths.wdgt_ts, ['wdgt_ts']);
-  });
-}
-
-// for gh-pages
-{
-  gulp.task('publish', ['install', 'build'], function () {
-    gulp.src('dist/**/*.*').pipe(gulp.dest('./'));
   });
 }
