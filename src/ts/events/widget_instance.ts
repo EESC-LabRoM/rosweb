@@ -196,14 +196,15 @@ export class WidgetInstanceEvents extends EventsParent {
   public WidgetSettingsConfirm = (e?: MouseEvent) => {
     // widget instance id
     let widgetInstanceId: number = parseInt($("input#widgetSettings").val());
+
+    // manage params
+    this._WidgetSettingsConfirmParams(widgetInstanceId);
+    
     // manage ros data
     this._WidgetSettingsConfirmSubscriptions(widgetInstanceId);
     this._WidgetSettingsConfirmRosParams(widgetInstanceId);
     this._WidgetSettingsConfirmRosServices(widgetInstanceId);
     this._WidgetSettingsConfirmActionServers(widgetInstanceId);
-
-    // manage params
-    this._WidgetSettingsConfirmParams(widgetInstanceId);
 
     // confirm callback
     let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
