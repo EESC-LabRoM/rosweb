@@ -29,7 +29,6 @@ Work = function () {
           message.ranges[i] = message.range_max;
         }
         cy = 150 * (1 - (message.ranges[i] / message.range_max));
-        console.log(cy);
         point_attr = { cx: 150, cy: cy, r: 1, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
         points.push(point_attr);
       }
