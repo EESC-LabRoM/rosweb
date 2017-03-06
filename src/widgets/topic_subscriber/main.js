@@ -33,14 +33,21 @@ var WidgetTopicSubscriber = function (widgetInstanceId) {
       throw new Error(e);
     });
   };
+  var last_datetime = 0;
   this.callback1 = function (message) {
-    var elem = $(self.selector).find(".datatopic1");
-    $(elem).html("");
-    self.debugObjectInsideElement(elem, message);
+    var datetime = new Date();
+    var period = 1000 * (1 / self.maxUpdateRate);
+    if(datetime - last_datetime > period) {
+      var elem = $(self.selector).find(".datatopic1");
+      $(elem).html("");
+      self.debugObjectInsideElement(elem, message);
+      last_datetime = datetime;
+    }
   }
   // Adjustable params
   this.arrayShowLimit = 5;
   this.valueShowLimit = 10;
+  this.maxUpdateRate = 1;
 
   // helper methods
   self.debugObjectInsideElement = function (elem, obj, level = 0) {
