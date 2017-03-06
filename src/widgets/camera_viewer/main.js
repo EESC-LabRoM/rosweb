@@ -18,7 +18,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
       self.viewer.width = width;
       self.viewer.height = height;
     }
-    $("." + self.viewerElement + " canvas").attr({
+    $(self.viewerElement).attr({
       width: width,
       height: height
     });
@@ -27,7 +27,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
   this.clbkTab = function (isMyTab) { };
 
   this.onchange = function (selectedTopic) {
-    $("." + self.viewerElement + " canvas").remove();
+    $(self.viewerElement).remove();
     self.viewer = new MJPEGCANVAS.Viewer({
       querySelector: '.jsWidgetContainer[data-widget-instance-id=\'' + self.widgetInstanceId + '\'] .jsMjpeg',
       host: self.host,
@@ -44,7 +44,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
   // helper properties and methods
   this.host = $("#jsRosUrl").val().split("//")[1].split(":")[0];
   this.viewer = null;
-  this.viewerElement = 'jsMjpeg';
+  this.viewerElement = self.selector + ' .jsMjpeg canvas';
   this.width = 480;
   this.height = 360;
 
