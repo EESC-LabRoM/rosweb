@@ -20,18 +20,24 @@ Work = function () {
     var angle;
     var dist;
     var max = 1080;
+    var distance = 0;
     if (points.length < max) {
       for (var i in message.ranges) {
         if (i == max) break;
-        angle = 180 * (message.angle_min + message.angle_increment * i) / Math.PI;
-        dist = 140 - (150 * (message.ranges[i] / message.range_max));
-        point_attr = { cx: 150, cy: dist, r: 1, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
+        angle = -180 * (message.angle_min + message.angle_increment * i) / Math.PI;
+        if (message.ranges[i] === null || message.ranges[i] > message.range_max) {
+          message.ranges[i] = message.range_max;
+        }
+        cy = 150 * (1 - (message.ranges[i] / message.range_max));
+        console.log(cy);
+        point_attr = { cx: 150, cy: cy, r: 1, fill: "black", transform: "rotate(" + angle + ", 150, 150)" };
         points.push(point_attr);
       }
     } else {
       for (var i in message.ranges) {
         if (i == max) break;
-        dist = 140 - (150 * (message.ranges[i] / message.range_max));
+        distance = message.ranges[i] == null ? message.range_max : message.ranges[i];
+        dist = 140 - (150 * (distance / message.range_max));
         points[i].cy = dist;
       }
     }

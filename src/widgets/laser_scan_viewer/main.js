@@ -18,16 +18,8 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
     var center = self.createElement("circle", null, {
       cx: 150,
       cy: 150,
-      r: 5,
+      r: 1,
       fill: "red"
-    });
-    var min = self.circle({
-      cx: 150,
-      cy: 150,
-      r: 10,
-      stroke: "red",
-      "stroke-width": 1,
-      fill: "transparent"
     });
     var max = self.circle({
       cx: 150,
@@ -42,7 +34,6 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
     });
 
     self.svg.appendChild(center);
-    self.svg.appendChild(min);
     self.svg.appendChild(max);
     self.svg.appendChild(self.pointsGroup);
   };
@@ -73,32 +64,32 @@ var WidgetLaserScanViewer = function (widgetInstanceId) {
   this.topic = null;
   self.callback1Worker = null;
   self.maxRange = 0;
-  this.divideHz = 0;
-  this.sumDivideHz = 0;
+  this.maxUpdateRate = 1;
+  var last_datetime = 0;
   this.callback = function (message) {
-    if (self.sumDivideHz != self.divideHz) {
-      self.sumDivideHz++;
-      return;
-    }
-    self.sumDivideHz = 0;
-    message.range_max = self.maxRange;
-    self.callback1Worker.postMessage({
-      widgetInstanceId: self.widgetInstanceId,
-      msg: message
-    });
-    self.callback1Worker.onmessage = function (msgEvnt) {
-      var point;
-      var length = self.points.length;
-      for (i in msgEvnt.data) {
-        if (length == 0) {
-          point = self.circle(msgEvnt.data[i]);
-          self.svg.appendChild(point);
-          self.points.push(point);
-        } else {
-          self.points[i].setAttributeNS(null, "cy", msgEvnt.data[i].cy);
+    var datetime = new Date();
+    var period = 1000 * (1 / self.maxUpdateRate);
+    if(datetime - last_datetime > period) {
+      message.range_max = self.maxRange;
+      self.callback1Worker.postMessage({
+        widgetInstanceId: self.widgetInstanceId,
+        msg: message
+      });
+      self.callback1Worker.onmessage = function (msgEvnt) {
+        var point;
+        var length = self.points.length;
+        for (i in msgEvnt.data) {
+          if (length == 0) {
+            point = self.circle(msgEvnt.data[i]);
+            self.svg.appendChild(point);
+            self.points.push(point);
+          } else {
+            self.points[i].setAttributeNS(null, "cy", msgEvnt.data[i].cy);
+          }
         }
-      }
-    };
+      };
+      last_datetime = datetime;
+    }
   };
 
   // helper properties and methods
