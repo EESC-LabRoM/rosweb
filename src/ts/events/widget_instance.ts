@@ -207,7 +207,8 @@ export class WidgetInstanceEvents extends EventsParent {
 
     // confirm callback
     let widgetInstance: WidgetInstance = currentWorkspace.get<WidgetInstance>(widgetInstanceId, "WidgetInstance");
-    widgetInstance.WidgetCallbackClass["clbkConfirm"]();
+    //widgetInstance.WidgetCallbackClass["clbkConfirm"]();
+    widgetInstance.WidgetCallbackClass.clbkConfirm();
 
     // frontend action
     this.Frontend.HideWidgetSettings();

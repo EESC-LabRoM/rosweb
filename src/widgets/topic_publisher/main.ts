@@ -1,18 +1,25 @@
 ///<reference path="../../ts/typings/tsd.d.ts" />
 
 import { WidgetParent } from '../../ts/classmodel/widget'
-import {Helper} from '../../ts/helpers/html';
+import { Helper } from '../../ts/helpers/html';
 
 declare var ros: ROSLIB.Ros;
 
 class WidgetTopicPublisher extends WidgetParent {
   constructor(widgetInstanceId: number) {
     super(widgetInstanceId);
-    this.topic = new ROSLIB.Topic({ros: ros, name: "", messageType: ""});
+    console.log(this.widgetInstanceId);
+    console.log(this.selector);
+    this.topic = new ROSLIB.Topic({ ros: ros, name: "", messageType: "" });
   }
-  public clbkCreated(): void {
+  clbkCreated(): void {
+    console.log(this);
+    $(this.selector).find(".jsWidgetTopicPublisherOnce").click(function (e) {
+      alert("ouch!");
+    });
   }
-  public clbkResized(): void {
+  clbkResized(): void {
+    console.log(this);
   }
   public clbkMoved(): void {
   }
