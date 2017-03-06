@@ -5,6 +5,9 @@ var WidgetROS3DViewer = function (widgetInstanceId) {
   this.selector = ".jsWidgetContainer[data-widget-instance-id=" + self.widgetInstanceId + "]";
 
   // Mandatory callback methods
+  this.clbkConfirm = function() {
+
+  };
   this.clbkCreated = function () {
     // Create the main viewer.
     self.viewer = new ROS3D.Viewer({
