@@ -31,11 +31,15 @@ var WidgetCameraViewer = function (widgetInstanceId) {
     self.viewer = new MJPEGCANVAS.Viewer({
       querySelector: '.jsWidgetContainer[data-widget-instance-id=\'' + self.widgetInstanceId + '\'] .jsMjpeg',
       host: self.host,
+      port: self.webVideoServerPort,
       width: self.width,
       height: self.height,
       topic: selectedTopic
     });
   };
+
+  // parameters
+  this.webVideoServerPort = 8080;
 
   // helper properties and methods
   this.host = $("#jsRosUrl").val().split("//")[1].split(":")[0];
