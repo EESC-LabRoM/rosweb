@@ -12,25 +12,25 @@ var WidgetNewWidget = function (widgetInstanceId) {
   this.clbkTab = function (isMyTab) { };
 
   // Subscriptions Callbacks
-  this.topic1 = new ROSLIB.Topic({
+  this.topic = new ROSLIB.Topic({
     ros: ros,
     name: "",
     messageType: ""
   });
 
   this.on_topic_selected = function (selectedTopic) {
-    self.topic1.unsubscribe();
-    self.topic1.name = selectedTopic;
-    var elem = $(self.selector).find(".datatopic1");
+    self.topic.unsubscribe();
+    self.topic.name = selectedTopic;
+    var elem = $(self.selector).find(".content");
     $(elem).html("");
 
     if (selectedTopic == "") return;
 
     ros.getTopicType(selectedTopic, function (type) {
-      self.topic1.messageType = type;
+      self.topic.messageType = type;
       $(self.selector).find("p.name").html(selectedTopic);
       $(self.selector).find("p.type").html(type);
-      self.topic1.subscribe(self.callback);
+      self.topic.subscribe(self.callback);
     }, function (e) {
       throw new Error(e);
     });
