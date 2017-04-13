@@ -5,6 +5,8 @@ ROSWeb is a web based supervisory system for Robot Operating System (ROS)
 
 It is a web application that manages robots data visualization widgets on a single web page.
 
+More about the project, how to use, how to contribute, demos and tutorials can be found at [this website][roswebpage]
+
 Documentation can be fount at [this website][doc].
 
 See the [working demo][demo].
@@ -72,6 +74,7 @@ For contribution and development tools details, see [CONTRIBUTING](CONTRIBUTING.
 
 [ros]: <http://www.ros.org>
 [doc]: <http://www.labrom.eesc.usp.br/rosweb/typedoc>
+[roswebpage]: <https://eesc-labrom.github.io/roswebpage/>
 [demo]: <http://labrom.eesc.usp.br/rosweb/>
 [rosbridge]: <http://www.github.com/RobotWebTools/rosbridge_suite>
 [paper]: <https://www.researchgate.net/publication/308519873_DEVELOPMENT_OF_A_MOBILE_ROBOTS_SUPERVISORY_SYSTEM> 
