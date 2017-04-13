@@ -1,0 +1,29 @@
+.cssWidgetContainer[data-widget-conf='0'] {
+  div[data-widget-name='new-widget'] {
+    border: 1px solid #333;
+  }
+}
+
+div[data-widget-name='new-widget'] {
+  float: left;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  div.header {
+    background-color: #aee;
+    border-bottom: 1px solid #333;
+    p {
+      text-align: center;
+      padding: 0 10px;
+    }
+    p.name {
+      font-weight: bold;
+    }
+    p.type {
+      font-style: italic;
+    }
+  }
+  div.content {
+    padding:10px;
+  }
+}
