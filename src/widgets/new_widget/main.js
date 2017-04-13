@@ -1,3 +1,4 @@
+/*
 var WidgetNewWidget = function (widgetInstanceId) {
   // Mandatory properties
   var self = this; // local variable to represent the object
@@ -40,3 +41,4 @@ var WidgetNewWidget = function (widgetInstanceId) {
     $(self.selector).find("div.content").html(JSON.stringify(message, null, 4));
   }
 }
+*/
