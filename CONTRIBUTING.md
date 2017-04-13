@@ -21,17 +21,12 @@ sudo npm install -g gulp-cli
   npm install
   ```
   
-3. Build
+3. Build and run the application server
   ```sh
-  gulp build
+  gulp
   ```
   
-4. Run
-  ```sh
-  gulp start
-  ```
-  
-5. Tip: While developing, to keep your local server updated, use the watch task in another terminal:
+4. Tip: While developing, to keep your local server updated, use the watch task in a new terminal:
   ```sh
   gulp watch
   ```
