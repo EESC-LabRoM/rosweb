@@ -58,6 +58,9 @@ export class Workspace {
  
     wg = new WidgetGroup("3D Viewer");
     new Widget(wg.id, "ROS 3D Viewer", "ROS3DViewer", "./widgets/ros_3d_viewer");
+ 
+    wg = new WidgetGroup("Development");
+    new Widget(wg.id, "New Widget", "NewWidget", "./widgets/new_widget");
   }
 
   private _clearWorkspace() {
