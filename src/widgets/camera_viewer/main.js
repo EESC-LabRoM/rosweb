@@ -32,6 +32,7 @@ var WidgetCameraViewer = function (widgetInstanceId) {
       querySelector: '.jsWidgetContainer[data-widget-instance-id=\'' + self.widgetInstanceId + '\'] .jsMjpeg',
       host: self.host,
       port: self.webVideoServerPort,
+      type: self.webVideoCompressionType,
       width: self.width,
       height: self.height,
       topic: selectedTopic
