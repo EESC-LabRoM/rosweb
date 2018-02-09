@@ -1,0 +1,58 @@
+.cssWidgetContainer[data-widget-conf='0'] {
+  div[data-widget-name='log-reader'] {
+    border: 1px solid #333;
+  }
+}
+
+div[data-widget-name='log-reader'] {
+  float: left;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  div.header {
+    background-color: #aee;
+    border-bottom: 1px solid #333;
+    p {
+      text-align: center;
+      padding: 0 10px;
+    }
+    p.name {
+      font-weight: bold;
+    }
+    p.type {
+      font-style: italic;
+    }
+  }
+  table.content {
+    display: table;
+    width: 100%;
+    thread {
+      float: left;
+      width: 100%;
+      tr {
+        width: 100%;
+        display: table;
+        text-align: left;
+        th.time {
+
+        }
+        th.level {
+
+        }
+        th.file {
+
+        }
+        th.function {
+
+        }
+        th.line {
+
+        }
+      }
+    }
+    tbody.body {
+      overflow: auto;
+      height: 150px;
+    }
+  }
+}
