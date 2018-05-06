@@ -58,7 +58,11 @@ export class Workspace {
  
     wg = new WidgetGroup("3D Viewer");
     new Widget(wg.id, "ROS 3D Viewer", "ROS3DViewer", "./widgets/ros_3d_viewer");
- 
+
+    wg = new WidgetGroup("Diagnostics");
+    new Widget(wg.id, "Diagnostics Viewer", "DiagnosticsViewer", "./widgets/diagnostics_viewer");
+    new Widget(wg.id, "Log reader", "LogReader", "./widgets/log_reader");
+
     wg = new WidgetGroup("Development");
     new Widget(wg.id, "New Widget", "NewWidget", "./widgets/new_widget");
   }

@@ -44,4 +44,3 @@ function events(ros: ROSLIB.Ros): void {
 }
 
 init();
-
