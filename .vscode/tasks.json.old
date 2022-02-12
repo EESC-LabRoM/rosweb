@@ -1,0 +1,50 @@
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "args": [
+        //"--no-color"
+    ],
+    "tasks": [
+		{
+			"taskName": "Default",
+      "suppressTaskName": true,
+      "args": ["gulp"],
+			"isBuildCommand": true,
+			"showOutput": "always",
+      "isWatching": false
+		},
+		{
+			"taskName": "Install",
+      "suppressTaskName": true,
+      "args": ["gulp", "install"],
+			"isBuildCommand": true,
+			"showOutput": "always",
+      "isWatching": false
+		},
+		{
+			"taskName": "Build",
+      "suppressTaskName": true,
+      "args": ["gulp", "build"],
+			"isBuildCommand": true,
+			"showOutput": "always",
+      "isWatching": false
+		},
+		{
+			"taskName": "Watch",
+      "suppressTaskName": true,
+      "args": ["gulp", "watch"],
+			"isBuildCommand": true,
+			"showOutput": "always",
+      "isWatching": false
+		},
+		{
+			"taskName": "Start",
+      "suppressTaskName": true,
+      "args": ["gulp", "webserver"],
+			"isBuildCommand": true,
+			"showOutput": "always",
+      "isWatching": true
+		}
+	]
+}

@@ -45,17 +45,17 @@ export class WidgetInstanceEvents extends EventsParent {
   };
 
   public WidgetConfirm = (e?: MouseEvent) => {
-    $(e.toElement).closest(".jsWidgetContainer").attr("data-widget-conf", "0");
+    $(e.target).closest(".jsWidgetContainer").attr("data-widget-conf", "0");
     e.preventDefault();
   };
 
   public WidgetDelete = (e?: MouseEvent) => {
-    $(e.toElement).closest(".jsWidgetContainer").remove();
+    $(e.target).closest(".jsWidgetContainer").remove();
     e.preventDefault();
   };
 
   public WidgetSettings = (e?: MouseEvent) => {
-    let widgetInstanceId: number = parseInt($(e.toElement).attr("data-widget-instance-id"));
+    let widgetInstanceId: number = parseInt($(e.target).attr("data-widget-instance-id"));
     this._WidgetSettings(widgetInstanceId);
     e.preventDefault();
   };
@@ -137,7 +137,7 @@ export class WidgetInstanceEvents extends EventsParent {
   }
 
   public WidgetContainerDblClick = (e?: MouseEvent) => {
-    let widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
+    let widgetInstanceId = parseInt($(e.target).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
     this.ToggleMovable();
     if ($(".jsToggleMovable").hasClass("active")) {
       this._WidgetSettings(widgetInstanceId);
@@ -320,7 +320,7 @@ export class WidgetInstanceEvents extends EventsParent {
   };
 
   public MouseDown = (e?: MouseEvent) => {
-    if ($(e.toElement).hasClass("jsWidgetResize")) {
+    if ($(e.target).hasClass("jsWidgetResize")) {
       this.toMove = false;
       this.toResize = true;
     } else {
@@ -328,14 +328,14 @@ export class WidgetInstanceEvents extends EventsParent {
       this.toResize = false;
     }
     $(".jsWidgetContainer").css("z-index", "20");
-    this.widgetInstanceId = parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
+    this.widgetInstanceId = parseInt($(e.target).closest(".jsWidgetContainer").attr("data-widget-instance-id"));
     this._WidgetSettings(this.widgetInstanceId);
-    $(e.toElement).closest(".jsWidgetContainer").addClass("jsMouseActive");
+    $(e.target).closest(".jsWidgetContainer").addClass("jsMouseActive");
     this.lastX = e.pageX;
     this.lastY = e.pageY;
   };
   public MouseMove = (e?: MouseEvent) => {
-    if (parseInt($(e.toElement).closest(".jsWidgetContainer").attr("data-widget-instance-id")) == this.widgetInstanceId) {
+    if (parseInt($(e.target).closest(".jsWidgetContainer").attr("data-widget-instance-id")) == this.widgetInstanceId) {
       if (this.toMove) {
         document.getSelection().removeAllRanges();
         this._WidgetMove(e);

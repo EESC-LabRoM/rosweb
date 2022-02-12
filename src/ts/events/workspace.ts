@@ -45,7 +45,7 @@ export class WorkspaceEvents extends EventsParent {
   }
 
   public LoadWorkspace = (e?: MouseEvent) => {
-    let workspace_id: number = parseInt($(e.toElement).attr("data-workspace-id"));
+    let workspace_id: number = parseInt($(e.target).attr("data-workspace-id"));
     this._LoadWorkspace(workspace_id);
     e.preventDefault();
   }
@@ -56,7 +56,7 @@ export class WorkspaceEvents extends EventsParent {
   }
 
   public RemoveWorkspace = (e?: MouseEvent) => {
-    let workspace_id: number = parseInt($(e.toElement).attr("data-workspace-id"));
+    let workspace_id: number = parseInt($(e.target).attr("data-workspace-id"));
     let workspace = storage.GetWorkspace(workspace_id);
     this._RemoveWorkspace(workspace);
     e.preventDefault();

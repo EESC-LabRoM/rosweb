@@ -38,7 +38,7 @@ export class WidgetEvents extends EventsParent {
   }
 
   public widgetItem = (e?: MouseEvent) => {
-    let widgetId: number = parseInt($(e.toElement).attr("data-widget-id"));
+    let widgetId: number = parseInt($(e.target).attr("data-widget-id"));
     let widget: Widget = currentWorkspace.get<Widget>(widgetId, "Widget");
     let tab: Tab = currentWorkspace.getCurrentTab();
     this._widgetItem(widget, tab);

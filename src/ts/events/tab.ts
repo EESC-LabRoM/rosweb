@@ -53,7 +53,7 @@ export class TabEvents extends EventsParent {
   }
 
   public selectTab = (e?: MouseEvent) => {
-    let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
+    let tabId: number = parseInt($(e.target).attr("data-tab-id"));
     let tab: Tab = currentWorkspace.get<Tab>(tabId, "Tab");
     this._selectTab(tab);
     e.preventDefault();
@@ -72,7 +72,7 @@ export class TabEvents extends EventsParent {
   }
 
   public closeTab = (e?: MouseEvent) => {
-    let tabId: number = parseInt($(e.toElement).attr("data-tab-id"));
+    let tabId: number = parseInt($(e.target).attr("data-tab-id"));
     if (confirm("Are you sure you want to close tab #" + tabId + " ?")) {
       this._closeTab(tabId);
     }
